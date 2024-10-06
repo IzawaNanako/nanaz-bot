@@ -13,13 +13,13 @@ module.exports = {
         const server = await interaction.client.guilds.fetch(serverID);
         const serverIcon = server.iconURL({
             dynamic: true,
-            size: 2048,9
+            size: 2048,
         });
 
         if (!serverIcon) {
             await interaction.reply({
                 content: 'Invalid Server ID.',
-                ephemeral: true
+                ephemeral: true,
             });
             return;
         }
