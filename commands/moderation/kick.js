@@ -72,7 +72,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({
                 text: 'The user can join back at anytime.',
-                iconURL: 'https://i.imgur.com/pqNga0Y.png',
+                iconURL: interaction.client.user.avatarURL(),
             });
 
         let kickedNotice = `${interaction.user} kicked you from **${interaction.guild.name}**.`;

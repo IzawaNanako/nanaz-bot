@@ -89,7 +89,7 @@ module.exports = {
             .setTimestamp()
             .setFooter({
                 text: 'Check Server Settings -> Bans to see the ban info, or to revoke the ban.',
-                iconURL: 'https://i.imgur.com/pqNga0Y.png',
+                iconURL: interaction.client.user.avatarURL(),
             });
 
         let bannedNotice = `${interaction.user} banned you from **${interaction.guild.name}**.`;
