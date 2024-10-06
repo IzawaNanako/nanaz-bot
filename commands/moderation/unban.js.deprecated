@@ -1,0 +1,44 @@
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
+const keyv = require('../../keyv');
+
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('unban')
+		.setDescription('Unban selected user that is banned from the server.')
+        .addStringOption(option => option
+            .setName('username')
+            .setDescription('The username of the user to unban.')
+            .setRequired(true)
+        )
+        .addBooleanOption(option => option
+            .setName('notice')
+            .setDescription('To inform the user that they have been unbanned. By default, this is set to true.')
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+        .setContexts(0),
+	async execute(interaction) {
+		const username = interaction.options.getString('username');
+        const notice = interaction.options.getBoolean('notice') || true;
+        const guild = await keyv.get(interaction.guild.id);
+        const bannedUser = guild.bannedUsers.find(user => user.username === member);
+        
+        if (username === interaction.user.username) {
+            await interaction.reply({ content: 'I don\'t think you are banned, I wonder why.' });
+            return;
+        }
+
+        if (!bannedUser) {
+            await interaction.reply({ content: `${username} is not banned.`, ephemeral: true });
+            return;
+        }
+
+        const unbannedNotice = `${interaction.user} unbanned you from **${interaction.guild.name}**!`;
+
+        if (!bannedUser.userID.user.bot && notice) {
+            await bannedUser.userID.send(unbannedNotice);
+        }
+
+        await interaction.reply();
+        await interaction.guild.members.unban(bannedUser.userID);
+	},
+};
