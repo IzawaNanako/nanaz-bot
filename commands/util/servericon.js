@@ -9,11 +9,11 @@ module.exports = {
             .setDescription('The id of the server to display the icon of.')
         ),
     async execute(interaction) {
-        const guildID = interaction.options.getString('server') || interaction.guild;
-        const server = await interaction.client.guilds.fetch(guildID);
+        const serverID = interaction.options.getString('server') || interaction.guild;
+        const server = await interaction.client.guilds.fetch(serverID);
         const serverIcon = server.iconURL({
             dynamic: true,
-            size: 2048,
+            size: 2048,9
         });
 
         if (!serverIcon) {
