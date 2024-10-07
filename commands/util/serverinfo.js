@@ -3,7 +3,8 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('serverinfo')
-        .setDescription('Display information about this server.'),
+        .setDescription('Display information about this server.')
+        .setContexts(0),
     async execute(interaction) {
         let owner = await interaction.guild.members.fetch(interaction.guild.ownerId);
 
@@ -19,7 +20,7 @@ module.exports = {
         const serverInfoEmbed = new EmbedBuilder()
             .setColor('#2E4053')
             .setAuthor({
-                name: `Requested by ${interaction.user.username}`,
+                name: `Requested by ${interaction.user.displayName}`,
             })
             .setTitle('Server Information')
             .setDescription(infoTexts[infoTextNum])

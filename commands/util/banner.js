@@ -23,9 +23,9 @@ module.exports = {
         const bannerEmbed = new EmbedBuilder()
             .setColor('#5865F2')
             .setAuthor({
-                name: `Requested by ${interaction.user.username}`,
+                name: `Requested by ${interaction.user.displayName}`,
             })
-            .setTitle(`${member.username}'s Profile Banner`)
+            .setTitle(`${member.displayName}'s Profile Banner`)
             .setDescription(`Banner URL: ${member.bannerURL()}`)
             .setImage(member.bannerURL({
                 dynamic: true,

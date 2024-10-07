@@ -7,7 +7,8 @@ module.exports = {
         .addUserOption(option => option
             .setName('user')
             .setDescription('The user to display information about.')
-        ),
+        )
+        .setContexts(0),
     async execute(interaction) {
         const member = interaction.options.getMember('user') || interaction.member;
         const guildMember = await interaction.guild.members.fetch(member.user.id);
@@ -44,7 +45,7 @@ module.exports = {
         const userInfoEmbed = new EmbedBuilder()
             .setColor('#03A9F4')
             .setAuthor({
-                name: `Requested by ${interaction.user.username}`,
+                name: `Requested by ${interaction.user.displayName}`,
             })
             .setTitle(`${member.user.displayName}'s User Information`)
             .setDescription(infoTexts[infoTextNum])

@@ -10,6 +10,15 @@ module.exports = {
         ),
     async execute(interaction) {
         const serverID = interaction.options.getString('server') || interaction.guild;
+
+        if (!serverID) {
+            await interaction.reply({
+                content: 'Invalid Server ID.',
+                ephemeral: true,
+            });
+            return;
+        }
+
         const server = await interaction.client.guilds.fetch(serverID);
         const serverIcon = server.iconURL({
             dynamic: true,
@@ -27,7 +36,7 @@ module.exports = {
         const serverIconEmbed = new EmbedBuilder()
             .setColor('#5865F2')
             .setAuthor({
-                name: `Requested by ${interaction.user.username}`,
+                name: `Requested by ${interaction.user.displayName}`,
             })
             .setTitle(`Server Icon of ${server.name}`)
             .setDescription(`Icon URL: ${serverIcon}`)

@@ -22,9 +22,9 @@ module.exports = {
             avatarEmbed = new EmbedBuilder()
                 .setColor('#5865F2')
                 .setAuthor({
-                    name: `Requested by ${interaction.user.username}`,
+                    name: `Requested by ${interaction.user.displayName}`,
                 })
-                .setTitle(`${member.username}'s Avatar`)
+                .setTitle(`${member.displayName}'s Avatar`)
                 .setDescription(`Avatar URL: ${member.displayAvatarURL()}`)
                 .setImage(member.avatarURL({
                     dynamic: true,
@@ -40,9 +40,9 @@ module.exports = {
             avatarEmbed = new EmbedBuilder()
                 .setColor('#5865F2')
                 .setAuthor({
-                    name: `Requested by ${interaction.user.username}`,
+                    name: `Requested by ${interaction.user.displayName}`,
                 })
-                .setTitle(`${member.username}'s Avatar`)
+                .setTitle(`${member.displayName}'s Avatar`)
                 .setDescription(`Avatar URL: ${member.displayAvatarURL()}`)
                 .setImage(member.displayAvatarURL({
                     dynamic: true,
