@@ -1,7 +1,17 @@
 const fs = require('node:fs');
 const path = require('node:path');
+//const { Sequelize } = require('sequelize');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 const { token } = require('./config.json');
+//const sequelize = new Sequelize('postgres://user:pass@localhost:5432/nanaz')
+
+/*try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+}
+catch (error) {
+    console.error('Unable to connect to the database:', error);
+}*/
 
 const client = new Client({
                         intents: [
