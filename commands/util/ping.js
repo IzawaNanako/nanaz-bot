@@ -17,7 +17,7 @@ module.exports = {
             })
             .setTimestamp();
 
-        let msg = await interaction.reply({
+        await interaction.reply({
             embeds: [pingEmbed],
             fetchReply: true,
         });
