@@ -12,6 +12,7 @@ module.exports = {
             .setName('default_avatar')
             .setDescription('Display the user\'s default avatar instead of their avatar in the server.')
         ),
+        
     async execute(interaction) {
         const member = interaction.options.getUser('user') || interaction.user;
         const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;

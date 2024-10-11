@@ -5,6 +5,7 @@ module.exports = {
         .setName('serverinfo')
         .setDescription('Display information about this server.')
         .setContexts(0),
+        
     async execute(interaction) {
         let owner = await interaction.guild.members.fetch(interaction.guild.ownerId);
 

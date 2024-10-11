@@ -4,6 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('ping')
 		.setDescription('Check the current latency of the bot.'),
+        
 	async execute(interaction) {
         let pingEmbed = new EmbedBuilder()
             .setColor('#808080')
@@ -12,12 +13,12 @@ module.exports = {
             })
             .setTitle('Pinging...')
             .setFooter({
-                text: 'Displayed by Nanaz',
+                text: 'Pinged by Nanaz',
                 iconURL: interaction.client.user.avatarURL(),
             })
             .setTimestamp();
 
-        await interaction.reply({
+        let msg = await interaction.reply({
             embeds: [pingEmbed],
             fetchReply: true,
         });

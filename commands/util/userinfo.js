@@ -9,6 +9,7 @@ module.exports = {
             .setDescription('The user to display information about.')
         )
         .setContexts(0),
+        
     async execute(interaction) {
         const member = interaction.options.getMember('user') || interaction.member;
         const guildMember = await interaction.guild.members.fetch(member.user.id);
