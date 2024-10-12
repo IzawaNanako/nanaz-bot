@@ -30,7 +30,7 @@ module.exports = {
         .setName('role')
         .setDescription('The role to add or remove.')
     )
-    //.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0),
     async execute(interaction) {
         await interaction.deferReply();

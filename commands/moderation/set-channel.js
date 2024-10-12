@@ -30,7 +30,7 @@ module.exports = {
         .setDescription('The channel to send chosen message type in, leave empty to disable the chosen feature.')
         .addChannelTypes(ChannelType.GuildText)
     )
-    //.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0),
     async execute(interaction) {
         await interaction.deferReply();
