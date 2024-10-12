@@ -2,15 +2,14 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('servericon')
-        .setDescription('Display the icon of the selected server.')
-        .addStringOption(option => option
-            .setName('server')
-            .setDescription('The id of the server to display the icon of.')
-        ),
-        
+    .setName('servericon')
+    .setDescription('Display the icon of the selected server.')
+    .addStringOption(option => option
+        .setName('server')
+        .setDescription('The id of the server to display the icon of.')
+    ),
     async execute(interaction) {
-        const serverID = interaction.options.getString('server') || interaction.guild;
+        const serverID = interaction.options.getString('server') ?? interaction.guild;
 
         if (!serverID) {
             await interaction.reply({
@@ -35,18 +34,18 @@ module.exports = {
         }
 
         const serverIconEmbed = new EmbedBuilder()
-            .setColor('#5865F2')
-            .setAuthor({
-                name: `Requested by ${interaction.user.displayName}`,
-            })
-            .setTitle(`Server Icon of ${server.name}`)
-            .setDescription(`Icon URL: ${serverIcon}`)
-            .setImage(serverIcon)
-            .setFooter({
-                text: `Displayed by Nanaz`,
-                iconURL: interaction.client.user.avatarURL(),
-            })
-            .setTimestamp();
+        .setColor('#5865F2')
+        .setAuthor({
+            name: `Requested by ${interaction.user.displayName}`,
+        })
+        .setTitle(`Server Icon of ${server.name}`)
+        .setDescription(`Icon URL: ${serverIcon}`)
+        .setImage(serverIcon)
+        .setFooter({
+            text: `Displayed by Nanaz`,
+            iconURL: interaction.client.user.avatarURL(),
+        })
+        .setTimestamp();
 
         await interaction.reply({
             embeds: [serverIconEmbed],

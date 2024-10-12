@@ -4,15 +4,19 @@ const sequelize = require('../utils/database');
 const Guild = sequelize.define('guild', {
     id: {
         type: Sequelize.STRING,
-        primaryKey: true
+        primaryKey: true,
     },
     welcomeChannelId: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
     },
-    welcomeRuleId: {
+    byeChannelId: {
         type: Sequelize.STRING,
-        allowNull: true
+        allowNull: true,
+    },
+    logChannelId: {
+        type: Sequelize.STRING,
+        allowNull: true,
     }
 });
 

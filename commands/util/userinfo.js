@@ -2,16 +2,15 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('userinfo')
-        .setDescription('Display information about the selected user.')
-        .addUserOption(option => option
-            .setName('user')
-            .setDescription('The user to display information about.')
-        )
-        .setContexts(0),
-        
+    .setName('userinfo')
+    .setDescription('Display information about the selected user.')
+    .addUserOption(option => option
+        .setName('user')
+        .setDescription('The user to display information about.')
+    )
+    .setContexts(0),
     async execute(interaction) {
-        const member = interaction.options.getMember('user') || interaction.member;
+        const member = interaction.options.getMember('user') ?? interaction.member;
         const guildMember = await interaction.guild.members.fetch(member.user.id);
         const roles = '```' + guildMember.roles.cache.map((role) => role.name).join(`, `) + '```';
         let status = guildMember.presence?.status;
@@ -44,63 +43,63 @@ module.exports = {
         ];
 
         const userInfoEmbed = new EmbedBuilder()
-            .setColor('#03A9F4')
-            .setAuthor({
-                name: `Requested by ${interaction.user.displayName}`,
-            })
-            .setTitle(`${member.user.displayName}'s User Information`)
-            .setDescription(infoTexts[infoTextNum])
-            .setThumbnail(member.user.displayAvatarURL({
-                dynamic: true,
-            }))
-            .addFields([
-                {
-                    name: 'Username',
-                    value: `${member.user.username}`,
-                    inline: true,
-                },
-                {
-                    name: 'User ID',
-                    value: `${member.user.id}`,
-                    inline: true,
-                },
-                {
-                    name: 'Badges',
-                    value: `${badges}`,
-                    inline: true,
-                },
-                {
-                    name: '\u200B',
-                    value: '\u200B',
-                },
-                {
-                    name: 'Roles',
-                    value: `${roles}`,
-                    inline: true,
-                },
-                {
-                    name: 'Joined this server at',
-                    value: `${guildMember.joinedAt}`,
-                    inline: true,
-                },
-                {
-                    name: 'Created at',
-                    value: `${member.user.createdAt}`,
-                    inline: true,
-                },
-                {
-                    name: '\u200B',
-                    value: '\u200B',
-                }
-            ])
-            .setFooter({
-                text: `Fetched by Nanaz`,
-                iconURL: interaction.client.user.avatarURL(),
-            })
-            .setTimestamp();
+        .setColor('#03A9F4')
+        .setAuthor({
+            name: `Requested by ${interaction.user.displayName}`,
+        })
+        .setTitle(`${member.user.displayName}'s User Information`)
+        .setDescription(infoTexts[infoTextNum])
+        .setThumbnail(member.user.displayAvatarURL({
+            dynamic: true,
+        }))
+        .addFields([
+            {
+                name: 'Username',
+                value: `${member.user.username}`,
+                inline: true,
+            },
+            {
+                name: 'User ID',
+                value: `${member.user.id}`,
+                inline: true,
+            },
+            {
+                name: 'Badges',
+                value: `${badges}`,
+                inline: true,
+            },
+            {
+                name: '\u200B',
+                value: '\u200B',
+            },
+            {
+                name: 'Roles',
+                value: `${roles}`,
+                inline: true,
+            },
+            {
+                name: 'Joined this server at',
+                value: `${guildMember.joinedAt}`,
+                inline: true,
+            },
+            {
+                name: 'Created at',
+                value: `${member.user.createdAt}`,
+                inline: true,
+            },
+            {
+                name: '\u200B',
+                value: '\u200B',
+            }
+        ])
+        .setFooter({
+            text: `Fetched by Nanaz`,
+            iconURL: interaction.client.user.avatarURL(),
+        })
+        .setTimestamp();
         
         await interaction.reply({
             embeds: [userInfoEmbed],
-        })
+        });
     }
 }

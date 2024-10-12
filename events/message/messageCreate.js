@@ -1,4 +1,3 @@
-const axios = require('axios');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { ChannelType } = require('discord.js');
 const geminiAPIKey = process.env.GEMINI_API_KEY;
