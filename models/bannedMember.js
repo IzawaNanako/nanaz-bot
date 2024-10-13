@@ -11,12 +11,12 @@ const BannedMember = sequelize.define('bannedMember', {
         type: Sequelize.STRING,
         allowNull: false,
     },
-    bans: {
+    totalBans: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0,
     },
-    banned: {
+    isBanned: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,

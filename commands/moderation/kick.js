@@ -5,23 +5,23 @@ const sendLog = require('../../utils/sendLog.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-    .setName('kick')
-    .setDescription('Kick selected member from the server.')
-    .addUserOption(option => option
-        .setName('user')
-        .setDescription('The user to kick.')
-        .setRequired(true)
-    )
-    .addStringOption(option => option
-        .setName('reason')
-        .setDescription('The reason you are kicking this user for.')
-    )
-    .addBooleanOption(option => option
-        .setName('notice')
-        .setDescription('To inform the user that they have been kicked. By default, this is set to true.')
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-    .setContexts(0),
+        .setName('kick')
+        .setDescription('Kick selected member from the server.')
+        .addUserOption(option => option
+            .setName('user')
+            .setDescription('The user to kick.')
+            .setRequired(true)
+        )
+        .addStringOption(option => option
+            .setName('reason')
+            .setDescription('The reason you are kicking this user for.')
+        )
+        .addBooleanOption(option => option
+            .setName('notice')
+            .setDescription('To inform the user that they have been kicked. By default, this is set to true.')
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
+        .setContexts(0),
 	async execute(interaction) {
 		const member = interaction.options.getMember('user');
         const reason = interaction.options.getString('reason');
@@ -68,43 +68,44 @@ module.exports = {
         ];
 
         const kickEmbed = new EmbedBuilder()
-        .setColor('#FF0000')
-        .setTitle('👋 Member Kicked')
-        .setDescription(kickMsgs[kickMsgID])
-        .addFields([
-            {
-                name: 'User: ',
-                value: `${member.user}`,
-                inline: true,
-            },
-            {
-                name: 'Issued by: ',
-                value: `${interaction.user}`,
-                inline: true,
-            },
-        ])
-        .setImage('https://i.imgur.com/3RiBEiw.gif')
-        .setTimestamp()
-        .setFooter({
-            text: 'The user can join back at anytime.',
-            iconURL: interaction.client.user.avatarURL(),
-        });
+            .setColor('#FF0000')
+            .setTitle('👋 Member Kicked')
+            .setDescription(kickMsgs[kickMsgID])
+            .addFields([
+                {
+                    name: 'User: ',
+                    value: `${member.user}`,
+                    inline: true,
+                },
+                {
+                    name: 'Issued by: ',
+                    value: `${interaction.user}`,
+                    inline: true,
+                },
+            ])
+            .setImage('https://i.imgur.com/3RiBEiw.gif')
+            .setTimestamp()
+            .setFooter({
+                text: 'The user can join back at anytime.',
+                iconURL: interaction.client.user.avatarURL(),
+            });
 
         let kickedNotice = `${interaction.user} kicked you from **${interaction.guild.name}**.`;
+
         if (reason) {
             kickedNotice += ` Reason: ${reason}`;
             kickEmbed
-            .addFields({
-                name: 'Reason: ',
-                value: reason,
-            });
+                .addFields({
+                    name: 'Reason: ',
+                    value: reason,
+                });
         }
 
         if (!member.user.bot && notice) {
             await member.send(kickedNotice);
         }
 
-        guildMember.kicked = true;
+        guildMember.isKicked = true;
         await guildMember.save();
 
         await interaction.reply({

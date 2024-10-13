@@ -54,18 +54,15 @@ module.exports = {
         
         if (guildMember?.kicked) {
             welcomeEmbed
-            .setDescription('Welcome back! Better be nicer this time!');
+                .setDescription('Welcome back! Better be nicer this time!');
 
-            guildMember.kicked = false;
+            guildMember.isKicked = false;
             await guildMember.save();
         }
 
-        if (bannedMember?.banned) {
+        if (bannedMember?.totalBans > 0) {
             welcomeEmbed
-            .setDescription('Welcome back! Hope you have learned your lessons.');
-
-            bannedMember.banned = false;
-            await bannedMember.save();
+                .setDescription('You seems to have a bad record, hope you have learned your lessons.');
         }
 
         if (guild.welcomeChannelId) {

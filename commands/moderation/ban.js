@@ -5,34 +5,34 @@ const sendLog = require('../../utils/sendLog.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-    .setName('ban')
-    .setDescription('Ban selected member from the server.')
-    .addUserOption(option => option
-        .setName('user')
-        .setDescription('The user to ban.')
-        .setRequired(true)
-    )
-    .addStringOption(option => option
-        .setName('reason')
-        .setDescription('The reason you are banning this user for.')
-    )
-    .addNumberOption(option => option
-        .setName('delete_messages')
-        .setDescription('How recent should their message be deleted in days? (Max 7, default 0, accepts decimals).')
-        .setMinValue(0)
-        .setMaxValue(7)
-    )
-    .addBooleanOption(option => option
-        .setName('notice')
-        .setDescription('To inform the user that they have been banned. By default, this is set to true.')
-    )
-    .addNumberOption(option => option
-        .setName('duration')
-        .setDescription('How long should the ban last for in days? (Accepts decimals, leave empty for indefinite).')
-        .setMinValue(0)
-    )
-    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setContexts(0),
+        .setName('ban')
+        .setDescription('Ban selected member from the server.')
+        .addUserOption(option => option
+            .setName('user')
+            .setDescription('The user to ban.')
+            .setRequired(true)
+        )
+        .addStringOption(option => option
+            .setName('reason')
+            .setDescription('The reason you are banning this user for.')
+        )
+        .addNumberOption(option => option
+            .setName('delete_messages')
+            .setDescription('How recent should their message be deleted in days? (Max 7, default 0, accepts decimals).')
+            .setMinValue(0)
+            .setMaxValue(7)
+        )
+        .addBooleanOption(option => option
+            .setName('notice')
+            .setDescription('To inform the user that they have been banned. By default, this is set to true.')
+        )
+        .addNumberOption(option => option
+            .setName('duration')
+            .setDescription('How long should the ban last for in days? (Accepts decimals, leave empty for indefinite).')
+            .setMinValue(0)
+        )
+        .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+        .setContexts(0),
 	async execute(interaction) {
 		const member = interaction.options.getMember('user');
         const reason = interaction.options.getString('reason');
@@ -82,36 +82,42 @@ module.exports = {
         ];
 
         const banEmbed = new EmbedBuilder()
-        .setColor('#FF0000')
-        .setTitle('<:banhammer:1292141718279557162> Member Banned')
-        .setDescription(banMsgs[banMsgID])
-        .addFields([
-            {
-                name: 'User: ',
-                value: `${member.user}`,
-                inline: true,
-            },
-            {
-                name: 'Issued by: ',
-                value: `${interaction.user}`,
-                inline: true,
-            },
-        ])
-        .setImage('https://i.imgur.com/ioBFfq3.gif')
-        .setTimestamp()
-        .setFooter({
-            text: 'Check Server Settings -> Bans or /baninfo for more information.',
-            iconURL: interaction.client.user.avatarURL(),
-        });
+            .setColor('#FF0000')
+            .setTitle('<:banhammer:1292141718279557162> Member Banned')
+            .setDescription(banMsgs[banMsgID])
+            .addFields([
+                {
+                    name: 'User: ',
+                    value: `${member.user}`,
+                    inline: true,
+                },
+                {
+                    name: 'Issued by: ',
+                    value: `${interaction.user}`,
+                    inline: true,
+                },
+                {
+                    name: '\u200B',
+                    value: '\u200B',
+                },
+            ])
+            .setImage('https://i.imgur.com/ioBFfq3.gif')
+            .setTimestamp()
+            .setFooter({
+                text: 'Check Server Settings -> Bans or /baninfo for more information.',
+                iconURL: interaction.client.user.avatarURL(),
+            });
 
         let bannedNotice = `${interaction.user} banned you from **${interaction.guild.name}**.`;
+        
         if (reason) {
             bannedNotice += ` Reason: ${reason}`;
             banEmbed
-            .addFields({
-                name: 'Reason: ',
-                value: reason,
-            });
+                .addFields({
+                    name: 'Reason: ',
+                    value: reason,
+                    inline: true,
+                });
         }
 
         if (!member.user.bot && notice) {
@@ -120,11 +126,24 @@ module.exports = {
 
         const delSecs = Math.round(delDays * 86400);
 
-        bannedMember.bans++;
-        bannedMember.banned = true;
+        bannedMember.totalBans++;
+        bannedMember.isBanned = true;
         bannedMember.bannedBy = interaction.user.id;
         bannedMember.bannedReason = reason;
+        bannedMember.bannedAt = new Date();
+
+        if (duration !== 'permanent') {
+            bannedMember.bannedUntil = new Date(Date.now() + (duration * 86400000));
+        }
+
         await bannedMember.save();
+
+        banEmbed
+            .addFields({
+                name: 'Expire Date: ',
+                value: duration === 'permanent' ? 'Permanent' : `${bannedMember.bannedUntil}`,
+                inline: true,
+            });
 
         await interaction.reply({
             embeds: [banEmbed],

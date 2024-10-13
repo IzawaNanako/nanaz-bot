@@ -7,7 +7,7 @@ const GuildMember = sequelize.define('guildMember', {
         type: Sequelize.STRING,
         primaryKey: true,
     },
-    kicked: {
+    isKicked: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: false,

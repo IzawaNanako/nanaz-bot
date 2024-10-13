@@ -26,7 +26,7 @@ module.exports = {
             }
         });
 
-        if (guildMember?.kicked || bannedMember?.banned) {
+        if (guildMember?.isKicked || bannedMember?.isBanned) {
             return;
         }
 
