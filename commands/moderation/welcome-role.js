@@ -61,7 +61,7 @@ module.exports = {
             }
         });
 
-        const previousRolesList = roles.map(role => `<@&${role.roleId}>`).join(', ');
+        const previousRolesList = roles.map(role => `<@&${role.id}>`).join(', ');
 
         if (previousRolesList.includes(role) && action === 'add') {
             await interaction.editReply({
@@ -106,15 +106,15 @@ module.exports = {
         }
         else if (action === 'add') {
             await WelcomeRole.create({
+                id: role.id,
                 guildId: guild.id,
-                roleId: role.id,
             });
         }
         else if (action === 'remove') {
             await WelcomeRole.destroy({
                 where: {
+                    id: role.id,
                     guildId: guild.id,
-                    roleId: role.id,
                 }
             });
         }
@@ -125,7 +125,7 @@ module.exports = {
             }
         });
 
-        const rolesList = roles.map(role => `<@&${role.roleId}>`).join(', ');
+        const rolesList = roles.map(role => `<@&${role.id}>`).join(', ');
 
         actionEmbed
         .addFields([

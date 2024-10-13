@@ -15,14 +15,14 @@ module.exports = {
 
         const guildMember = await GuildMember.findOne({
             where: {
-                id: member.id,
+                id: member.user.id,
                 guildId: guild.id,
             }
         });
 
         const bannedMember = await BannedMember.findOne({
             where: {
-                id: member.id,
+                id: member.user.id,
                 guildId: guild.id,
             }
         });
@@ -78,9 +78,9 @@ module.exports = {
 
         if (welcomeRoles.length > 0) {
             for (const role of welcomeRoles) {
-                const welcomeRole = await member.guild.roles.fetch(role.roleId);
+                const welcomeRole = await member.guild.roles.fetch(role.id);
                 if (welcomeRole) {
-                    await member.roles.add(role.roleId);
+                    await member.roles.add(role.id);
                 }
             }
         }

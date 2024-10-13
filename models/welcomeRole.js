@@ -3,9 +3,9 @@ const sequelize = require('../utils/database.js');
 const Guild = require('./guild.js');
 
 const WelcomeRole = sequelize.define('welcomeRole', {
-    roleId: {
+    id: {
         type: Sequelize.STRING,
-        allowNull: false,
+        primaryKey: true,
     }
 });
 

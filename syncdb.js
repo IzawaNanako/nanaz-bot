@@ -1,8 +1,8 @@
 require('dotenv').config();
 
-const BannedMember = require('./models/bannedMember.js');
+const WelcomeRole = require('./models/bannedMember.js');
 
-BannedMember.sync({
+WelcomeRole.sync({
     force: true,
 })
 .then(() => {
