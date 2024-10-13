@@ -65,7 +65,7 @@ module.exports = {
                 embeds: [
                     new EmbedBuilder()
                         .setColor('#FF0000')
-                        .setDescription('🚫 | I can\'t seem to ban that user.\nTry checking my ban permission.'),
+                        .setDescription('I can\'t seem to ban that user.\nTry checking my ban permission.'),
                 ], 
                 ephemeral: true,
             });

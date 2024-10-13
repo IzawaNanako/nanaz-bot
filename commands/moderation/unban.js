@@ -29,7 +29,7 @@ module.exports = {
         const bannedMember = await BannedMember.findOne({
             where: {
                 username: username,
-                banned: true,
+                isBanned: true,
                 guildId: guild.id,
             }
         });

@@ -46,12 +46,12 @@ module.exports = {
             return;
         }
 
-        if (!member.bannable) {
+        if (!member.kickable) {
             await interaction.reply({
                 embeds: [
                     new EmbedBuilder()
                         .setColor('#FF0000')
-                        .setDescription('🚫 | I can\'t seem to kick that user.\nTry checking my kick permission.'),
+                        .setDescription('I can\'t seem to kick that user.\nTry checking my kick permission.'),
                 ], 
                 ephemeral: true,
             });
