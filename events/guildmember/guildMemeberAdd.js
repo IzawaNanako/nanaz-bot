@@ -33,6 +33,8 @@ module.exports = {
             }
         });
 
+        const welcomeMessage = guild.welcomeMessage;
+
         const welcomeEmbed = new EmbedBuilder()
             .setColor('#2E4053')
             .setAuthor({
@@ -45,7 +47,7 @@ module.exports = {
             .setThumbnail(member.guild.iconURL({
                 dynamic: true,
             }))
-            .setDescription(`Thank you for joining ${member.guild.name}!`)
+            .setDescription(welcomeMessage)
             .setFooter({
                 text: `Hi, I'm Nanaz!`,
                 iconURL: member.client.user.avatarURL(),

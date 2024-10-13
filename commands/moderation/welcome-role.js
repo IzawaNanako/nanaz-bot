@@ -91,11 +91,11 @@ module.exports = {
                     inline: true,
                 }
             ])
+            .setTimestamp()
             .setFooter({
                 text: `Executed by Nanaz`,
                 iconURL: interaction.client.user.avatarURL(),
-            })
-            .setTimestamp();
+            });
         
         if (action === 'clear') {
             await WelcomeRole.destroy({

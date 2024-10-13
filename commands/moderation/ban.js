@@ -126,17 +126,19 @@ module.exports = {
 
         const delSecs = Math.round(delDays * 86400);
 
-        bannedMember.totalBans++;
-        bannedMember.isBanned = true;
-        bannedMember.bannedBy = interaction.user.id;
-        bannedMember.bannedReason = reason;
-        bannedMember.bannedAt = new Date();
+        bannedMember.update({
+            totalBans: bannedMember.totalBans + 1,
+            isBanned: true,
+            bannedBy: interaction.user.id,
+            bannedReason: reason,
+            bannedAt: new Date(),
+        })
 
         if (duration) {
-            bannedMember.bannedUntil = new Date(Date.now() + (duration * 86400000));
+            bannedMember.update({
+                bannedUntil: new Date(Date.now() + (duration * 86400000)),
+            })
         }
-
-        await bannedMember.save();
 
         banEmbed
             .addFields({

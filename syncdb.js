@@ -1,12 +1,12 @@
 require('dotenv').config();
 
-const User = require('./models/user');
+const Guild = require('./models/guild.js');
 
-User.sync({
+Guild.sync({
     force: true,
 })
 .then(() => {
-    console.log(`${User.name} Database synced.`);
+    console.log('Guild Database synced.');
 })
 .catch((err) => {
     console.log(err);

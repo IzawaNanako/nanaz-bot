@@ -105,8 +105,9 @@ module.exports = {
             await member.send(kickedNotice);
         }
 
-        guildMember.isKicked = true;
-        await guildMember.save();
+        guildMember.update({
+            isKicked: true,
+        });
 
         await interaction.reply({
             embeds: [kickEmbed],

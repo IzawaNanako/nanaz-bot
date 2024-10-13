@@ -17,6 +17,11 @@ const Guild = sequelize.define('guild', {
     logChannelId: {
         type: Sequelize.STRING,
         allowNull: true,
+    },
+    welcomeMessage: {
+        type: Sequelize.STRING,
+        defaultValue: 'Thank you for joining ${member.guild.name}!',
+        allowNull: false,
     }
 });
 

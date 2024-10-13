@@ -76,12 +76,13 @@ module.exports = {
             await user.send(unbannedNotice);
         }
 
-        bannedMember.isBanned = false;
-        bannedMember.bannedBy = null;
-        bannedMember.bannedReason = null;
-        bannedMember.bannedAt = null;
-        bannedMember.bannedUntil = null;
-        await bannedMember.save();
+        bannedMember.update({
+            isBanned: false,
+            bannedBy: null,
+            bannedReason: null,
+            bannedAt: null,
+            bannedUntil: null,
+        })
 
         await interaction.reply({
             embeds: [unbanEmbed],
