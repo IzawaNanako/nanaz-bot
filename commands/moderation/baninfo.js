@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
-const Guild = require('../../models/guild.js');
 const BannedMember = require('../../models/bannedMember.js');
 
 module.exports = {

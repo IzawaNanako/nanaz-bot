@@ -6,6 +6,8 @@ module.exports = {
     execute(client) {
         console.log(`Ready! Logged in as ${client.user.tag}`);
         client.user.setStatus(PresenceUpdateStatus.DoNotDisturb);
-        client.user.setActivity('cat videos', { type: ActivityType.Watching });
+        client.user.setActivity('cat videos', {
+            type: ActivityType.Watching,
+        });
     }
 };

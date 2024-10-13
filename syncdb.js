@@ -6,7 +6,7 @@ User.sync({
     force: true,
 })
 .then(() => {
-    console.log("Database synced.");
+    console.log(`${User.name} Database synced.`);
 })
 .catch((err) => {
     console.log(err);
