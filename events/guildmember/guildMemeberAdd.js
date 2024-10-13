@@ -47,7 +47,7 @@ module.exports = {
             .setThumbnail(member.guild.iconURL({
                 dynamic: true,
             }))
-            .setDescription(welcomeMessage)
+            .setDescription(`${welcomeMessage}`)
             .setFooter({
                 text: `Hi, I'm Nanaz!`,
                 iconURL: member.client.user.avatarURL(),
