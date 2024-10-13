@@ -18,7 +18,6 @@ module.exports = {
         }
         
         if (message.mentions.has(client.user) || message.channel.type === ChannelType.DM) {
-            const thinkingMessage = await message.reply('Thinking a response...');
             const userMessage = message.content
                 .replace(`<@!${client.user.id}>`, '')
                 .trim();
@@ -46,14 +45,13 @@ module.exports = {
             const reply = await result.response.text();
 
             if (reply.length > 2000) {
-                thinkingMessage.delete();
                 const replyArray = reply.match(/[\s\S]{1,2000}/g);
                 replyArray.forEach(async (msg) => {
                     await message.reply(msg);
                 });
                 return;
             }
-            await message.editReply(reply);
+            await message.reply(reply);
         }
     }
 };
