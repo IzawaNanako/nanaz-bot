@@ -18,6 +18,7 @@ module.exports = {
         }
         
         if (message.mentions.has(client.user) || message.channel.type === ChannelType.DM) {
+            message.deferReply();
             const userMessage = message.content
                 .replace(`<@!${client.user.id}>`, '')
                 .trim();
@@ -47,11 +48,11 @@ module.exports = {
             if (reply.length > 2000) {
                 const replyArray = reply.match(/[\s\S]{1,2000}/g);
                 replyArray.forEach(async (msg) => {
-                    await message.reply(msg);
+                    await message.editReply(msg);
                 });
                 return;
             }
-            await message.reply(reply);
+            await message.editReply(reply);
         }
     }
 };
