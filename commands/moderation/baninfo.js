@@ -18,6 +18,7 @@ module.exports = {
             guildId: interaction.guild.id,
             username: username,
         });
+        const expireDate = bannedMember.bannedUntil ?? 'Never';
 
         if (!bannedMember) {
             await interaction.reply({
@@ -35,13 +36,13 @@ module.exports = {
                 .setDescription(`This user is currently banned from this server.`)
                 .addFields([
                     {
-                        name: 'User: ',
+                        name: 'Username: ',
                         value: `${bannedMember.username}`,
                         inline: true,
                     },
                     {
-                        name: 'Issued by: ',
-                        value: `${interaction.user}`,
+                        name: 'User ID: ',
+                        value: `\`${bannedMember.id}\``,
                         inline: true,
                     },
                     {
@@ -49,13 +50,13 @@ module.exports = {
                         value: '\u200B',
                     },
                     {
-                        name: 'Reason: ',
-                        value: `${bannedMember.reason}`,
+                        name: 'Issued by: ',
+                        value: `${interaction.user}`,
                         inline: true,
                     },
                     {
-                        name: 'Total Bans: ',
-                        value: `${bannedMember.totalBans}`,
+                        name: 'Reason: ',
+                        value: `${bannedMember.reason}`,
                         inline: true,
                     },
                     {
@@ -69,9 +70,17 @@ module.exports = {
                     },
                     {
                         name: 'Expires At: ',
-                        value: `${bannedMember.bannedUntil}`,
+                        value: `${expireDate}`,
                         inline: true,
-                    }
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
+                    },
+                    {
+                        name: 'Total Bans: ',
+                        value: `${bannedMember.totalBans}`,
+                    },
                 ])
                 .setTimestamp()
                 .setFooter({
@@ -89,6 +98,15 @@ module.exports = {
                         name: 'User: ',
                         value: `${bannedMember.username}`,
                         inline: true,
+                    },
+                    {
+                        name: 'User ID: ',
+                        value: `\`${bannedMember.id}\``,
+                        inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
                     },
                     {
                         name: 'Total Bans: ',

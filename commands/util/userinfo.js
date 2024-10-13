@@ -60,7 +60,7 @@ module.exports = {
                 },
                 {
                     name: 'User ID',
-                    value: `${member.user.id}`,
+                    value: `\`${member.user.id}\``,
                     inline: true,
                 },
                 {

@@ -38,7 +38,7 @@ module.exports = {
         const reason = interaction.options.getString('reason');
         const delDays = interaction.options.getNumber('delete_messages') ?? 0;
         const notice = interaction.options.getBoolean('notice') ?? true;
-        const duration = interaction.options.getNumber('duration') ?? 'permanent';
+        const duration = interaction.options.getNumber('duration');
         const [ guild ] = await Guild.findOrCreate({
             where: {
                 id: interaction.guild.id,
@@ -132,7 +132,7 @@ module.exports = {
         bannedMember.bannedReason = reason;
         bannedMember.bannedAt = new Date();
 
-        if (duration !== 'permanent') {
+        if (duration) {
             bannedMember.bannedUntil = new Date(Date.now() + (duration * 86400000));
         }
 
@@ -141,7 +141,7 @@ module.exports = {
         banEmbed
             .addFields({
                 name: 'Expire Date: ',
-                value: duration === 'permanent' ? 'Permanent' : `${bannedMember.bannedUntil}`,
+                value: duration ? `${bannedMember.bannedUntil}` : 'Never',
                 inline: true,
             });
 

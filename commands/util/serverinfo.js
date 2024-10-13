@@ -35,7 +35,7 @@ module.exports = {
                 },
                 {
                     name: 'Server ID',
-                    value: `${interaction.guild.id}`,
+                    value: `\`${interaction.guild.id}\``,
                     inline: true,
                 },
                 {
