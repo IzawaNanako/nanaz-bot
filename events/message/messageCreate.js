@@ -34,7 +34,7 @@ module.exports = {
             const parts = [
                 {
                 text: `input: ${userMessage}`,
-                },
+                }
             ];
 
             const result = await model.generateContent({
