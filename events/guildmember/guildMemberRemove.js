@@ -15,14 +15,14 @@ module.exports = {
         const guildMember = await GuildMember.findOne({
             where: {
                 id: member.id,
-                guildId: guild.id,
+                guildId: member.guild.id,
             }
         });
 
         const bannedMember = await BannedMember.findOne({
             where: {
                 id: member.id,
-                guildId: guild.id,
+                guildId: member.guild.id,
             }
         });
 

@@ -42,7 +42,7 @@ module.exports = {
             helpEmbed = new EmbedBuilder()
                 .setColor('#2E4053')
                 .setTitle('Welcome Message Helps')
-                .setDescription('The welcome message to send to new members of this server.\nDefault: "Thank you for joining ${member.guild.name}!"\nFormatting tips: Use "${member.guild.name}" or just enter the server name for the server name, "${member.user.username}" for the new member\'s username, and "${member.user.displayName}" for the display name, user ${member.user} to make the user\'s name clickable.\nUse "\\n" to make a new line.\nIf you wish to disable the welcome message feature, use "/set-channel Welcome" and leave the channel empty to disable it.\n\nIf you need any extra assist, please join our support server: https://discord.gg/vh2gSBESnh')
+                .setDescription('The welcome message to send to new members of this server.\n\nDefault: "Thank you for joining ${member.guild.name}!"\n\nFormatting tips: Use "${member.guild.name}" or just enter the server name for the server name, "${member.user.username}" for the new member\'s username, "${member.user.displayName}" for the display name, and user "${member.user}" to make the user\'s name clickable.\n\nUse "\\n" to make a new line.\n\nIf you wish to disable the welcome message feature, use "/set-channel Welcome" and leave the channel empty to disable it.\n\n\nIf you need any extra assist, please contact us through our support server: https://discord.gg/vh2gSBESnh')
                 .setTimestamp()
                 .setFooter({
                     text: 'Assisted by Nanaz.',
@@ -51,7 +51,8 @@ module.exports = {
         }
 
         await interaction.reply({
-            embeds: [helpEmbed]
+            embeds: [helpEmbed],
+            ephemeral: true,
         });
     }
 }
