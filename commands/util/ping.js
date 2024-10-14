@@ -7,9 +7,6 @@ module.exports = {
     async execute(interaction) {
         const pingEmbed = new EmbedBuilder()
             .setColor('#808080')
-            .setAuthor({
-                name: `Requested by ${interaction.user.displayName}`,
-            })
             .setTitle('Pinging...')
             .setFooter({
                 text: 'Pinged by Nanaz',
