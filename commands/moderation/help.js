@@ -13,8 +13,7 @@ module.exports = {
                     value: 'welcome-msg',
                 }
             )
-        )
-        .setContexts(0),
+        ),
     async execute(interaction) {
         const feature = interaction.options.getString('feature');
 
