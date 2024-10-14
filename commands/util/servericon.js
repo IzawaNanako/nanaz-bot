@@ -9,7 +9,7 @@ module.exports = {
             .setDescription('The id of the server to display the icon of.')
         ),
     async execute(interaction) {
-        const serverID = interaction.options.getString('server') ?? interaction.guild;
+        const serverID = interaction.options.getString('server') || interaction.guild.id;
 
         if (!serverID) {
             await interaction.reply({

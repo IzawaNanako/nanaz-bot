@@ -9,7 +9,7 @@ module.exports = {
             .setDescription('The user to display the banner of.')
         ),
     async execute(interaction) {
-        const user = interaction.options.getUser('user') ?? interaction.user;
+        const user = interaction.options.getUser('user') || interaction.user;
         const member = await user.fetch();
 
         if (!member.bannerURL()) {

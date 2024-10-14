@@ -13,11 +13,11 @@ module.exports = {
             .setDescription('Display the user\'s default avatar instead of their avatar in the server.')
         ),
     async execute(interaction) {
-        const member = interaction.options.getUser('user') ?? interaction.user;
-        const defaultAvatar = interaction.options.getBoolean('default_avatar') ?? false;
+        const member = interaction.options.getUser('user') || interaction.user;
+        const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;
         
         let avatarEmbed;
-        
+
         if (defaultAvatar && !member.bot) {
             avatarEmbed = new EmbedBuilder()
                 .setColor('#5865F2')

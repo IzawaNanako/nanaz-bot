@@ -10,7 +10,7 @@ module.exports = {
         )
         .setContexts(0),
     async execute(interaction) {
-        const member = interaction.options.getMember('user') ?? interaction.member;
+        const member = interaction.options.getMember('user') || interaction.member;
         const guildMember = await interaction.guild.members.fetch(member.user.id);
         const roles = '```' + guildMember.roles.cache.map((role) => role.name).join(`, `) + '```';
         let status = guildMember.presence?.status;
@@ -60,7 +60,7 @@ module.exports = {
                 },
                 {
                     name: 'User ID',
-                    value: `\`${member.user.id}\``,
+                    value: `\`\`\`${member.user.id}\`\`\``,
                     inline: true,
                 },
                 {

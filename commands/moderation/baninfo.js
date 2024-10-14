@@ -101,7 +101,7 @@ module.exports = {
                     },
                     {
                         name: 'User ID: ',
-                        value: `\`${bannedMember.id}\``,
+                        value: `\`\`\`${bannedMember.id}\`\`\``,
                         inline: true,
                     },
                     {

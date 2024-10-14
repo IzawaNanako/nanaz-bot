@@ -36,8 +36,8 @@ module.exports = {
 	async execute(interaction) {
 		const member = interaction.options.getMember('user');
         const reason = interaction.options.getString('reason');
-        const delDays = interaction.options.getNumber('delete_messages') ?? 0;
-        const notice = interaction.options.getBoolean('notice') ?? true;
+        const delDays = interaction.options.getNumber('delete_messages') || 0;
+        const notice = interaction.options.getBoolean('notice') || true;
         const duration = interaction.options.getNumber('duration');
         const [ guild ] = await Guild.findOrCreate({
             where: {

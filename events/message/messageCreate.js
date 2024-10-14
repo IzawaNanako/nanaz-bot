@@ -22,7 +22,9 @@ module.exports = {
                 .replace(`<@!${client.user.id}>`, '')
                 .trim();
 
-            const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+            const model = genAI.getGenerativeModel({
+                model: MODEL_NAME
+            });
 
             const generationConfig = {
                 temperature: 0.9,
@@ -38,7 +40,10 @@ module.exports = {
             ];
 
             const result = await model.generateContent({
-                contents: [{ role: 'user', parts }],
+                contents: [{
+                    role: 'user',
+                    parts,
+                }],
                 generationConfig,
             });
 

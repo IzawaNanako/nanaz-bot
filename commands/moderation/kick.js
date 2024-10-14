@@ -25,7 +25,7 @@ module.exports = {
 	async execute(interaction) {
 		const member = interaction.options.getMember('user');
         const reason = interaction.options.getString('reason');
-        const notice = interaction.options.getBoolean('notice') ?? true;
+        const notice = interaction.options.getBoolean('notice') || true;
         const [ guild ] = await Guild.findOrCreate({
             where: {
                 id: interaction.guild.id,

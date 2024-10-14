@@ -20,7 +20,7 @@ module.exports = {
         .setContexts(0),
 	async execute(interaction) {
 		const username = interaction.options.getString('username');
-        const notice = interaction.options.getBoolean('notice') ?? true;
+        const notice = interaction.options.getBoolean('notice') || true;
         const guild = await Guild.findOne({
             where: {
                 id: interaction.guild.id
