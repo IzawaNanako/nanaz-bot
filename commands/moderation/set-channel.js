@@ -5,7 +5,7 @@ const sendLog = require('../../utils/sendLog.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('set-channel')
-        .setDescription('Set the channel to for welcome, bye messages and logs.')
+        .setDescription('Set the channel to send welcome messages, bye messages and logs.')
         .addStringOption(option => option
             .setName('type')
             .setDescription('The type of channel to set.')
