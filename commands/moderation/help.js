@@ -43,13 +43,13 @@ module.exports = {
                         inline: true,
                     },
                     {
-                        name: '\u200B',
-                        value: '\u200B',
-                    },
-                    {
                         name: 'ids',
                         value: 'Get help on how to use IDs.',
                         inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
                     },
                     {
                         name: 'welcome-msg',
@@ -57,14 +57,14 @@ module.exports = {
                         inline: true,
                     },
                     {
-                        name: '\u200B',
-                        value: '\u200B',
-                    },
-                    {
                         name: 'userinfo',
                         value: 'Get help on the /userinfo command.',
                         inline: true,
-                    }
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
+                    },
                 )
         }
         else if (option === 'formats') {
