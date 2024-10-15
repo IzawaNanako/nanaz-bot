@@ -5,53 +5,122 @@ module.exports = {
         .setName('help')
         .setDescription('Get help on certain features of this bot.')
         .addStringOption(option => option
-            .setName('feature')
-            .setDescription('The feature to get help on.')
-            .addChoices(
-                {
-                    name: 'Welcome Message',
-                    value: 'welcome-msg',
-                }
-            )
+            .setName('option')
+            .setDescription('The thing you want to get help on, check "/help Menu" if you don\'t seem to find what you need.')
+            .setAutocomplete(true)
         ),
     async execute(interaction) {
-        const feature = interaction.options.getString('feature');
+        const supportServer = process.env.SUPPORT_SERVER;
+        const codeBlockExampleOne = '\\`This is a code block.\\`';
+        const codeBlockExampleTwo = '\\`\\`\\`This is a cool code block.\nI\'m a line.\nI\'m not a line, wait I am!?\\`\\`\\`';
+        let option = interaction.options.getString('option');
 
-        let helpEmbed;
-
-        if (!feature) {
-            helpEmbed = new EmbedBuilder()
-                .setColor('#2E4053')
-                .setTitle('Help Menu')
-                .setDescription('Below is a list of the features available for help.')
-                .addFields(
-                    {
-                        name: 'Welcome Message',
-                        value: 'Get help on the welcome message feature.',
-                    }
-                )
-                .setTimestamp()
-                .setFooter({
-                    text: 'Assisted by Nanaz.',
-                    iconURL: interaction.client.user.avatarURL(),
-                });
+        if (option) {
+            option = option.toLowerCase();
         }
 
-        if (feature === 'welcome-msg') {
-            helpEmbed = new EmbedBuilder()
+        const helpEmbed = new EmbedBuilder()
+            .setTimestamp()
+            .setFooter({
+                text: 'Assisted by Nanaz.',
+                iconURL: interaction.client.user.avatarURL(),
+            });
+
+        if (!option || option === 'menu') {
+            helpEmbed 
+                .setColor('#2E4053')
+                .setTitle('Help Menu')
+                .setDescription('Below is a list of the options available for help.')
+                .addFields(
+                    {
+                        name: 'menu',
+                        value: 'Show up this menu.',
+                        inline: true,
+                    },
+                    {
+                        name: 'formats',
+                        value: 'Get help on how to format your messages.',
+                        inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
+                    },
+                    {
+                        name: 'ids',
+                        value: 'Get help on how to use IDs.',
+                        inline: true,
+                    },
+                    {
+                        name: 'welcome-msg',
+                        value: 'Get help on the welcome message feature.',
+                        inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
+                    },
+                    {
+                        name: 'userinfo',
+                        value: 'Get help on the /userinfo command.',
+                        inline: true,
+                    }
+                )
+        }
+        else if (option === 'formats') {
+            helpEmbed
+                .setColor('#2E4053')
+                .setTitle('Formatting Helps')
+                .setDescription(`Discord, and some other platforms, use **Markdown**, which is a system to create formatted texts.\n\nGo to the bottom of the message if you only want to know how to put characters in a way like "\\_Why is this not italic?\\_"\n\nHere are some syntaxs you can use!\n\n"**Bold**": \\*\\*Bold\\*\\*\n"_Italic_": \\_Italic\\_ or \\*Italic\\*\n"__Underline__": \\_\\_Underline\\_\\_\n\n# Heading 1\n## Heading 2\n### Heading 3\nEquals to\n\\# Heading 1\n\\#\\# Heading 2\n\\#\\#\\# Heading 3\nrespectively, note that the space is neccessary.\n\nYou can also put message\n-# like this!\nOriginal Message:\nYou can also put message\n-\\# like this!\nNote that along with the headers, they need their own line and the space is neccessary.\n\n[Here is a masked link that takes you to cat pictures.](https://www.google.com/search?q=cats&tbm=isch)\nOriginal Message:\n\\[Here is a masked link that takes you to cat pictures.\\](https://www.google.com/search?q=cats&tbm=isch)\n\n- This is a list\n- cats\n  - cute\n  - meow\n* dogs\n  * friend\n  * woof\n\nYou can create this by putting "- " or "\\* " in front of each line, remember that the space is neccessary. Add another 2 spaces at the very start to indent.\n\nOriginal Message:\n\n\\- This is a list\n\\- cats\n\u200B \u200B \\- cute\n\u200B \u200B \\- meow\n\\* dogs\n\u200B \u200B \\* friend\n\u200B \u200B \\* woof\n\n\`This is a code block.\`\nOriginal Message:\n${codeBlockExampleOne}\n\`\`\`\nThis is a cool code block.\nI\'m a line.\nI\'m not a line, wait I am!?\`\`\`\nOriginal Message:\n${codeBlockExampleTwo}\n\n> I\'m quoted\nOriginal Message:\n\\> I\'m quoted\n\n> We\' are quoted.\n> I am.\n> Me too.\nOriginal Message:\n\\>\\>\\> We\' are quoted.\nI am.\nMe too.\n\nSo, how did I put all these fancy characters without ruining everything? Well it's pretty simple, just put a "\\\" before any character that has a special effect to "Escape" it!\nExample: "\\*\\*I am escaped!\\*\\*"\nOriginal Message: "\\\\*\\\\*I am escaped!\\\\*\\\\*"\n\nIf you need any extra assist, please contact us through our support server: ${supportServer}`);
+        }
+        else if (option === 'ids') {
+            helpEmbed
+                .setColor('#2E4053')
+                .setTitle('IDs Helps')
+                .setDescription(`ID in Discord is a unique string of numbers assigned to every guild, user, channels, emojis and possibly more! Everything has their own ID, it's their only way of knowing each other!\n\nTo get something's ID, you'll need to turn on Developer Mode on Discord, head to your User Settings -> Under App Settings, click on "Advanced" -> Turn on "Developer Mode".\n\nNow you just have to right click on a user, a server, or anything, then click on "Copy _Something_ ID" to get their ID!\n\nIf you need any extra assist, please contact us through our support server: ${supportServer}`)
+                .setImage('https://i.imgur.com/Dn402t2.gif');
+        }
+        else if (option === 'welcome-msg') {
+            helpEmbed
                 .setColor('#2E4053')
                 .setTitle('Welcome Message Helps')
-                .setDescription('The welcome message to send to new members of this server.\n\nDefault: "Thank you for joining ${member.guild.name}!"\n\nFormatting tips:\nUse "${member.guild.name}" or just enter the server name for the server name.\nUse "${member.user.username}" for the new member\'s username.\nUse "${member.user.displayName}" for the display name.\nUse "${member.user}" to make the user\'s name clickable.\n\nUse "\\n" to make a new line.\n\nIf you wish to disable the welcome message feature, use "/set-channel Welcome" and leave the channel option empty to disable it.\n\n\nIf you need any extra assist, please contact us through our support server: https://discord.gg/vh2gSBESnh')
-                .setTimestamp()
-                .setFooter({
-                    text: 'Assisted by Nanaz.',
-                    iconURL: interaction.client.user.avatarURL(),
-                });
+                .setDescription(`The welcome message to send to new members of your server.\n\nDefault: "Thank you for joining \${member.guild.name}!"\n\nCommon Questions: (Remove the quotes if you want to include any of the syntaxs below.)\nQ: How can I get the server name?\nAns: You can just type the server name in yourself, but if you want, "\${member.guild.name} as shown above."\n\nQ: How can I get the new member\s username?\nAns: "\${member.user.username}"\n\nQ: I actually meant their name displayed, like the one with caps?\nAns: "\${member.user.displayName}"\n\nQ: How do I get a new line?\nAns: Use "\\n" at the end of the line, don\'t need any spaces.\n\nQ: How do I make something bold or italic or something something?\nAns: Check "/help formats".\n\nQ: How do I put multiple characters such as "*" in my message without it making my message weird?\nAns: Check "/help formats".\n\nIf you need any extra assist, please contact us through our support server: ${supportServer}`);
+        }
+        else if (option === 'userinfo') {
+            helpEmbed
+                .setColor('#2E4053')
+                .setTitle('User Info Command Helps')
+                .setDescription(`Get information about the selected user.\n\nCommon Questions:\nQ: The user I want to check is not in the server! How do I check them?\nAns: You need to get their user ID and put "<@id-here>" in the option box, replace id-here with their user ID.\n\nQ: So how do I get their user ID?\nAns: Check "/help ids".\n\nIf you need any extra assist, please contact us through our support server: ${supportServer}`);
+        }
+        else {
+            await interaction.reply({
+                content: 'Invalid option.',
+                ephemeral: true,
+            });
+            return;
         }
 
         await interaction.reply({
             embeds: [helpEmbed],
             ephemeral: true,
         });
+    },
+    async autocomplete(interaction) {
+        const focusedValue = interaction.options.getFocused();
+        const choices = [
+            'menu', 'formats', 'ids', 'welcome-msg', 'userinfo',
+        ];
+
+        const filtered = choices.filter(choice => 
+            choice.startsWith(focusedValue.toLowerCase())
+        );
+
+        await interaction.respond(
+            filtered.map(choice => ({
+                name: choice,
+                value: choice,
+            }))
+            .slice(0, 25)
+        );
     }
 }

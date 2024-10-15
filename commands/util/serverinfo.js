@@ -6,6 +6,7 @@ module.exports = {
         .setDescription('Display information about this server.')
         .setContexts(0),
     async execute(interaction) {
+        const createdAtTimestamp = Math.floor(interaction.guild.createdAt.getTime() / 1000);
         let owner = await interaction.guild.members.fetch(interaction.guild.ownerId);
 
         const infoTextNum = Math.floor(Math.random() * 5);
@@ -34,13 +35,17 @@ module.exports = {
                     inline: true,
                 },
                 {
-                    name: 'Server ID',
-                    value: `\`\`\`${interaction.guild.id}\`\`\``,
+                    name: 'Server Owner',
+                    value: `<@${owner.user.id}>`,
                     inline: true,
                 },
                 {
-                    name: 'Server Owner',
-                    value: `<@${owner.user.id}>`,
+                    name: '\u200B',
+                    value: '\u200B',
+                },
+                {
+                    name: 'Server ID',
+                    value: `\`\`\`${interaction.guild.id}\`\`\``,
                     inline: true,
                 },
                 {
@@ -87,7 +92,7 @@ module.exports = {
                 },
                 {
                     name: 'Created At',
-                    value: `${interaction.guild.createdAt}`,
+                    value: `<t:${createdAtTimestamp}>`,
                     inline: true,
                 },
                 {

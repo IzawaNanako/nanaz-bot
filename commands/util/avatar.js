@@ -16,43 +16,33 @@ module.exports = {
         const member = interaction.options.getUser('user') || interaction.user;
         const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;
         
-        let avatarEmbed;
+        const avatarEmbed = new EmbedBuilder()
+            .setColor('#5865F2')
+            .setAuthor({
+                name: `Requested by ${interaction.user.displayName}`,
+            })
+            .setTitle(`${member.displayName}'s Avatar`)
+            .setFooter({
+                text: `Displayed by Nanaz`,
+                iconURL: interaction.client.user.avatarURL(),
+            })
+            .setTimestamp();
 
         if (defaultAvatar && !member.bot) {
-            avatarEmbed = new EmbedBuilder()
-                .setColor('#5865F2')
-                .setAuthor({
-                    name: `Requested by ${interaction.user.displayName}`,
-                })
-                .setTitle(`${member.displayName}'s Avatar`)
-                .setDescription(`Avatar URL: ${member.displayAvatarURL()}`)
+            avatarEmbed
+                .setDescription(`Avatar URL: ${member.avatarURL()}`)
                 .setImage(member.avatarURL({
                     dynamic: true,
                     size: 2048,
-                }))
-                .setFooter({
-                    text: `Displayed by Nanaz`,
-                    iconURL: interaction.client.user.avatarURL(),
-                })
-                .setTimestamp();
+                }));
         }
         else {
-            avatarEmbed = new EmbedBuilder()
-                .setColor('#5865F2')
-                .setAuthor({
-                    name: `Requested by ${interaction.user.displayName}`,
-                })
-                .setTitle(`${member.displayName}'s Avatar`)
+            avatarEmbed
                 .setDescription(`Avatar URL: ${member.displayAvatarURL()}`)
                 .setImage(member.displayAvatarURL({
                     dynamic: true,
                     size: 2048,
-                }))
-                .setFooter({
-                    text: `Displayed by Nanaz`,
-                    iconURL: interaction.client.user.avatarURL(),
-                })
-                .setTimestamp();
+                }));
         }
 
         await interaction.reply({

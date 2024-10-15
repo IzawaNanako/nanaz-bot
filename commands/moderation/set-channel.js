@@ -12,15 +12,15 @@ module.exports = {
             .setRequired(true)
             .addChoices(
                 {
-                    name: 'Welcome',
+                    name: 'welcome',
                     value: 'welcome',
                 },
                 {
-                    name: 'Bye',
+                    name: 'bye',
                     value: 'bye',
                 },
                 {
-                    name: 'Log',
+                    name: 'log',
                     value: 'log',
                 }
             )

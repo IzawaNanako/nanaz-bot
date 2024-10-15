@@ -6,7 +6,7 @@ module.exports = {
         .setDescription('Display the icon of the selected server.')
         .addStringOption(option => option
             .setName('server')
-            .setDescription('The id of the server to display the icon of.')
+            .setDescription('The ID of the server to display the icon of. "/help ids" for how to get IDs.')
         ),
     async execute(interaction) {
         const serverID = interaction.options.getString('server') || interaction.guild.id;

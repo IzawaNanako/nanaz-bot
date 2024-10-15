@@ -27,12 +27,17 @@ module.exports = {
             })
         }
 
-        let banInfoEmbed;
+        const banInfoEmbed = new EmbedBuilder()
+            .setColor('#FF0000')
+            .setTitle('Ban Information')
+            .setTimestamp()
+            .setFooter({
+                text: 'Fetched by Nanaz.',
+                iconURL: interaction.client.user.avatarURL(),
+            });
 
         if (bannedMember.isBanned) {
-            banInfoEmbed = new EmbedBuilder()
-                .setColor('#FF0000')
-                .setTitle('Ban Information')
+            banInfoEmbed
                 .setDescription(`This user is currently banned from this server.`)
                 .addFields([
                     {
@@ -81,17 +86,10 @@ module.exports = {
                         name: 'Total Bans: ',
                         value: `${bannedMember.totalBans}`,
                     },
-                ])
-                .setTimestamp()
-                .setFooter({
-                    text: 'Fetched by Nanaz.',
-                    iconURL: interaction.client.user.avatarURL(),
-                });
+                ]);
         }
         else {
-            banInfoEmbed = new EmbedBuilder()
-                .setColor('#FF0000')
-                .setTitle('Ban Information')
+            banInfoEmbed
                 .setDescription('This user is currently not banned from this server.')
                 .addFields([
                     {
@@ -113,12 +111,7 @@ module.exports = {
                         value: `${bannedMember.totalBans}`,
                         inline: true,
                     }
-                ])
-                .setTimestamp()
-                .setFooter({
-                    text: 'Fetched by Nanaz.',
-                    iconURL: interaction.client.user.avatarURL(),
-                });
+                ]);
         }
 
         await interaction.reply({
