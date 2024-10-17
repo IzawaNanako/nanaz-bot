@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 const Guild = require('./models/guild.js');
 
 Guild.sync({

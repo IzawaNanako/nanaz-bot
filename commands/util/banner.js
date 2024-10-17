@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -39,6 +40,7 @@ module.exports = {
 
         await interaction.reply({
             embeds: [bannerEmbed],
+            components: [supportButton],
         });
     }
 }

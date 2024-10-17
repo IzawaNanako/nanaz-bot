@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
 const Guild = require('../../models/guild.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,7 +17,7 @@ module.exports = {
     async execute(interaction) {
         await interaction.deferReply();
         const message = interaction.options.getString('message');
-        const [ guild ] = await Guild.findOrCreate({
+        const guild = await Guild.findOrCreate({
             where: {
                 id: await interaction.guild.id,
             }
@@ -49,6 +50,7 @@ module.exports = {
 
         await interaction.editReply({
             embeds: [actionEmbed],
+            components: [supportButton],
         });
 
         await sendLog(interaction.guild, {

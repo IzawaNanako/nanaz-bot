@@ -1,18 +1,26 @@
 require('dotenv').config();
-
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
+
 const token = process.env.TOKEN;
 
 const client = new Client({
-                        intents: [
-                            GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent,
-                            GatewayIntentBits.GuildMembers, GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageTyping,
-                            GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.GuildPresences
+                        intents:[
+                            GatewayIntentBits.Guilds,
+                            GatewayIntentBits.GuildMessages,
+                            GatewayIntentBits.MessageContent,
+                            GatewayIntentBits.GuildMembers,
+                            GatewayIntentBits.DirectMessages,
+                            GatewayIntentBits.DirectMessageTyping,
+                            GatewayIntentBits.DirectMessageReactions,
+                            GatewayIntentBits.GuildPresences,
                         ],
                         partials: [
-                            Partials.Message, Partials.Channel, Partials.Reaction, Partials.GuildMember
+                            Partials.Message,
+                            Partials.Channel,
+                            Partials.Reaction, 
+                            Partials.GuildMember,
                         ], 
                         });
 

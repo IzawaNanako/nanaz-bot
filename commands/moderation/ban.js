@@ -2,6 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('disc
 const Guild = require('../../models/guild.js');
 const BannedMember = require('../../models/bannedMember.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -83,7 +84,7 @@ module.exports = {
 
         const banEmbed = new EmbedBuilder()
             .setColor('#FF0000')
-            .setTitle('<:banhammer:1292141718279557162> Member Banned')
+            .setTitle('<:banhammer:1296420170188718141> Member Banned')
             .setDescription(banMsgs[banMsgID])
             .addFields([
                 {
@@ -149,6 +150,7 @@ module.exports = {
 
         await interaction.reply({
             embeds: [banEmbed],
+            components: [supportButton],
         });
         await interaction.guild.members.ban(member, {
             reason: reason ?? 'No reason provided.',

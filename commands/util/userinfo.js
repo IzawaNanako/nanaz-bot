@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -16,6 +17,7 @@ module.exports = {
             'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
             'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
             'HypeSquadOnlineHouse3': '<:HypeSquadBalance:1295711412294778931>',
+            'Hypesquad': '<:HypeSquadEvents:1296418614336815215>',
             'ActiveDeveloper': '<:ActiveDeveloper:1295710776014667817>',
             'VerifiedDeveloper': '<:EarlyVerifiedBotDeveloper:1295710584330915902>',
             'BugHunterLevel1': '<:DiscordBugHunter:1295711456355942401>',
@@ -40,7 +42,7 @@ module.exports = {
 
         if (guildMember) {
             roles = guildMember.roles.cache.map((role) => role.name).join(`, `);
-            joinedAtTimestamp = Math.floor(guildMember.joinedAt.getTime() / 1000);
+            joinedAt = `<t:${Math.floor(guildMember.joinedAt.getTime() / 1000)}>`;
             status = guildMember.presence?.status;
         }
         else {
@@ -124,7 +126,7 @@ module.exports = {
                 },
                 {
                     name: 'Joined Server At',
-                    value: `<t:${joinedAtTimestamp}>`,
+                    value: `${joinedAt}`,
                     inline: true,
                 },
                 {
@@ -149,6 +151,7 @@ module.exports = {
         
         await interaction.reply({
             embeds: [userInfoEmbed],
+            components: [supportButton],
         });
     }
 }

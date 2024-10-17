@@ -11,21 +11,18 @@ module.exports = {
                 id: member.guild.id,
             }
         });
-
         const guildMember = await GuildMember.findOne({
             where: {
                 id: member.id,
                 guildId: member.guild.id,
             }
         });
-
         const bannedMember = await BannedMember.findOne({
             where: {
                 id: member.id,
                 guildId: member.guild.id,
             }
         });
-
         if (guildMember?.isKicked || bannedMember?.isBanned) {
             return;
         }

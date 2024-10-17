@@ -12,27 +12,23 @@ module.exports = {
                 id: member.guild.id,
             }
         });
-
         const guildMember = await GuildMember.findOne({
             where: {
                 id: member.user.id,
                 guildId: member.guild.id,
             }
         });
-
         const bannedMember = await BannedMember.findOne({
             where: {
                 id: member.user.id,
                 guildId: member.guild.id,
             }
         });
-
         const welcomeRoles = await WelcomeRole.findAll({
             where: {
                 guildId: member.guild.id,
             }
         });
-
         const welcomeMessage = guild.welcomeMessage;
 
         const welcomeEmbed = new EmbedBuilder()

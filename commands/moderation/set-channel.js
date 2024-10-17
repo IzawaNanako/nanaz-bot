@@ -1,11 +1,12 @@
 const { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder } = require('discord.js');
 const Guild = require('../../models/guild.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('set-channel')
-        .setDescription('Set the channel to send welcome messages, bye messages and logs.')
+        .setDescription('Set the channel to send welcome messages, bye messages, and logs in.')
         .addStringOption(option => option
             .setName('type')
             .setDescription('The type of channel to set.')
@@ -27,7 +28,7 @@ module.exports = {
         )
         .addChannelOption(option => option
             .setName('channel')
-            .setDescription('The channel to send chosen message type in, leave empty to disable the chosen feature.')
+            .setDescription('The channel to set for the chosen feature, leave empty to disable the chosen feature.')
             .addChannelTypes(ChannelType.GuildText)
         )
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
@@ -37,9 +38,9 @@ module.exports = {
         const type = interaction.options.getString('type');
         const typeName = type.charAt(0).toUpperCase() + type.slice(1);
         const channel = interaction.options.getChannel('channel');
-        const [ guild ] = await Guild.findOrCreate({
+        const guild = await Guild.findOrCreate({
             where: {
-                id: await interaction.guild.id,
+                id: interaction.guild.id,
             }
         });
         const previousChannel = guild[type + 'ChannelId'];
@@ -81,6 +82,7 @@ module.exports = {
 
         await interaction.editReply({
             embeds: [actionEmbed],
+            components: [supportButton]
         });
 
         await sendLog(interaction.guild, {

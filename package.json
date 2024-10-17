@@ -1,28 +1,28 @@
 {
-  "name": "uwubot",
-  "version": "1.0.0",
-  "description": "not so cool idk maybe cute?",
-  "main": "index.js",
-  "scripts": {
+    "name": "uwubot",
+    "version": "1.0.0",
+    "description": "not so cool idk maybe cute?",
+    "main": "index.js",
+    "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
     "@discordjs/voice": "^0.17.0",
     "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.7",
     "discord.js": "^14.16.3",
-    "distube": "^5.0.2",
     "dotenv": "^16.4.5",
     "pg": "^8.13.0",
     "pg-hstore": "^2.3.4",
     "postgres": "^3.4.4",
     "sequelize": "^6.37.4",
-    "sodium-native": "^4.2.1"
-  },
-  "devDependencies": {
+    "sodium-native": "^4.2.1",
+    "undici": "^6.20.1"
+    },
+    "devDependencies": {
     "eslint": "^9.11.1"
-  }
+    }
 }

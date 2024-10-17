@@ -2,6 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('disc
 const Guild = require('../../models/guild.js');
 const GuildMember = require('../../models/guildMember.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -26,7 +27,7 @@ module.exports = {
 		const member = interaction.options.getMember('user');
         const reason = interaction.options.getString('reason');
         const notice = interaction.options.getBoolean('notice') || true;
-        const [ guild ] = await Guild.findOrCreate({
+        const guild = await Guild.findOrCreate({
             where: {
                 id: interaction.guild.id,
             }
@@ -111,6 +112,7 @@ module.exports = {
 
         await interaction.reply({
             embeds: [kickEmbed],
+            components: [supportButton],
         });
         await member.kick();
 

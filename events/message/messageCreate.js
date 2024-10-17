@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { ChannelType } = require('discord.js');
-const geminiAPIKey = process.env.GEMINI_API_KEY;
 
+const geminiAPIKey = process.env.GEMINI_API_KEY;
 const MODEL_NAME = 'gemini-1.5-flash';
 const genAI = new GoogleGenerativeAI(geminiAPIKey);
 

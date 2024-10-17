@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
             .setDescription('Display the user\'s default avatar instead of their avatar in the server.')
         ),
     async execute(interaction) {
-        const member = interaction.options.getUser('user') || interaction.user;
+        const user = interaction.options.getUser('user') || interaction.user;
         const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;
         
         const avatarEmbed = new EmbedBuilder()
@@ -21,25 +22,25 @@ module.exports = {
             .setAuthor({
                 name: `Requested by ${interaction.user.displayName}`,
             })
-            .setTitle(`${member.displayName}'s Avatar`)
+            .setTitle(`${user.displayName}'s Avatar`)
             .setFooter({
                 text: `Displayed by Nanaz`,
                 iconURL: interaction.client.user.avatarURL(),
             })
             .setTimestamp();
 
-        if (defaultAvatar && !member.bot) {
+        if (defaultAvatar && !user.bot) {
             avatarEmbed
-                .setDescription(`Avatar URL: ${member.avatarURL()}`)
-                .setImage(member.avatarURL({
+                .setDescription(`Avatar URL: ${user.avatarURL()}`)
+                .setImage(user.avatarURL({
                     dynamic: true,
                     size: 2048,
                 }));
         }
         else {
             avatarEmbed
-                .setDescription(`Avatar URL: ${member.displayAvatarURL()}`)
-                .setImage(member.displayAvatarURL({
+                .setDescription(`Avatar URL: ${user.displayAvatarURL()}`)
+                .setImage(user.displayAvatarURL({
                     dynamic: true,
                     size: 2048,
                 }));
@@ -47,6 +48,7 @@ module.exports = {
 
         await interaction.reply({
             embeds: [avatarEmbed],
+            components: [supportButton],
         });
     }
 }

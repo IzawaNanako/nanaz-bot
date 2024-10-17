@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('discord.js');
-const Guild = require('../../models/guild.js');
 const BannedMember = require('../../models/bannedMember.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,16 +21,11 @@ module.exports = {
 	async execute(interaction) {
 		const username = interaction.options.getString('username');
         const notice = interaction.options.getBoolean('notice') || true;
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id
-            }
-        });
         const bannedMember = await BannedMember.findOne({
             where: {
                 username: username,
                 isBanned: true,
-                guildId: guild.id,
+                guildId: interaction.guild.id,
             }
         });
 
@@ -86,6 +81,7 @@ module.exports = {
 
         await interaction.reply({
             embeds: [unbanEmbed],
+            components: [supportButton],
         });
         await interaction.guild.members.unban(bannedMember.id);
 

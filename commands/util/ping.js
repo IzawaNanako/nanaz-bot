@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -31,6 +32,7 @@ module.exports = {
                         }
                     ])
             ],
+            components: [supportButton],
         });
 	},
 };

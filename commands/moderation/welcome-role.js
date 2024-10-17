@@ -2,6 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } = require('disc
 const Guild = require('../../models/guild.js');
 const WelcomeRole = require('../../models/welcomeRole.js');
 const sendLog = require('../../utils/sendLog.js');
+const supportButton = require('../../utils/supportButton.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -36,7 +37,7 @@ module.exports = {
         await interaction.deferReply();
         const action = interaction.options.getString('action');
         const role = interaction.options.getRole('role');
-        const [ guild ] = await Guild.findOrCreate({
+        const guild = await Guild.findOrCreate({
             where: {
                 id: await interaction.guild.id,
             }
@@ -138,6 +139,7 @@ module.exports = {
 
         await interaction.editReply({
             embeds: [actionEmbed],
+            components: [supportButton],
         });
 
         await sendLog(interaction.guild, {
