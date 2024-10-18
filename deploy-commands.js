@@ -1,21 +1,21 @@
-require('dotenv').config();
-const { REST, Routes } = require('discord.js');
-const fs = require('node:fs');
-const path = require('node:path');
+import 'dotenv/config.js';
+import { REST, Routes } from 'discord.js';
+import { readdirSync } from 'fs';
+import { join } from 'path';
 
 const clientId = process.env.CLIENT_ID;
 const token = process.env.TOKEN;
 
 const commands = [];
-const foldersPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(foldersPath);
+const foldersPath = join('./src/commands');
+const commandFolders = readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
-	const commandsPath = path.join(foldersPath, folder);
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	const commandsPath = join(foldersPath, folder);
+	const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
+		const filePath = join(commandsPath, file);
+		const command = await import(`./${filePath}`);
 		if ('data' in command && 'execute' in command) {
 			commands.push(command.data.toJSON());
 		}

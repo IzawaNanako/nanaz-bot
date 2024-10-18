@@ -1,0 +1,129 @@
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import Guild from '../../models/guild.js';
+import WelcomeRole from '../../models/welcomeRole.js';
+import sendLog from '../../utils/sendLog.js';
+import supportButton from '../../utils/supportButton.js';
+export const data = new SlashCommandBuilder()
+    .setName('welcome-role')
+    .setDescription('Set the roles to give to new members of this server.')
+    .addStringOption(option => option
+    .setName('action')
+    .setDescription('The action to perform. Can be "add", "remove" or "clear" to clear all welcome roles.')
+    .setRequired(true)
+    .addChoices({
+    name: 'add',
+    value: 'add',
+}, {
+    name: 'remove',
+    value: 'remove',
+}, {
+    name: 'clear',
+    value: 'clear',
+}))
+    .addRoleOption(option => option
+    .setName('role')
+    .setDescription('The role to add or remove.'))
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setContexts(0);
+export async function execute(interaction) {
+    await interaction.deferReply();
+    const action = interaction.options.getString('action');
+    const role = interaction.options.getRole('role');
+    const [guild] = await Guild.findOrCreate({
+        where: {
+            id: interaction.guild.id,
+        }
+    });
+    if (action === 'clear' && role) {
+        await interaction.editReply({
+            content: 'Please leave the role section empty to clear all welcome roles!',
+        });
+        return;
+    }
+    else if (action !== 'clear' && !role) {
+        await interaction.editReply({
+            content: 'Please specify a existing role!',
+        });
+        return;
+    }
+    let roles = await WelcomeRole.findAll({
+        where: {
+            guildId: guild.id,
+        }
+    });
+    const previousRolesList = roles.map(role => `<@&${role.id}>`).join(', ');
+    if (previousRolesList.includes(role) && action === 'add') {
+        await interaction.editReply({
+            content: 'This role is already in the list!',
+        });
+        return;
+    }
+    const actionEmbed = new EmbedBuilder()
+        .setColor('#2E4053')
+        .setAuthor({
+        name: `Requested by ${interaction.user.displayName}`,
+    })
+        .setTitle('Welcome Roles Changed')
+        .setThumbnail(interaction.guild.iconURL({
+        dynamic: true,
+    }))
+        .addFields([
+        {
+            name: 'Previous Roles',
+            value: previousRolesList.length > 0 ? previousRolesList : 'None',
+            inline: true,
+        },
+        {
+            name: '\u200B',
+            value: '\u200B',
+            inline: true,
+        }
+    ])
+        .setTimestamp()
+        .setFooter({
+        text: `Executed by Nanaz`,
+        iconURL: interaction.client.user.avatarURL(),
+    });
+    if (action === 'clear') {
+        await WelcomeRole.destroy({
+            where: {
+                guildId: guild.id,
+            }
+        });
+    }
+    else if (action === 'add') {
+        await WelcomeRole.create({
+            id: role.id,
+            guildId: guild.id,
+        });
+    }
+    else if (action === 'remove') {
+        await WelcomeRole.destroy({
+            where: {
+                id: role.id,
+                guildId: guild.id,
+            }
+        });
+    }
+    roles = await WelcomeRole.findAll({
+        where: {
+            guildId: guild.id,
+        }
+    });
+    const rolesList = roles.map(role => `<@&${role.id}>`).join(', ');
+    actionEmbed
+        .addFields([
+        {
+            name: 'Current Roles',
+            value: rolesList.length > 0 ? rolesList : 'None',
+            inline: true,
+        }
+    ]);
+    await interaction.editReply({
+        embeds: [actionEmbed],
+        components: [supportButton],
+    });
+    await sendLog(interaction.guild, {
+        embeds: [actionEmbed],
+    });
+}

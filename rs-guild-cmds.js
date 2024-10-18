@@ -1,5 +1,5 @@
-require('dotenv').config();
-const { REST, Routes } = require('discord.js');
+import 'dotenv/config.js';
+import { REST, Routes } from 'discord.js';
 
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID;
@@ -15,8 +15,8 @@ rest.get(Routes.applicationGuildCommands(clientId, guildId))
         const deletePromises = commandsToDelete.map(command => 
             rest.delete(Routes.applicationGuildCommand(clientId, guildId, command.id))
         );
-
-        return Promise.all(deletePromises);
+        Promise.all(deletePromises);
+        return;
     })
-    .then(() => console.log('Successfully reset all guild commands.'))
+    .then(() => console.log('Successfully deleted all guild commands.'))
     .catch(console.error);
