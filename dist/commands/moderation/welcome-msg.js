@@ -26,9 +26,6 @@ export async function execute(interaction) {
             id: interaction.guild.id,
         }
     });
-    guild.update({
-        welcomeMessage: message,
-    });
     const actionEmbed = new EmbedBuilder()
         .setColor('#2E4053')
         .setAuthor({
@@ -38,14 +35,21 @@ export async function execute(interaction) {
         .setThumbnail(interaction.guild.iconURL())
         .addFields([
         {
-            name: 'Current Message',
+            name: 'Previous Message',
             value: `${guild.welcomeMessage}`,
+        },
+        {
+            name: 'Current Message',
+            value: `${message}`,
         }
     ])
         .setTimestamp()
         .setFooter({
         text: `Executed by Nanaz`,
         iconURL: interaction.client.user.avatarURL() ?? undefined,
+    });
+    guild.update({
+        welcomeMessage: message,
     });
     await interaction.editReply({
         embeds: [actionEmbed],
