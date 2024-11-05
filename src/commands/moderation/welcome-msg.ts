@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
 import Guild from '../../models/guild.js';
 import sendLog from '../../utils/sendLog.js';
 import supportButton from '../../utils/supportButton.js';
@@ -13,10 +13,17 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
-export async function execute(interaction) {
+export async function execute(interaction: CommandInteraction) {
+    if (!interaction.guild) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
     await interaction.deferReply();
-    const message = interaction.options.getString('message');
-    const guild = await Guild.findOrCreate({
+    const message = interaction.options.get('message')?.value as string;
+    const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,
         }
@@ -32,9 +39,7 @@ export async function execute(interaction) {
             name: `Requested by ${interaction.user.displayName}`,
         })
         .setTitle('Welcome Message Changed')
-        .setThumbnail(interaction.guild.iconURL({
-            dynamic: true,
-        }))
+        .setThumbnail(interaction.guild.iconURL())
         .addFields([
             {
                 name: 'Current Message',
@@ -44,7 +49,7 @@ export async function execute(interaction) {
         .setTimestamp()
         .setFooter({
             text: `Executed by Nanaz`,
-            iconURL: interaction.client.user.avatarURL(),
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
 
     await interaction.editReply({

@@ -10,8 +10,8 @@ export const data = new SlashCommandBuilder()
     .setName('default_avatar')
     .setDescription('Display the user\'s default avatar instead of their avatar in the server.'));
 export async function execute(interaction) {
-    const user = interaction.options.getUser('user') || interaction.user;
-    const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;
+    const user = interaction.options.get('user')?.user || interaction.user;
+    const defaultAvatar = interaction.options.get('default_avatar')?.value || false;
     const avatarEmbed = new EmbedBuilder()
         .setColor('#5865F2')
         .setAuthor({
@@ -20,14 +20,13 @@ export async function execute(interaction) {
         .setTitle(`${user.displayName}'s Avatar`)
         .setFooter({
         text: `Displayed by Nanaz`,
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
     if (defaultAvatar && !user.bot) {
         avatarEmbed
             .setDescription(`Avatar URL: ${user.avatarURL()}`)
             .setImage(user.avatarURL({
-            dynamic: true,
             size: 2048,
         }));
     }
@@ -35,7 +34,6 @@ export async function execute(interaction) {
         avatarEmbed
             .setDescription(`Avatar URL: ${user.displayAvatarURL()}`)
             .setImage(user.displayAvatarURL({
-            dynamic: true,
             size: 2048,
         }));
     }

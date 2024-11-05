@@ -1,15 +1,19 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 import Guild from './guild.js';
 const GuildMember = sequelize.define('guildMember', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     },
     isKicked: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+    },
+    guildId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 Guild.hasMany(GuildMember, {

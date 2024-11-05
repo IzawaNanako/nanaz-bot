@@ -1,8 +1,8 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 const User = sequelize.define('user', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     }
 });

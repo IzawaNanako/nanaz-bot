@@ -15,8 +15,22 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(0);
 export async function execute(interaction) {
-    const username = interaction.options.getString('username');
-    const notice = interaction.options.getBoolean('notice') || true;
+    if (!interaction.guild || !interaction.guild.members.me) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
+        await interaction.reply({
+            content: 'I don\'t have permission to manage bans in this server!',
+            ephemeral: true,
+        });
+        return;
+    }
+    const username = interaction.options.get('username')?.value;
+    const notice = interaction.options.get('notice')?.value || true;
     const bannedMember = await BannedMember.findOne({
         where: {
             username: username,
@@ -55,7 +69,7 @@ export async function execute(interaction) {
         .setTimestamp()
         .setFooter({
         text: 'The user can join the server now.',
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     });
     const unbannedNotice = `${interaction.user} unbanned you from **${interaction.guild.name}**!`;
     if (!user.bot && notice) {

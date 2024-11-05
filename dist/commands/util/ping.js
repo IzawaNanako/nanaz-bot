@@ -6,13 +6,16 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
     const pingEmbed = new EmbedBuilder()
         .setColor('#808080')
+        .setAuthor({
+        name: `Requested by ${interaction.user.displayName}`,
+    })
         .setTitle('Pinging...')
         .setFooter({
         text: 'Pinged by Nanaz',
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
-    let msg = await interaction.reply({
+    const msg = await interaction.reply({
         embeds: [pingEmbed],
         fetchReply: true,
     });

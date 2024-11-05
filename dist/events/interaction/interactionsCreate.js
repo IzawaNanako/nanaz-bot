@@ -1,7 +1,7 @@
 import { Events } from 'discord.js';
 export const name = Events.InteractionCreate;
 export async function execute(interaction) {
-    if (!interaction.isChatInputCommand() && !interaction.isAutocomplete()) {
+    if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isContextMenuCommand()) {
         return;
     }
     const command = interaction.client.commands.get(interaction.commandName);
@@ -9,7 +9,7 @@ export async function execute(interaction) {
         console.error(`No command matching ${interaction.commandName} was found.`);
         return;
     }
-    if (interaction.isChatInputCommand()) {
+    if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
         try {
             await command.execute(interaction);
         }
@@ -29,12 +29,17 @@ export async function execute(interaction) {
             }
         }
     }
-    else {
-        try {
-            await command.autocomplete(interaction);
+    else if (interaction.isAutocomplete()) {
+        if (command.autocomplete) {
+            try {
+                await command.autocomplete(interaction);
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
-        catch (error) {
-            console.error(error);
+        else {
+            console.error(`The command "${interaction.commandName}" does not have an autocomplete method.`);
         }
     }
 }

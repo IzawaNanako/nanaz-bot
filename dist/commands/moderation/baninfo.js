@@ -11,25 +11,35 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(0);
 export async function execute(interaction) {
-    const username = interaction.options.getString('username');
-    const [bannedMember] = await BannedMember.findOne({
-        guildId: interaction.guild.id,
-        username: username,
+    if (!interaction.guild) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    const username = interaction.options.get('username')?.value;
+    const bannedMember = await BannedMember.findOne({
+        where: {
+            guildId: interaction.guild.id,
+            username: username,
+        }
     });
-    const expireDate = bannedMember.bannedUntil ?? 'Never';
     if (!bannedMember) {
         await interaction.reply({
             content: 'This user has never been banned from this server.',
             ephemeral: true,
         });
+        return;
     }
+    const expireDate = bannedMember.bannedUntil ?? 'Never';
     const banInfoEmbed = new EmbedBuilder()
         .setColor('#FF0000')
         .setTitle('Ban Information')
         .setTimestamp()
         .setFooter({
         text: 'Fetched by Nanaz.',
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     });
     if (bannedMember.isBanned) {
         banInfoEmbed
@@ -56,7 +66,7 @@ export async function execute(interaction) {
             },
             {
                 name: 'Reason: ',
-                value: `${bannedMember.reason}`,
+                value: `${bannedMember.bannedReason}`,
                 inline: true,
             },
             {

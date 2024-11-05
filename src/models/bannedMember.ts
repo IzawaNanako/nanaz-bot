@@ -1,41 +1,64 @@
-import { Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 import Guild from './guild.js';
 
-const BannedMember = sequelize.define('bannedMember', {
+interface BannedMemberAttributes {
+    id: string;
+    username: string;
+    totalBans: number;
+    isBanned: boolean;
+    bannedBy: string | null;
+    bannedReason: string | null;
+    bannedAt: Date | null;
+    bannedUntil: Date | null;
+    guildId: string;
+}
+
+interface BannedMemberInstance
+    extends Model<BannedMemberAttributes>,
+        BannedMemberAttributes {
+            createdAt?: Date;
+            updatedAt?: Date;
+        }
+
+const BannedMember = sequelize.define<BannedMemberInstance>('bannedMember', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     },
     username: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     totalBans: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 0,
     },
     isBanned: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     },
     bannedBy: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedReason: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedAt: {
-        type: Sequelize.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedUntil: {
-        type: Sequelize.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
+    },
+    guildId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 

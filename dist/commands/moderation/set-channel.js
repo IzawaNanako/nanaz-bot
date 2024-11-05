@@ -26,25 +26,37 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
 export async function execute(interaction) {
+    if (!interaction.guild || !interaction.guild.members.me) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
     await interaction.deferReply();
-    const type = interaction.options.getString('type');
+    const type = interaction.options.get('type')?.value;
     const typeName = type.charAt(0).toUpperCase() + type.slice(1);
-    const channel = interaction.options.getChannel('channel');
+    const channel = interaction.options.get('channel')?.channel;
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,
         }
     });
-    const previousChannel = guild[type + 'ChannelId'];
+    const channelKey = `${type}ChannelId`;
+    const previousChannel = guild[channelKey];
+    if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.SendMessages)) {
+        await interaction.editReply({
+            content: 'The bot doesn\'t have permission to send messages in that channel.',
+        });
+        return;
+    }
     const actionEmbed = new EmbedBuilder()
         .setColor('#2E4053')
         .setAuthor({
         name: `Requested by ${interaction.user.displayName}`,
     })
         .setTitle(`${typeName} Channel Changed`)
-        .setThumbnail(interaction.guild.iconURL({
-        dynamic: true,
-    }))
+        .setThumbnail(interaction.guild.iconURL())
         .addFields([
         {
             name: 'Previous Channel',
@@ -58,17 +70,18 @@ export async function execute(interaction) {
         },
         {
             name: previousChannel ? 'New Channel' : 'Current Channel',
-            value: `${channel}` ?? 'Disabled',
+            value: `${channel}` || 'Disabled',
             inline: true,
         }
     ])
         .setFooter({
         text: `Executed by Nanaz`,
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
-    guild[type + 'ChannelId'] = channel ? channel.id : null;
-    await guild.save();
+    guild.update({
+        [channelKey]: channel ? channel.id : null
+    });
     await interaction.editReply({
         embeds: [actionEmbed],
         components: [supportButton]

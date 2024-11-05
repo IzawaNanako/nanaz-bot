@@ -8,7 +8,7 @@ export const data = new SlashCommandBuilder()
     .setDescription('The user to display information about.'))
     .setContexts(0);
 export async function execute(interaction) {
-    const user = interaction.options.getUser('user') || interaction.user;
+    const user = interaction.options.get('user')?.user || interaction.user;
     const createdAtTimestamp = Math.floor(user.createdAt.getTime() / 1000);
     const badgeMap = {
         'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
@@ -25,32 +25,45 @@ export async function execute(interaction) {
         'CertifiedModerator': '<:ModeratorProgramAlumni:1295711596865388584>',
         'VerifiedBot': '<:Verified:1295712821358759967>',
     };
-    let badges = user.flags.toArray();
-    let guildMember;
+    if (!user.flags) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    const badges = user.flags.toArray()
+        .map((badge) => badgeMap[badge] ?? '')
+        .join(' ') || 'None';
     let roles;
     let joinedAt;
     let status;
+    let guildMember;
     try {
-        guildMember = await interaction.guild.members.fetch(user.id);
+        guildMember = await interaction.guild?.members.fetch(user.id);
     }
     catch (error) {
-        guildMember = null;
+        if (error.code === 10007) {
+            guildMember = null;
+        }
+        else {
+            throw error;
+        }
     }
     if (guildMember) {
-        roles = guildMember.roles.cache.map((role) => role.name).join(`, `);
-        joinedAt = `<t:${Math.floor(guildMember.joinedAt.getTime() / 1000)}>`;
+        roles = guildMember.roles.cache.map((role) => `<@&${role.id}>`).join(`, `);
         status = guildMember.presence?.status;
+        if (guildMember.joinedAt) {
+            joinedAt = `<t:${Math.floor(guildMember.joinedAt.getTime() / 1000)}>`;
+        }
+        else {
+            joinedAt = 'N/A';
+        }
     }
     else {
         roles = 'N/A';
         joinedAt = 'N/A';
         status = 'Unknown';
-    }
-    if (badges.length === 0) {
-        badges = 'None';
-    }
-    else {
-        badges = badges.map((badge) => badgeMap[badge] || '').join(' ');
     }
     if (status === 'offline') {
         status = 'Offline';
@@ -79,9 +92,7 @@ export async function execute(interaction) {
     })
         .setTitle(`${user.displayName}'s User Information`)
         .setDescription(infoTexts[infoTextNum])
-        .setThumbnail(user.displayAvatarURL({
-        dynamic: true,
-    }))
+        .setThumbnail(user.displayAvatarURL())
         .addFields([
         {
             name: 'Username',
@@ -137,7 +148,7 @@ export async function execute(interaction) {
     ])
         .setFooter({
         text: `Fetched by Nanaz`,
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
     await interaction.reply({

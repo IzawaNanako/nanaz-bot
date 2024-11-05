@@ -1,12 +1,13 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { ChannelType } from 'discord.js';
-
-const geminiAPIKey = process.env.GEMINI_API_KEY;
-const MODEL_NAME = 'gemini-1.5-flash';
-const genAI = new GoogleGenerativeAI(geminiAPIKey);
+import { ChannelType, Message, Client } from 'discord.js';
+import { generateWithAI } from '../../utils/generateWithAI.js';
 
 export const name = 'messageCreate';
-export async function execute(message, client) {
+export async function execute(message: Message, client: Client) {
+    if (!client.user) {
+        console.error('Client user not found.');
+        process.exit(1);
+    }
+
     if (message.author.bot) {
         return;
     }
@@ -16,45 +17,29 @@ export async function execute(message, client) {
         return;
     }
 
-    if (message.mentions.has(client.user) || message.channel.type === ChannelType.DM) {
-        const userMessage = message.content
-            .replace(`<@!${client.user.id}>`, '')
-            .trim();
+    if (message.mentions.has(client.user, { ignoreEveryone: true, ignoreRoles: true }) || message.channel.type === ChannelType.DM) {
+        try {
+            let reply;
 
-        const model = genAI.getGenerativeModel({
-            model: MODEL_NAME
-        });
-
-        const generationConfig = {
-            temperature: 0.9,
-            topK: 1,
-            topP: 1,
-            maxOutputTokens: 2048,
-        };
-
-        const parts = [
-            {
-                text: `input: ${userMessage}`,
+            if (message.author.id === process.env.OWNER_ID) {
+                reply = await generateWithAI(message.content, true);
             }
-        ];
+            else {
+                reply = await generateWithAI(message.content);
+            }
 
-        const result = await model.generateContent({
-            contents: [{
-                role: 'user',
-                parts,
-            }],
-            generationConfig,
-        });
+            if (reply.length > 2000) {
+                const replyArray = reply.match(/[\s\S]{1,2000}/g);
+                replyArray?.forEach(async (msg) => {
+                    await message.reply(msg);
+                });
+                return;
+            }
 
-        const reply = await result.response.text();
-
-        if (reply.length > 2000) {
-            const replyArray = reply.match(/[\s\S]{1,2000}/g);
-            replyArray.forEach(async (msg) => {
-                await message.reply(msg);
-            });
+            await message.reply(reply);
+        }
+        catch (error) {
             return;
         }
-        await message.reply(reply);
     }
 }

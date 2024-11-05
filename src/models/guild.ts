@@ -1,25 +1,40 @@
-import { Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 
-const Guild = sequelize.define('guild', {
+interface GuildAttributes {
+    id: string;
+    welcomeChannelId: string | null;
+    byeChannelId: string | null;
+    logChannelId: string | null;
+    welcomeMessage: string | null;
+}
+
+interface GuildInstance
+    extends Model<GuildAttributes>,
+        GuildAttributes {
+            createdAt?: Date;
+            updatedAt?: Date;
+        }
+
+const Guild = sequelize.define<GuildInstance>('guild', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     },
     welcomeChannelId: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     byeChannelId: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     logChannelId: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     welcomeMessage: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         defaultValue: 'Thank you for joining ${member.guild.name}!',
         allowNull: false,
     }

@@ -5,8 +5,15 @@ export const data = new SlashCommandBuilder()
     .setDescription('Display information about this server.')
     .setContexts(0);
 export async function execute(interaction) {
+    if (!interaction.guild) {
+        interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
     const createdAtTimestamp = Math.floor(interaction.guild.createdAt.getTime() / 1000);
-    let owner = await interaction.guild.members.fetch(interaction.guild.ownerId);
+    const owner = await interaction.guild.members.fetch(interaction.guild.ownerId);
     const infoTextNum = Math.floor(Math.random() * 5);
     const infoTexts = [
         'Maybe you can find some secrets I couldn\'t find?',
@@ -22,9 +29,7 @@ export async function execute(interaction) {
     })
         .setTitle('Server Information')
         .setDescription(infoTexts[infoTextNum])
-        .setThumbnail(interaction.guild.iconURL({
-        dynamic: true,
-    }))
+        .setThumbnail(interaction.guild.iconURL())
         .addFields([
         {
             name: 'Server Name',
@@ -33,7 +38,7 @@ export async function execute(interaction) {
         },
         {
             name: 'Server Owner',
-            value: `<@${owner.user.id}>`,
+            value: `${owner.user}`,
             inline: true,
         },
         {
@@ -99,7 +104,7 @@ export async function execute(interaction) {
     ])
         .setFooter({
         text: `Fetched by Nanaz`,
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
     await interaction.reply({

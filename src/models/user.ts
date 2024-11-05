@@ -1,9 +1,20 @@
-import { Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 
-const User = sequelize.define('user', {
+interface UserAttributes {
+    id: string;
+}
+
+interface UserInstance
+    extends Model<UserAttributes>,
+        UserAttributes {
+            createdAt: Date;
+            updatedAt: Date;
+        }
+
+const User = sequelize.define<UserInstance>('user', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     }
 });

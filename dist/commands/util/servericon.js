@@ -7,7 +7,14 @@ export const data = new SlashCommandBuilder()
     .setName('server')
     .setDescription('The ID of the server to display the icon of. "/help ids" for how to get IDs.'));
 export async function execute(interaction) {
-    const serverID = interaction.options.getString('server') || interaction.guild.id;
+    if (!interaction.guild) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    const serverID = interaction.options.get('server')?.value || interaction.guild.id;
     if (!serverID) {
         await interaction.reply({
             content: 'Invalid Server ID.',
@@ -17,7 +24,6 @@ export async function execute(interaction) {
     }
     const server = await interaction.client.guilds.fetch(serverID);
     const serverIcon = server.iconURL({
-        dynamic: true,
         size: 2048,
     });
     if (!serverIcon) {
@@ -37,7 +43,7 @@ export async function execute(interaction) {
         .setImage(serverIcon)
         .setFooter({
         text: `Displayed by Nanaz`,
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     })
         .setTimestamp();
     await interaction.reply({

@@ -1,10 +1,14 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 import Guild from './guild.js';
 const WelcomeRole = sequelize.define('welcomeRole', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
+    },
+    guildId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 Guild.hasMany(WelcomeRole, {

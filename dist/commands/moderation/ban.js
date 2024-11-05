@@ -27,35 +27,54 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(0);
 export async function execute(interaction) {
-    const member = interaction.options.getMember('user');
-    const reason = interaction.options.getString('reason');
-    const delDays = interaction.options.getNumber('delete_messages') || 0;
-    const notice = interaction.options.getBoolean('notice') || true;
-    const duration = interaction.options.getNumber('duration');
-    const bannedMember = await BannedMember.findOrCreate({
-        where: {
-            id: member.user.id,
-            username: member.user.username,
-            guildId: interaction.guild.id,
-        }
-    });
-    if (member.user.id === interaction.user.id) {
+    if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
-            content: 'Bruh.',
-        });
-        return;
-    }
-    if (!member.bannable) {
-        await interaction.reply({
-            embeds: [
-                new EmbedBuilder()
-                    .setColor('#FF0000')
-                    .setDescription('I can\'t seem to ban that user.\nTry checking my ban permission.'),
-            ],
+            content: 'Something went wrong...',
             ephemeral: true,
         });
         return;
     }
+    if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
+        await interaction.reply({
+            content: 'I don\'t have permission to ban members in this server!',
+            ephemeral: true,
+        });
+        return;
+    }
+    const user = interaction.options.get('user')?.user;
+    if (!user) {
+        await interaction.reply({
+            content: 'Invalid User.',
+            ephemeral: true,
+        });
+        return;
+    }
+    const member = await interaction.guild.members.fetch(user.id);
+    const reason = interaction.options.get('reason')?.value ?? 'No reason provided.';
+    const delDays = interaction.options.get('delete_messages')?.value || 0;
+    const notice = interaction.options.get('notice')?.value || true;
+    const duration = interaction.options.get('duration')?.value ?? undefined;
+    if (!member || !user) {
+        await interaction.reply({
+            content: 'Invalid User.',
+            ephemeral: true,
+        });
+        return;
+    }
+    if (user.id === interaction.user.id) {
+        await interaction.reply({
+            content: 'Bruh.',
+            ephemeral: true,
+        });
+        return;
+    }
+    const [bannedMember] = await BannedMember.findOrCreate({
+        where: {
+            id: user.id,
+            username: user.username,
+            guildId: interaction.guild.id,
+        }
+    });
     const banMsgID = Math.floor(Math.random() * 5);
     const banMsgs = [
         'Be gone!',
@@ -71,7 +90,7 @@ export async function execute(interaction) {
         .addFields([
         {
             name: 'User: ',
-            value: `${member.user}`,
+            value: `${user}`,
             inline: true,
         },
         {
@@ -88,7 +107,7 @@ export async function execute(interaction) {
         .setTimestamp()
         .setFooter({
         text: 'Check Server Settings -> Bans or /baninfo for more information.',
-        iconURL: interaction.client.user.avatarURL(),
+        iconURL: interaction.client.user.avatarURL() ?? undefined,
     });
     let bannedNotice = `${interaction.user} banned you from **${interaction.guild.name}**.`;
     if (reason) {
@@ -99,9 +118,6 @@ export async function execute(interaction) {
             value: reason,
             inline: true,
         });
-    }
-    if (!member.user.bot && notice) {
-        await member.send(bannedNotice);
     }
     const delSecs = Math.round(delDays * 86400);
     bannedMember.update({
@@ -122,13 +138,16 @@ export async function execute(interaction) {
         value: duration ? `${bannedMember.bannedUntil}` : 'Never',
         inline: true,
     });
+    if (!user.bot && notice) {
+        await user.send(bannedNotice);
+    }
+    await interaction.guild.members.ban(user, {
+        reason: reason,
+        deleteMessageSeconds: delSecs,
+    });
     await interaction.reply({
         embeds: [banEmbed],
         components: [supportButton],
-    });
-    await interaction.guild.members.ban(member, {
-        reason: reason ?? 'No reason provided.',
-        deleteMessageSeconds: delSecs,
     });
     await sendLog(interaction.guild, {
         embeds: [banEmbed],

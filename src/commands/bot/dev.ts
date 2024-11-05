@@ -1,9 +1,9 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PresenceUpdateStatus, ActivityType } from 'discord.js';
-import BotSetting from '../../models/botSetting.js';
+import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, CommandInteraction, TextChannel, Presence } from 'discord.js';
+import BotSetting from '../../models/botSettings.js';
 
 export const data = new SlashCommandBuilder()
-    .setName('debug')
-    .setDescription('Debug commands that control the bot directly, accessible only by the developer.')
+    .setName('dev')
+    .setDescription('Developer commands that control the bot directly, accessible only by the developer.')
     .addStringOption(option => option
         .setName('option')
         .setDescription('The action to take.')
@@ -33,7 +33,7 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
-export async function execute(interaction) {
+export async function execute(interaction: CommandInteraction) {
     if (interaction.user.id !== process.env.OWNER_ID) {
         await interaction.reply({
             content: 'You do not have the permission to use this command.',
@@ -41,23 +41,30 @@ export async function execute(interaction) {
         });
         return;
     }
-    const statusMap = {
-        'online': PresenceUpdateStatus.Online,
-        'idle': PresenceUpdateStatus.Idle,
-        'dnd': PresenceUpdateStatus.DoNotDisturb,
-        'invisible': PresenceUpdateStatus.Invisible,
-    };
-    const activityMap = {
+    if (!interaction.channel) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    const channel = interaction.channel as TextChannel;
+    const statuses = [
+        'online',
+        'idle',
+        'dnd',
+        'invisible',
+    ];
+    const activityMap: { [key: string]: ActivityType } = {
         'playing': ActivityType.Playing,
         'streaming': ActivityType.Streaming,
         'listening': ActivityType.Listening,
         'watching': ActivityType.Watching,
         'competing': ActivityType.Competing,
         'custom': ActivityType.Custom,
-        'none': 'none',
     }
-    const option = interaction.options.getString('option');
-    let value = interaction.options.getString('value');
+    const option = interaction.options.get('option')?.value as string;
+    const value = interaction.options.get('value')?.value as string;
 
     if (option === 'stop') {
         await interaction.reply({
@@ -99,7 +106,7 @@ export async function execute(interaction) {
         await interaction.reply({
             content: 'Please enter a status: "online", "idle", "dnd" or "invisible".',
         });
-        let responseStatus = await interaction.channel
+        const responseStatus = await channel
             .awaitMessages({
                 filter: m => m.author.id === interaction.user.id,
                 max: 1,
@@ -109,19 +116,19 @@ export async function execute(interaction) {
             .catch(() => {
                 return null;
             });
-        const status = statusMap[responseStatus.first().content.toLowerCase()];
+        const status = responseStatus?.first()?.content.toLowerCase();
 
-        if (!status) {
-            await responseStatus.first().reply({
+        if (!status || !statuses.includes(status)) {
+            await responseStatus?.first()?.reply({
                 content: 'Invalid status.',
             });
             return;
         }
 
-        await responseStatus.first().reply({
+        await responseStatus?.first()?.reply({
             content: 'Please enter activity type: "playing", "streaming", "listening", "watching", "competing", "custom" or "none".',
         });
-        let responseActivityType = await interaction.channel
+        const responseActivityType = await channel
             .awaitMessages({
                 filter: m => m.author.id === interaction.user.id,
                 max: 1,
@@ -131,27 +138,31 @@ export async function execute(interaction) {
             .catch(() => {
                 return null;
             });
-        const activityType = activityMap[responseActivityType.first().content.toLowerCase()];
+        const activityType = responseActivityType?.first()?.content.toLowerCase() as string;
+        const activityTypeMapped = activityMap[activityType];
 
-        if (!activityType) {
-            await responseActivityType.first().reply({
+        if (((activityTypeMapped === null || activityTypeMapped === undefined) && activityType !== 'none') || !activityType) {
+            await responseActivityType?.first()?.reply({
                 content: 'Invalid activity type.',
             });
             return;
         }
 
         if (activityType === 'none') {
-            await responseActivityType.first().reply({
+            await responseActivityType?.first()?.reply({
                 content: 'Setting status...',
             });
-            await interaction.client.user.setStatus(status);
+            interaction.client.user.setPresence({
+                activities: [],
+                status: status as PresenceStatusData,
+            });
             storeStatus(status, activityType, null, null);
         }
-        else if (activityType === ActivityType.Custom) {
-            await responseActivityType.first().reply({
+        else if (activityType === 'custom') {
+            await responseActivityType?.first()?.reply({
                 content: 'Please enter the activity texts.',
             });
-            let responseActivityTexts = await interaction.channel
+            const responseActivityTexts = await channel
                 .awaitMessages({
                     filter: m => m.author.id === interaction.user.id,
                     max: 1,
@@ -161,34 +172,41 @@ export async function execute(interaction) {
                 .catch(() => {
                     return null;
                 });
-            const activityTexts = responseActivityTexts.first().content;
+            const activityTexts = responseActivityTexts?.first()?.content;
+
+            if (!activityTexts) {
+                await responseActivityType?.first()?.reply({
+                    content: 'Failed to set status. Check your input.',
+                });
+                return;
+            }
 
             try {
-                await responseActivityType.first().reply({
+                await responseActivityTexts?.first()?.reply({
                     content: 'Setting status...',
                 });
-                await interaction.client.user.setPresence({
+                interaction.client.user.setPresence({
                     activities: [{
                         name: 'custom',
-                        type: activityType,
+                        type: activityTypeMapped,
                         state: activityTexts,
                     }],
-                    status: status,
+                    status: status as PresenceStatusData,
                 });
                 storeStatus(status, activityType, activityTexts, null);
             }
             catch (error) {
-                await responseActivityType.first().reply({
-                    content: 'Failed to set status.',
+                await responseActivityTexts?.first()?.reply({
+                    content: 'Failed to set status. Try again later.',
                 });
                 console.log(error);
             }
         }
-        else if (activityType === ActivityType.Streaming) {
-            await responseActivityType.first().reply({
+        else if (activityType === 'streaming') {
+            await responseActivityType?.first()?.reply({
                 content: 'Please enter the text after stream name.',
             });
-            let responseStreamingName = await interaction.channel
+            const responseStreamName = await channel
                 .awaitMessages({
                     filter: m => m.author.id === interaction.user.id,
                     max: 1,
@@ -198,12 +216,12 @@ export async function execute(interaction) {
                 .catch(() => {
                     return null;
                 });
-            const streamingName = responseStreamingName.first().content;
+            const streamName = responseStreamName?.first()?.content ?? undefined;
 
-            await responseActivityType.first().reply({
+            await responseStreamName?.first()?.reply({
                 content: 'Please enter stream URL, only Twitch and Youtube URLs are supported.',
             });
-            let responseStreamingURL = await interaction.channel
+            const responseStreamURL = await channel
                 .awaitMessages({
                     filter: m => m.author.id === interaction.user.id,
                     max: 1,
@@ -213,35 +231,41 @@ export async function execute(interaction) {
                 .catch(() => {
                     return null;
                 });
-            const streamingURL = responseStreamingURL.first().content;
+            const streamURL = responseStreamURL?.first()?.content;
+
+            if (!streamName || !streamURL) {
+                await responseActivityType?.first()?.reply({
+                    content: 'Failed to set status. Check your input.',
+                });
+                return;
+            }
 
             try {
-                await responseActivityType.first().reply({
+                await responseStreamURL?.first()?.reply({
                     content: 'Setting status...',
                 });
-                await interaction.client.user.setPresence({
+                interaction.client.user.setPresence({
                     activities: [{
-                        name: streamingName,
-                        type: activityType,
-                        url: streamingURL,
+                        name: streamName,
+                        type: activityTypeMapped,
+                        url: streamURL,
                     }],
-                    status: status,
+                    status: status as PresenceStatusData,
                 });
-                storeStatus(status, activityType, streamingName, streamingURL);
+                storeStatus(status, activityType, streamName, streamURL);
             }
             catch (error) {
-                await responseActivityType.first().reply({
-                    content: 'Failed to set status.',
-                    ephemeral: true,
+                await responseStreamURL?.first()?.reply({
+                    content: 'Failed to set status. Try again later.',
                 });
                 console.log(error);
             }
         }
         else {
-            await responseActivityType.first().reply({
+            await responseActivityType?.first()?.reply({
                 content: 'Please enter activity name.',
             });
-            let responseActivityName = await interaction.channel
+            const responseActivityName = await channel
                 .awaitMessages({
                     filter: m => m.author.id === interaction.user.id,
                     max: 1,
@@ -251,25 +275,31 @@ export async function execute(interaction) {
                 .catch(() => {
                     return null;
                 });
-            const activityName = responseActivityName.first().content;
+            const activityName = responseActivityName?.first()?.content;
+
+            if (!activityName) {
+                await responseActivityType?.first()?.reply({
+                    content: 'Failed to set status. Check your input.',
+                });
+                return;
+            }
 
             try {
-                await responseActivityType.first().reply({
+                await responseActivityName?.first()?.reply({
                     content: 'Setting status...',
                 });
-                await interaction.client.user.setPresence({
+                interaction.client.user.setPresence({
                     activities: [{
                         name: activityName,
-                        type: activityType,
-                        
+                        type: activityTypeMapped,
                     }],
-                    status: status,
+                    status: status as PresenceStatusData,
                 });
                 storeStatus(status, activityType, activityName, null);
             }
             catch (error) {
-                await responseActivityType.first().reply({
-                    content: 'Failed to set status.',
+                await responseActivityName?.first()?.reply({
+                    content: 'Failed to set status. Try again later.',
                 });
                 console.log(error);
             }
@@ -320,17 +350,22 @@ export async function execute(interaction) {
     }
 }
 
-function storeStatus(status, activityType, activityName, activityUrl) {
-    const bot = BotSetting.findOne({
+async function storeStatus(status: string, activityType: string, activityName: string | null, activityUrl: string | null) {
+    const bot = await BotSetting.findOne({
         where: {
             id: 'Nanaz',
         },
     });
 
+    if (!bot) {
+        console.error('Bot not found.');
+        process.exit(1);
+    }
+
     bot.update({
         status: status,
         activityType: activityType,
         activityName: activityName,
-        activityUrl: activityUrl,
+        activityUrl: activityUrl ?? null,
     });
 }

@@ -1,14 +1,17 @@
+import { PermissionFlagsBits } from 'discord.js';
 import Guild from '../models/guild.js';
-export default async (guild, message) => {
+async function sendLog(guild, message) {
     const guildData = await Guild.findOne({
         where: {
-            id: guild.id
+            id: guild.id,
         }
     });
-    if (guildData?.logChannelId) {
+    if (guildData && guildData.logChannelId && guild.members.me?.permissionsIn(guildData.logChannelId).has(PermissionFlagsBits.SendMessages)) {
         const logChannel = guild.channels.cache.get(guildData.logChannelId);
         if (logChannel) {
             await logChannel.send(message);
         }
     }
-};
+}
+;
+export default sendLog;

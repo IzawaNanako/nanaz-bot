@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
 import Guild from '../../models/guild.js';
 import WelcomeRole from '../../models/welcomeRole.js';
 import sendLog from '../../utils/sendLog.js';
@@ -32,10 +32,24 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
-export async function execute(interaction) {
+export async function execute(interaction: CommandInteraction) {
+    if (!interaction.guild || !interaction.guild.members.me) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageRoles)) {
+        await interaction.reply({
+            content: 'I don\'t have permission to manage roles in this server!',
+            ephemeral: true,
+        });
+        return;
+    }
     await interaction.deferReply();
-    const action = interaction.options.getString('action');
-    const role = interaction.options.getRole('role');
+    const action = interaction.options.get('action')?.value as string;
+    const role = interaction.options.get('role')?.role;
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,
@@ -61,9 +75,9 @@ export async function execute(interaction) {
         }
     });
 
-    const previousRolesList = roles.map(role => `<@&${role.id}>`).join(', ');
+    const previousRolesList = roles.map(oldRole => `<@&${oldRole.id}>`).join(', ');
 
-    if (previousRolesList.includes(role) && action === 'add') {
+    if (previousRolesList.includes(`<@&${role?.id}>`) && action === 'add') {
         await interaction.editReply({
             content: 'This role is already in the list!',
         });
@@ -76,9 +90,7 @@ export async function execute(interaction) {
             name: `Requested by ${interaction.user.displayName}`,
         })
         .setTitle('Welcome Roles Changed')
-        .setThumbnail(interaction.guild.iconURL({
-            dynamic: true,
-        }))
+        .setThumbnail(interaction.guild.iconURL())
         .addFields([
             {
                 name: 'Previous Roles',
@@ -94,7 +106,7 @@ export async function execute(interaction) {
         .setTimestamp()
         .setFooter({
             text: `Executed by Nanaz`,
-            iconURL: interaction.client.user.avatarURL(),
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
 
     if (action === 'clear') {
@@ -105,12 +117,24 @@ export async function execute(interaction) {
         });
     }
     else if (action === 'add') {
+        if (!role) {
+            await interaction.editReply({
+                content: 'Something went wrong...',
+            });
+            return;
+        }
         await WelcomeRole.create({
             id: role.id,
             guildId: guild.id,
         });
     }
     else if (action === 'remove') {
+        if (!role) {
+            await interaction.editReply({
+                content: 'Something went wrong...',
+            });
+            return;
+        }
         await WelcomeRole.destroy({
             where: {
                 id: role.id,

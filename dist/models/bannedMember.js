@@ -1,40 +1,44 @@
-import { Sequelize } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 import Guild from './guild.js';
 const BannedMember = sequelize.define('bannedMember', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
     },
     username: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     totalBans: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 0,
     },
     isBanned: {
-        type: Sequelize.BOOLEAN,
+        type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
     },
     bannedBy: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedReason: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedAt: {
-        type: Sequelize.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
     },
     bannedUntil: {
-        type: Sequelize.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
+    },
+    guildId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 Guild.hasMany(BannedMember, {

@@ -1,11 +1,27 @@
-import { Sequelize } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../utils/database.js';
 import Guild from './guild.js';
 
-const WelcomeRole = sequelize.define('welcomeRole', {
+interface WelcomeRoleAttributes {
+    id: string;
+    guildId: string;
+}
+
+interface WelcomeRoleInstance
+    extends Model<WelcomeRoleAttributes>,
+        WelcomeRoleAttributes {
+            createdAt?: Date;
+            updatedAt?: Date;
+        }
+
+const WelcomeRole = sequelize.define<WelcomeRoleInstance>('welcomeRole', {
     id: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         primaryKey: true,
+    },
+    guildId: {
+        type: DataTypes.STRING,
+        allowNull: false,
     }
 });
 

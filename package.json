@@ -7,15 +7,21 @@
     "scripts": {
         "dev": "tsx watch src/index.ts",
         "build": "tsc",
-        "start": "node ."
+        "start": "node .",
+        "deploy-global": "node dist/deploy-commands-global.js",
+        "deploy-guild": "node dist/deploy-commands-guild.js",
+        "rs-global": "node dist/rs-global-cmds.js",
+        "rs-guild": "node dist/rs-guild-cmds.js",
+        "syncdb": "node dist/syncdb.js"
     },
     "keywords": [],
-    "author": "",
+    "author": "Izawa Nanako",
     "license": "ISC",
     "dependencies": {
         "@discordjs/voice": "^0.17.0",
         "@google/generative-ai": "^0.21.0",
         "@types/node": "^22.7.6",
+        "deepl-node": "^1.14.0",
         "discord.js": "^14.16.3",
         "dotenv": "^16.4.5",
         "pg": "^8.13.0",

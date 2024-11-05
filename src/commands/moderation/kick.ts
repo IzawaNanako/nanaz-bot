@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
 import GuildMember from '../../models/guildMember.js';
 import sendLog from '../../utils/sendLog.js';
 import supportButton from '../../utils/supportButton.js';
@@ -21,18 +21,40 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setContexts(0);
-export async function execute(interaction) {
-    const member = interaction.options.getMember('user');
-    const reason = interaction.options.getString('reason');
-    const notice = interaction.options.getBoolean('notice') || true;
-    const guildMember = await GuildMember.findOrCreate({
+export async function execute(interaction: CommandInteraction) {
+    if (!interaction.guild || !interaction.guild.members.me) {
+        await interaction.reply({
+            content: 'Something went wrong...',
+            ephemeral: true,
+        });
+        return;
+    }
+    if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
+        await interaction.reply({
+            content: 'I don\'t have permission to kick members in this server!',
+            ephemeral: true,
+        });
+        return;
+    }
+    const user = interaction.options.get('user')?.user;
+    if (!user) {
+        await interaction.reply({
+            content: 'Invalid User',
+            ephemeral: true,
+        });
+        return;
+    }
+    const member = await interaction.guild.members.fetch(user.id);
+    const reason = interaction.options.get('reason')?.value as string;
+    const notice = interaction.options.get('notice')?.value as boolean || true;
+    const [guildMember] = await GuildMember.findOrCreate({
         where: {
-            id: member.user.id,
+            id: user.id,
             guildId: interaction.guild.id,
         }
     });
 
-    if (member.user.id === interaction.user.id) {
+    if (user.id === interaction.user.id) {
         await interaction.reply({
             content: 'What the heck are you doing?',
         });
@@ -80,7 +102,7 @@ export async function execute(interaction) {
         .setTimestamp()
         .setFooter({
             text: 'The user can join back at anytime.',
-            iconURL: interaction.client.user.avatarURL(),
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
 
     let kickedNotice = `${interaction.user} kicked you from **${interaction.guild.name}**.`;

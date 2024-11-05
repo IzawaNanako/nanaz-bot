@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, CommandInteraction } from 'discord.js';
 import supportButton from '../../utils/supportButton.js';
 
 export const data = new SlashCommandBuilder()
@@ -8,8 +8,8 @@ export const data = new SlashCommandBuilder()
         .setName('user')
         .setDescription('The user to display the banner of.')
     );
-export async function execute(interaction) {
-    const user = interaction.options.getUser('user') || interaction.user;
+export async function execute(interaction: CommandInteraction) {
+    const user = interaction.options.get('user')?.user || interaction.user;
     const member = await user.fetch();
 
     if (!member.bannerURL()) {
@@ -28,12 +28,11 @@ export async function execute(interaction) {
         .setTitle(`${member.displayName}'s Profile Banner`)
         .setDescription(`Banner URL: ${member.bannerURL()}`)
         .setImage(member.bannerURL({
-            dynamic: true,
             size: 2048,
-        }))
+        }) ?? null)
         .setFooter({
             text: `Displayed by Nanaz`,
-            iconURL: interaction.client.user.avatarURL(),
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();
 

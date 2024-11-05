@@ -1,12 +1,19 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 
-const supportButton = new ActionRowBuilder()
+const supportServer = process.env.SUPPORT_SERVER;
+
+if (!supportServer) {
+    console.error('Support server not found.');
+    process.exit(1);
+}
+
+const supportButton = new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
         new ButtonBuilder()
             .setLabel('Support Server')
             .setStyle(ButtonStyle.Link)
             .setEmoji('📞')
-            .setURL(process.env.SUPPORT_SERVER)
+            .setURL(supportServer)
     );
 
 export default supportButton;

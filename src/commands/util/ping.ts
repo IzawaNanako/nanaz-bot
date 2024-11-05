@@ -1,20 +1,23 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, CommandInteraction } from 'discord.js';
 import supportButton from '../../utils/supportButton.js';
 
 export const data = new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Check the current latency of the bot.');
-export async function execute(interaction) {
+export async function execute(interaction: CommandInteraction) {
     const pingEmbed = new EmbedBuilder()
         .setColor('#808080')
+        .setAuthor({
+            name: `Requested by ${interaction.user.displayName}`,
+        })
         .setTitle('Pinging...')
         .setFooter({
             text: 'Pinged by Nanaz',
-            iconURL: interaction.client.user.avatarURL(),
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();
 
-    let msg = await interaction.reply({
+    const msg = await interaction.reply({
         embeds: [pingEmbed],
         fetchReply: true,
     });

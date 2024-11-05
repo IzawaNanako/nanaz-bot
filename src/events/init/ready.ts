@@ -1,47 +1,82 @@
-import { Events } from 'discord.js';
-import BotSetting from '../../models/botSetting';
+import { Events, Client, PresenceStatusData, ActivityType } from 'discord.js';
+import BotSettings from '../../models/botSettings.js';
 
 export const name = Events.ClientReady;
 export const once = true;
-export async function execute(client) {
+export async function execute(client: Client) {
+    if (!client.user) {
+        console.error('Client user not found.');
+        process.exit(1);
+    }
+
     console.log(`Ready! Logged in as ${client.user.tag}`);
 
-    const bot = await BotSetting.findOrCreate({
+    const activityMap = {
+        'playing': ActivityType.Playing,
+        'streaming': ActivityType.Streaming,
+        'listening': ActivityType.Listening,
+        'watching': ActivityType.Watching,
+        'competing': ActivityType.Competing,
+        'custom': ActivityType.Custom,
+    }
+    const [bot] = await BotSettings.findOrCreate({
         where: {
             id: 'Nanaz',
         }
     });
 
-    if (bot.activityType === 'none') {
-        await client.user.setStatus(bot.status);
+    if (!bot.status || !bot.activityType) {
+        console.error('Bot status or activity type not found.');
+        process.exit(1);
     }
-    else if (bot.activityType === 'ActivityType.Custom') {
-        await client.user.setPresence({
+
+    const status = bot.status as PresenceStatusData;
+
+    if (bot.activityType === 'none') {
+        client.user.setPresence({
+            activities: [],
+            status: status,
+        })
+        return;
+    }
+    else if (!bot.activityName) {
+        console.error('Bot activity name not found.');
+        process.exit(1);
+    }
+
+    const activityType = activityMap[bot.activityType as keyof typeof activityMap];
+    
+    if (activityType === ActivityType.Custom) {
+        client.user.setPresence({
             activities: [{
                 name: 'custom',
-                type: bot.activityType,
+                type: activityType,
                 state: bot.activityName,
             }],
-            status: bot.status,
+            status: status,
         });
     }
-    else if (bot.activityType === 'ActivityType.Streaming') {
-        await client.user.setPresence({
+    else if (activityType === ActivityType.Streaming) {
+        if (!bot.activityUrl) {
+            console.error('Activity URL not found. Ignoring activity.');
+            return;
+        }
+        client.user.setPresence({
             activities: [{
                 name: bot.activityName,
-                type: bot.activityType,
+                type: activityType,
                 url: bot.activityUrl,
             }],
-            status: bot.status,
+            status: status,
         });
     }
     else {
-        await client.user.setPresence({
+        client.user.setPresence({
             activities: [{
                 name: bot.activityName,
-                type: bot.activityType,
+                type: activityType,
             }],
-            status: bot.status,
+            status: status,
         });
     }
 }
