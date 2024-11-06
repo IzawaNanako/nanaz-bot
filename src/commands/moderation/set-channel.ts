@@ -41,7 +41,7 @@ export async function execute(interaction: CommandInteraction) {
         return;
     }
     await interaction.deferReply();
-    const type = interaction.options.get('type')?.value as string;
+    const type = interaction.options.get('type', true).value as string;
     const typeName = type.charAt(0).toUpperCase() + type.slice(1);
     const channel = interaction.options.get('channel')?.channel;
     const [guild] = await Guild.findOrCreate({

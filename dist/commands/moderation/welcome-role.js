@@ -41,7 +41,7 @@ export async function execute(interaction) {
         return;
     }
     await interaction.deferReply();
-    const action = interaction.options.get('action')?.value;
+    const action = interaction.options.get('action', true).value;
     const role = interaction.options.get('role')?.role;
     const [guild] = await Guild.findOrCreate({
         where: {

@@ -22,7 +22,7 @@ export async function execute(interaction: CommandInteraction) {
         return;
     }
     await interaction.deferReply();
-    const message = interaction.options.get('message')?.value as string;
+    const message = interaction.options.get('message', true).value as string;
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,

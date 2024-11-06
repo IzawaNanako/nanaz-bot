@@ -20,7 +20,7 @@ export async function execute(interaction) {
         return;
     }
     await interaction.deferReply();
-    const message = interaction.options.get('message')?.value;
+    const message = interaction.options.get('message', true).value;
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,

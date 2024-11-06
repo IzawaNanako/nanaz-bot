@@ -29,7 +29,7 @@ export async function execute(interaction) {
         });
         return;
     }
-    const username = interaction.options.get('username')?.value;
+    const username = interaction.options.get('username', true).value;
     const notice = interaction.options.get('notice')?.value || true;
     const bannedMember = await BannedMember.findOne({
         where: {

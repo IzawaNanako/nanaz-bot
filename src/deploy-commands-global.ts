@@ -22,10 +22,10 @@ for (const folder of commandFolders) {
 		const filePath = join(commandsPath, file);
         const filePathURL = pathToFileURL(`./${filePath}`);
 		const command = await import(`${filePathURL}`);
-		if ('data' in command && 'execute' in command && command.data.name !== 'dev') {
+		if ('data' in command && 'execute' in command && command.data.name !== 'dev' && command.data.name !== 'attack') {
 			commands.push(command.data.toJSON());
 		}
-        else if (command.data.name === 'dev') {
+        else if (command.data.name === 'dev' || command.data.name === 'attack') {
             continue;
         }
         else {

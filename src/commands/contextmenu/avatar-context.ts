@@ -9,9 +9,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     const avatarEmbed = new EmbedBuilder()
         .setColor('#5865F2')
-        .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
-        })
         .setTitle(`${user.displayName}'s Avatar`)
         .setFooter({
             text: `Displayed by Nanaz`,
@@ -37,5 +34,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [avatarEmbed],
         components: [supportButton],
+        ephemeral: true,
     });
 }

@@ -38,7 +38,7 @@ export async function execute(interaction: CommandInteraction) {
             });
             return;
         }
-        const game = interaction.options.get('game')?.value as string;
+        const game = interaction.options.get('game', true).value as string;
         if (!game) {
             await interaction.reply({
                 content: 'Invalid Game.',
@@ -46,7 +46,7 @@ export async function execute(interaction: CommandInteraction) {
             });
             return;
         }
-        const opponent = interaction.options.get('user')?.user;
+        const opponent = interaction.options.get('user', true).user;
         if (!opponent) {
             await interaction.reply({
                 content: 'Invalid User.',

@@ -18,7 +18,7 @@ export async function execute(interaction) {
         });
         return;
     }
-    const username = interaction.options.get('username')?.value;
+    const username = interaction.options.get('username', true).value;
     const bannedMember = await BannedMember.findOne({
         where: {
             guildId: interaction.guild.id,

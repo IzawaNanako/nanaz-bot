@@ -63,7 +63,7 @@ export async function execute(interaction: CommandInteraction) {
         'competing': ActivityType.Competing,
         'custom': ActivityType.Custom,
     }
-    const option = interaction.options.get('option')?.value as string;
+    const option = interaction.options.get('option', true).value;
     const value = interaction.options.get('value')?.value as string;
 
     if (option === 'stop') {

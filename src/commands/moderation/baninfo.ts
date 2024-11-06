@@ -20,7 +20,7 @@ export async function execute(interaction: CommandInteraction) {
         });
         return;
     }
-    const username = interaction.options.get('username')?.value as string;
+    const username = interaction.options.get('username', true).value;
     const bannedMember = await BannedMember.findOne({
         where: {
             guildId: interaction.guild.id,

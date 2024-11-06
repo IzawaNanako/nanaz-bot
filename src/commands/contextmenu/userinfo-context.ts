@@ -78,9 +78,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     const userInfoEmbed = new EmbedBuilder()
         .setColor('#03A9F4')
-        .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
-        })
         .setTitle(`${user.displayName}'s User Information`)
         .setDescription(infoTexts[infoTextNum])
         .setThumbnail(user.displayAvatarURL())
@@ -146,5 +143,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [userInfoEmbed],
         components: [supportButton],
+        ephemeral: true
     });
 }

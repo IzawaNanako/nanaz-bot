@@ -41,7 +41,7 @@ export async function execute(interaction) {
         });
         return;
     }
-    const user = interaction.options.get('user')?.user;
+    const user = interaction.options.get('user', true).user;
     if (!user) {
         await interaction.reply({
             content: 'Invalid User.',

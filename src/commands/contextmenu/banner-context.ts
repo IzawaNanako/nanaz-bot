@@ -18,9 +18,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     const bannerEmbed = new EmbedBuilder()
         .setColor('#5865F2')
-        .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
-        })
         .setTitle(`${member.displayName}'s Profile Banner`)
         .setDescription(`Banner URL: ${member.bannerURL()}`)
         .setImage(member.bannerURL({
@@ -35,5 +32,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [bannerEmbed],
         components: [supportButton],
+        ephemeral: true,
     });
 }

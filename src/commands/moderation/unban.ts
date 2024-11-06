@@ -32,7 +32,7 @@ export async function execute(interaction: CommandInteraction) {
         });
         return;
     }
-    const username = interaction.options.get('username')?.value as string;
+    const username = interaction.options.get('username', true).value;
     const notice = interaction.options.get('notice')?.value as boolean || true;
     const bannedMember = await BannedMember.findOne({
         where: {

@@ -34,7 +34,7 @@ export async function execute(interaction) {
         return;
     }
     await interaction.deferReply();
-    const type = interaction.options.get('type')?.value;
+    const type = interaction.options.get('type', true).value;
     const typeName = type.charAt(0).toUpperCase() + type.slice(1);
     const channel = interaction.options.get('channel')?.channel;
     const [guild] = await Guild.findOrCreate({
