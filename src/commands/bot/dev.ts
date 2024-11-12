@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, CommandInteraction, TextChannel, Presence } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel } from 'discord.js';
 import BotSetting from '../../models/botSettings.js';
 
 export const data = new SlashCommandBuilder()
@@ -33,7 +33,7 @@ export const data = new SlashCommandBuilder()
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
     if (interaction.user.id !== process.env.OWNER_ID) {
         await interaction.reply({
             content: 'You do not have the permission to use this command.',
@@ -318,7 +318,7 @@ export async function execute(interaction: CommandInteraction) {
         }
 
         try {
-            const newCommand = await import(`../${commandName}.js?update=${Date.now()}`);
+            const newCommand = await import(`../${commandName}.js`);
 
             if (!newCommand.data || !newCommand.execute) {
                 await interaction.reply({
@@ -362,7 +362,7 @@ async function storeStatus(status: string, activityType: string, activityName: s
         process.exit(1);
     }
 
-    bot.update({
+    await bot.update({
         status: status,
         activityType: activityType,
         activityName: activityName,

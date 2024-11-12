@@ -7,6 +7,7 @@ interface GuildAttributes {
     byeChannelId: string | null;
     logChannelId: string | null;
     welcomeMessage: string | null;
+    language: string;
 }
 
 interface GuildInstance
@@ -36,6 +37,11 @@ const Guild = sequelize.define<GuildInstance>('guild', {
     welcomeMessage: {
         type: DataTypes.STRING,
         defaultValue: 'Thank you for joining ${member.guild.name}!',
+        allowNull: false,
+    },
+    language: {
+        type: DataTypes.STRING,
+        defaultValue: 'en-US',
         allowNull: false,
     }
 });

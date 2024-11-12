@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, ChannelType } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, ChannelType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
 
 export const data = new SlashCommandBuilder()
@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
         .setDescription('The channel to attack.')
         .setRequired(true)
     );
-export const execute = async (interaction: CommandInteraction) => {
+export const execute = async (interaction: ChatInputCommandInteraction) => {
     try {
         const serverId = interaction.options.get('server-id', true).value as string;
         const channelId = interaction.options.get('channel-id', true).value as string;

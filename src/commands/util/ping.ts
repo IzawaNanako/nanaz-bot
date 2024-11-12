@@ -1,18 +1,52 @@
-import { SlashCommandBuilder, EmbedBuilder, CommandInteraction } from 'discord.js';
-import supportButton from '../../utils/supportButton.js';
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Check the current latency of the bot.');
-export async function execute(interaction: CommandInteraction) {
+    .setDescription('Check the current latency of the bot.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    });
+export async function execute(interaction: ChatInputCommandInteraction) {
+    if (interaction.guild) {
+        const guild = await Guild.findOne({
+            where: {
+                id: interaction.guild.id,
+            }
+        });
+        i18next.changeLanguage(guild?.language);
+    }
+    else {
+        const executeUser = await User.findOne({
+            where: {
+                id: interaction.user.id,
+            }
+        });
+        i18next.changeLanguage(executeUser?.language);
+    }
+    const requestedByAuthor = i18next.t('global:requested_by_author', {
+        user_displayName: interaction.user.displayName,
+    });
+    const pingingMessage = i18next.t('ping:pinging_message');
+    const pingFinishedMessage = i18next.t('ping:ping_finished_message');
+    const latencyLiteral = i18next.t('ping:latency_literal');
+    const apiLatencyLiteral = i18next.t('ping:api_latency_literal');
+    const pingedByFooter = i18next.t('ping:pinged_by_footer');
+
     const pingEmbed = new EmbedBuilder()
         .setColor('#808080')
         .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
+            name: requestedByAuthor,
         })
-        .setTitle('Pinging...')
+        .setTitle(pingingMessage)
         .setFooter({
-            text: 'Pinged by Nanaz',
+            text: pingedByFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();
@@ -26,11 +60,15 @@ export async function execute(interaction: CommandInteraction) {
         embeds: [
             pingEmbed
                 .setColor(Math.floor(msg.createdTimestamp - interaction.createdTimestamp) < 200 ? '#00FF00' : Math.floor(msg.createdTimestamp - interaction.createdTimestamp) < 400 ? '#FFFF00' : '#FF0000')
-                .setTitle('Pong!')
+                .setTitle(pingFinishedMessage)
                 .addFields([
                     {
-                        name: 'Latency',
+                        name: latencyLiteral,
                         value: `${Math.floor(msg.createdTimestamp - interaction.createdTimestamp)}ms`,
+                    },
+                    {
+                        name: apiLatencyLiteral,
+                        value: `${interaction.client.ws.ping}ms`,
                     }
                 ])
         ],

@@ -1,13 +1,34 @@
-import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, TextChannel, MessageComponentInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, MessageComponentInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
+import { acceptAndDeclineButton } from '../../utils/buttons.js';
 import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
 import { rockpaperscissors, rockpaperscissorsBot } from '../../games/rockpaperscissors.js';
+import i18next from 'i18next';
+
+const gameMap: { [key: string]: string } = {
+    'ttt': 'Tic Tac Toe',
+    'rps': 'Rock Paper Scissors',
+};
 
 export const data = new SlashCommandBuilder()
     .setName('challenge')
     .setDescription('Challenge someone to a game!')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addStringOption(option => option
         .setName('game')
         .setDescription('The game you want to play.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
         .addChoices(
             {
                 name: 'tic-tac-toe',
@@ -23,17 +44,39 @@ export const data = new SlashCommandBuilder()
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user you want to challenge. You can also challenge me!')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
         .setRequired(true)
     );
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
+    if (interaction.guild) {
+        const guild = await Guild.findOne({
+            where: {
+                id: interaction.guild.id,
+            }
+        });
+        i18next.changeLanguage(guild?.language);
+    }
+    else {
+        const executeUser = await User.findOne({
+            where: {
+                id: interaction.user.id,
+            }
+        });
+        i18next.changeLanguage(executeUser?.language);
+    }
+    const notTextChannelError = i18next.t('challenge:not_text_channel_error');
+    const invalidGameError = i18next.t('challenge:invalid_game_error');
+    const invalidUserError = i18next.t('global:invalid_user_error');
+    const challengeOtherBotError = i18next.t('challenge:challenge_other_bot_error');
     try {
-        const gameMap: { [key: string]: string } = {
-            'ttt': 'Tic Tac Toe',
-            'rps': 'Rock Paper Scissors',
-        };
         if (interaction.channel instanceof TextChannel === false) {
             await interaction.reply({
-                content: 'This command can only be used in a text channel.',
+                content: notTextChannelError,
                 ephemeral: true,
             });
             return;
@@ -41,7 +84,7 @@ export async function execute(interaction: CommandInteraction) {
         const game = interaction.options.get('game', true).value as string;
         if (!game) {
             await interaction.reply({
-                content: 'Invalid Game.',
+                content: invalidGameError,
                 ephemeral: true,
             });
             return;
@@ -49,46 +92,49 @@ export async function execute(interaction: CommandInteraction) {
         const opponent = interaction.options.get('user', true).user;
         if (!opponent) {
             await interaction.reply({
-                content: 'Invalid User.',
+                content: invalidUserError,
                 ephemeral: true,
             });
             return;
         }
         else if (opponent.bot && opponent !== interaction.client.user) {
             await interaction.reply({
-                content: 'You cannot challenge other bots except me!',
+                content: challengeOtherBotError,
                 ephemeral: true,
             });
             return;
         }
 
+        const challengeLetterLiteral = i18next.t('challenge:challenge_letter_literal');
+        const challengeLetterMessage = i18next.t('challenge:challenge_letter_message', {
+            challenger: interaction.user,
+            game: gameMap[game],
+        });
+        const deliveredByFooter = i18next.t('challenge:delivered_by_footer');
+        const challengeDeclinedMessage = i18next.t('challenge:challenge_declined_message', {
+            challenger: interaction.user,
+            challenged: opponent,
+        });
+        const challengeNotRespondedMessage = i18next.t('challenge:challenge_not_responded_message', {
+            challenged: opponent,
+        });
+        const challengeThemselvesMessage = i18next.t('challenge:challenge_themselves_message');
+        const challengeCurrentBotMessage = i18next.t('challenge:challenge_current_bot_message');
+
         if (opponent !== interaction.client.user && opponent !== interaction.user) {
+            const letterEmbed = new EmbedBuilder()
+                .setColor('#5865F2')
+                .setTitle(challengeLetterLiteral)
+                .setDescription(challengeLetterMessage)
+                .setFooter({
+                    text: deliveredByFooter,
+                    iconURL: interaction.client.user.avatarURL() ?? undefined
+                })
+                .setTimestamp();
             const challengeLetter = await interaction.reply({
                 content: `${opponent}`,
-                embeds: [
-                    new EmbedBuilder()
-                        .setColor('#5865F2')
-                        .setTitle('Challenge Letter')
-                        .setDescription(`You have been challenged by ${interaction.user} into a game of ${gameMap[game]}! Do you accept the challenge?`)
-                        .setFooter({
-                            text: `Delivered by Nanaz`,
-                            iconURL: interaction.client.user.avatarURL() ?? undefined
-                        })
-                        .setTimestamp(),
-                ],
-                components: [
-                    new ActionRowBuilder<ButtonBuilder>()
-                        .addComponents(
-                            new ButtonBuilder()
-                                .setCustomId('accept')
-                                .setLabel('Accept')
-                                .setStyle(ButtonStyle.Success),
-                            new ButtonBuilder()
-                                .setCustomId('decline')
-                                .setLabel('Decline')
-                                .setStyle(ButtonStyle.Danger)
-                    )
-                ],
+                embeds: [letterEmbed],
+                components: [acceptAndDeclineButton],
             });
             const acceptCollector = challengeLetter.createMessageComponentCollector({
                 filter: i => i.user.id === opponent.id,
@@ -101,14 +147,11 @@ export async function execute(interaction: CommandInteraction) {
                 received = true;
                 acceptCollector.stop();
                 if (i.customId === 'decline') {
+                    letterEmbed
+                        .setDescription(challengeDeclinedMessage);
                     challengeLetter.edit({
                         content: '',
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor('#5865F2')
-                                .setTitle('Challenge Letter')
-                                .setDescription(`${opponent} has declined ${interaction.user}'s challenge. :(`),
-                        ],
+                        embeds: [letterEmbed],
                         components: [],
                     });
                     return;
@@ -124,21 +167,20 @@ export async function execute(interaction: CommandInteraction) {
             });
             acceptCollector.on('end', async () => {
                 if (!received) {
+                    letterEmbed
+                        .setDescription(challengeNotRespondedMessage);
                     challengeLetter.edit({
-                        embeds: [
-                            new EmbedBuilder()
-                                .setColor('#5865F2')
-                                .setTitle('Challenge Letter')
-                                .setDescription(`${opponent} didn't respond to the challenge...`),
-                        ]
+                        content: '',
+                        embeds: [letterEmbed],
+                        components: [],
                     });
                     return;
                 }
             });
         }
         else if (opponent === interaction.user) {
-            interaction.reply({
-                content: 'Why would you challenge yourself? You\'re weird, but I\'ll let you do it anyway.',
+            await interaction.reply({
+                content: challengeThemselvesMessage,
             });
             setTimeout(() => {
                 if (game === 'ttt') {
@@ -150,8 +192,8 @@ export async function execute(interaction: CommandInteraction) {
             }, 2000);
         }
         else {
-            interaction.reply({
-                content: 'Challenging me? It\'s impossible to win, but you can try to not lose!',
+            await interaction.reply({
+                content: challengeCurrentBotMessage,
             });
             setTimeout(() => {
                 if (game === 'ttt') {
@@ -163,6 +205,7 @@ export async function execute(interaction: CommandInteraction) {
             }, 2000);
         }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     catch (error: any) {
         if (error.code === 10008) {
             return;

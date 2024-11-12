@@ -1,20 +1,64 @@
-import { SlashCommandBuilder, EmbedBuilder, CommandInteraction } from 'discord.js';
-import supportButton from '../../utils/supportButton.js';
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('banner')
     .setDescription('Display the banner of the selected user.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to display the banner of.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
     );
-export async function execute(interaction: CommandInteraction) {
-    const user = interaction.options.get('user')?.user || interaction.user;
-    const member = await user.fetch();
+export async function execute(interaction: ChatInputCommandInteraction) {
+    if (interaction.guild) {
+        const guild = await Guild.findOne({
+            where: {
+                id: interaction.guild.id,
+            }
+        });
+        i18next.changeLanguage(guild?.language);
+    }
+    else {
+        const executeUser = await User.findOne({
+            where: {
+                id: interaction.user.id,
+            }
+        });
+        i18next.changeLanguage(executeUser?.language);
+    }
 
-    if (!member.bannerURL()) {
+    const user = interaction.options.getUser('user') || interaction.user;
+    const userFetched = await user.fetch();
+
+    const userNoBannerError = i18next.t('banner:user_no_banner_error');
+    const requestedByAuthor = i18next.t('global:requested_by_author', {
+        user_displayName: interaction.user.displayName,
+    });
+    const displayedByFooter = i18next.t('global:displayed_by_footer');
+    const bannerEmbedTitle = i18next.t('banner:banner_embed_title', {
+        user_displayName: userFetched.displayName,
+    });
+    const bannerURLDescription = i18next.t('banner:banner_url_description', {
+        banner_url: userFetched.bannerURL(),
+    });
+
+    if (!userFetched.bannerURL()) {
         await interaction.reply({
-            content: 'This user does not have a banner.',
+            content: userNoBannerError,
             ephemeral: true,
         });
         return;
@@ -23,15 +67,15 @@ export async function execute(interaction: CommandInteraction) {
     const bannerEmbed = new EmbedBuilder()
         .setColor('#5865F2')
         .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
+            name: requestedByAuthor,
         })
-        .setTitle(`${member.displayName}'s Profile Banner`)
-        .setDescription(`Banner URL: ${member.bannerURL()}`)
-        .setImage(member.bannerURL({
+        .setTitle(bannerEmbedTitle)
+        .setDescription(bannerURLDescription)
+        .setImage(userFetched.bannerURL({
             size: 2048,
         }) ?? null)
         .setFooter({
-            text: `Displayed by Nanaz`,
+            text: displayedByFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();

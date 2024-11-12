@@ -1,7 +1,7 @@
-import { ChannelType, Message, Client } from 'discord.js';
+import { ChannelType, Message, Client, Events } from 'discord.js';
 import { generateWithAI } from '../../utils/generateWithAI.js';
 
-export const name = 'messageCreate';
+export const name = Events.MessageCreate;
 export async function execute(message: Message, client: Client) {
     if (!client.user) {
         console.error('Client user not found.');
@@ -38,7 +38,7 @@ export async function execute(message: Message, client: Client) {
 
             await message.reply(reply);
         }
-        catch (error) {
+        catch {
             return;
         }
     }

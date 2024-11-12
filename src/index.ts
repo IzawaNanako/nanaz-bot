@@ -3,6 +3,8 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
 import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
+import i18next from 'i18next';
+import Backend from 'i18next-fs-backend';
 
 const token = process.env.TOKEN;
 
@@ -10,6 +12,23 @@ if (!token) {
     console.log('Token not found.');
     process.exit(1);
 }
+
+i18next.use(Backend).init({
+    backend: {
+        loadPath: join('dist/languages/{{lng}}/{{ns}}.json'),
+    },
+    lng: 'en',
+    fallbackLng: 'en',
+    preload: ['en'],
+    ns: ['commands', 'events', 'games', 'general', 'languages'],
+    defaultNS: 'commands',
+    interpolation: {
+        escapeValue: false,
+    },
+}, (error) => {
+    console.error('i18next initialization error: ', error);
+    process.exit(1);
+});
 
 const client = new Client({
     intents: [
@@ -71,6 +90,7 @@ for (const folder of eventFolders) {
 
 client.login(token);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 process.on('unhandledRejection', (error: any) => {
     if (error.code !== 10008) {
         console.error('Unhandled promise rejection: ', error);

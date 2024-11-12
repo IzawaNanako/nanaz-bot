@@ -1,4 +1,3 @@
-import { name } from './events/guildmember/guildMemberRemove';
 import 'dotenv/config.js';
 import { REST, Routes, ApplicationCommand } from 'discord.js';
 import { readdirSync } from 'fs';

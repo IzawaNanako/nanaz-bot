@@ -1,52 +1,92 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
 import GuildMember from '../../models/guildMember.js';
 import sendLog from '../../utils/sendLog.js';
-import supportButton from '../../utils/supportButton.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kick selected member from the server.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to kick.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
         .setRequired(true)
     )
     .addStringOption(option => option
         .setName('reason')
         .setDescription('The reason you are kicking this user for.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been kicked. By default, this is set to true.')
+        .setDescription('To inform the user that they have been kicked. Defaults to false.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
     .setContexts(0);
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
+    const executeUser = await User.findOne({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    i18next.changeLanguage(executeUser?.language);
+    const unknownError = i18next.t('global:unknown_error');
+    const kickPermissionError = i18next.t('kick:kick_permission_error');
+    const invalidUserError = i18next.t('global:invalid_user_error');
+    const kickingThemselvesError = i18next.t('kick:kicking_themselves_error');
+    const failedToKickError = i18next.t('kick:failed_to_kick_error');
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
-            content: 'Something went wrong...',
+            content: unknownError,
             ephemeral: true,
         });
         return;
     }
+
     if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
         await interaction.reply({
-            content: 'I don\'t have permission to kick members in this server!',
+            content: kickPermissionError,
             ephemeral: true,
         });
         return;
     }
-    const user = interaction.options.get('user', true).user;
+    const user = interaction.options.getUser('user', true);
     if (!user) {
         await interaction.reply({
-            content: 'Invalid User',
+            content: invalidUserError,
             ephemeral: true,
         });
         return;
     }
+
     const member = await interaction.guild.members.fetch(user.id);
-    const reason = interaction.options.get('reason')?.value as string;
-    const notice = interaction.options.get('notice')?.value as boolean || true;
+    const reason = interaction.options.getString('reason');
+    const notice = interaction.options.getBoolean('notice') || false;
     const [guildMember] = await GuildMember.findOrCreate({
         where: {
             id: user.id,
@@ -56,7 +96,8 @@ export async function execute(interaction: CommandInteraction) {
 
     if (user.id === interaction.user.id) {
         await interaction.reply({
-            content: 'What the heck are you doing?',
+            content: kickingThemselvesError,
+            ephemeral: true,
         });
         return;
     }
@@ -66,34 +107,58 @@ export async function execute(interaction: CommandInteraction) {
             embeds: [
                 new EmbedBuilder()
                     .setColor('#FF0000')
-                    .setDescription('I can\'t seem to kick that user.\nTry checking my kick permission.'),
+                    .setDescription(failedToKickError),
             ],
             ephemeral: true,
         });
         return;
     }
 
+    const guild = await Guild.findOne({
+        where: {
+            id: interaction.guild.id,
+        }
+    });
+    i18next.changeLanguage(guild?.language);
+    const kickEmbedTitle = i18next.t('kick:kick_embed_title');
+    const userLiteral = i18next.t('global:user_literal');
+    const issuerFieldTitle = i18next.t('global:issuer_field_title');
+    const reasonLiteral = i18next.t('global:reason_literal');
+    const kickEmbedFooter = i18next.t('kick:kick_embed_footer');
+    const kickNotice = i18next.t('kick:kick_notice', {
+        issuer: interaction.user,
+        server_name: interaction.guild.name,
+    });
+    const kickNoticeReason = i18next.t('kick:kick_notice_reason', {
+        reason: reason,
+    });
+    const kickRandomTextOne = i18next.t('kick:kick_random_text_one');
+    const kickRandomTextTwo = i18next.t('kick:kick_random_text_two');
+    const kickRandomTextThree = i18next.t('kick:kick_random_text_three');
+    const kickRandomTextFour = i18next.t('kick:kick_random_text_four');
+    const kickRandomTextFive = i18next.t('kick:kick_random_text_five');
+
     const kickMsgID = Math.floor(Math.random() * 5);
     const kickMsgs = [
-        'They have seen better days...',
-        'They\'ll probably not be missed.',
-        'They\'ll be missed.',
-        'I\'m going to miss you.',
-        'I\'m sorry. I\'m sorry. I\'m sorry.'
+        kickRandomTextOne,
+        kickRandomTextTwo,
+        kickRandomTextThree,
+        kickRandomTextFour,
+        kickRandomTextFive,
     ];
 
     const kickEmbed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setTitle('👋 Member Kicked')
+        .setTitle(kickEmbedTitle)
         .setDescription(kickMsgs[kickMsgID])
         .addFields([
             {
-                name: 'User: ',
+                name: userLiteral,
                 value: `${member.user}`,
                 inline: true,
             },
             {
-                name: 'Issued by: ',
+                name: issuerFieldTitle,
                 value: `${interaction.user}`,
                 inline: true,
             },
@@ -101,17 +166,17 @@ export async function execute(interaction: CommandInteraction) {
         .setImage('https://i.imgur.com/3RiBEiw.gif')
         .setTimestamp()
         .setFooter({
-            text: 'The user can join back at anytime.',
+            text: kickEmbedFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
 
-    let kickedNotice = `${interaction.user} kicked you from **${interaction.guild.name}**.`;
+    let kickedNotice = kickNotice;
 
     if (reason) {
-        kickedNotice += ` Reason: ${reason}`;
+        kickedNotice += kickNoticeReason;
         kickEmbed
             .addFields({
-                name: 'Reason: ',
+                name: reasonLiteral,
                 value: reason,
             });
     }
@@ -120,7 +185,7 @@ export async function execute(interaction: CommandInteraction) {
         await member.send(kickedNotice);
     }
 
-    guildMember.update({
+    await guildMember.update({
         isKicked: true,
     });
 

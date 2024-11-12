@@ -1,26 +1,50 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
 import BannedMember from '../../models/bannedMember.js';
-import supportButton from '../../utils/supportButton.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('baninfo')
     .setDescription('Get information about a user\'s ban status on this server.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addStringOption(option => option
         .setName('username')
         .setDescription('The username of the user to get information about.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(0);
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
+    const executeUser = await User.findOne({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    i18next.changeLanguage(executeUser?.language);
+    const unknownError = i18next.t('global:unknown_error');
+    const userNeverBannedMessage = i18next.t('baninfo:user_never_banned_message');
     if (!interaction.guild) {
         await interaction.reply({
-            content: 'Something went wrong...',
+            content: unknownError,
             ephemeral: true,
         });
         return;
     }
-    const username = interaction.options.get('username', true).value;
+
+    const username = interaction.options.getString('username', true);
     const bannedMember = await BannedMember.findOne({
         where: {
             guildId: interaction.guild.id,
@@ -29,34 +53,54 @@ export async function execute(interaction: CommandInteraction) {
     });
     if (!bannedMember) {
         await interaction.reply({
-            content: 'This user has never been banned from this server.',
+            content: userNeverBannedMessage,
             ephemeral: true,
         });
         return;
     }
 
-    const expireDate = bannedMember.bannedUntil ?? 'Never';
+    const guild = await Guild.findOne({
+        where: {
+            id: interaction.guild.id,
+        }
+    });
+    i18next.changeLanguage(guild?.language);
+    const neverLiteral = i18next.t('global:never_literal');
+    const userLiteral = i18next.t('global:user_literal');
+    const usernameLiteral = i18next.t('global:username_literal');
+    const userIdLiteral = i18next.t('global:user_id_literal');
+    const issuerFieldTitle = i18next.t('global:issuer_field_title');
+    const reasonLiteral = i18next.t('global:reason_literal');
+    const fetchedByFooter = i18next.t('global:fetched_by_footer');
+    const banInformationLiteral = i18next.t('baninfo:ban_information_literal');
+    const userIsBannedMessage = i18next.t('baninfo:user_is_banned_message');
+    const userIsNotBannedMessage = i18next.t('baninfo:user_is_not_banned_message');
+    const baninfoEmbedBannedAtTitle = i18next.t('baninfo:baninfo_embed_banned_at_title');
+    const baninfoEmbedExpireDateTitle = i18next.t('baninfo:baninfo_embed_expire_date_title');
+    const baninfoEmbedTotalBansTitle = i18next.t('baninfo:baninfo_embed_total_bans_title');
+
+    const expireDate = bannedMember.bannedUntil ?? neverLiteral;
 
     const banInfoEmbed = new EmbedBuilder()
         .setColor('#FF0000')
-        .setTitle('Ban Information')
+        .setTitle(banInformationLiteral)
         .setTimestamp()
         .setFooter({
-            text: 'Fetched by Nanaz.',
+            text: fetchedByFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
 
     if (bannedMember.isBanned) {
         banInfoEmbed
-            .setDescription(`This user is currently banned from this server.`)
+            .setDescription(userIsBannedMessage)
             .addFields([
                 {
-                    name: 'Username: ',
+                    name: usernameLiteral,
                     value: `${bannedMember.username}`,
                     inline: true,
                 },
                 {
-                    name: 'User ID: ',
+                    name: userIdLiteral,
                     value: `\`${bannedMember.id}\``,
                     inline: true,
                 },
@@ -65,12 +109,12 @@ export async function execute(interaction: CommandInteraction) {
                     value: '\u200B',
                 },
                 {
-                    name: 'Issued by: ',
+                    name: issuerFieldTitle,
                     value: `${interaction.user}`,
                     inline: true,
                 },
                 {
-                    name: 'Reason: ',
+                    name: reasonLiteral,
                     value: `${bannedMember.bannedReason}`,
                     inline: true,
                 },
@@ -79,50 +123,46 @@ export async function execute(interaction: CommandInteraction) {
                     value: '\u200B',
                 },
                 {
-                    name: 'Banned At: ',
+                    name: baninfoEmbedBannedAtTitle,
                     value: `${bannedMember.bannedAt}`,
                     inline: true,
                 },
                 {
-                    name: 'Expires At: ',
+                    name: baninfoEmbedExpireDateTitle,
                     value: `${expireDate}`,
-                    inline: true,
-                },
-                {
-                    name: '\u200B',
-                    value: '\u200B',
-                },
-                {
-                    name: 'Total Bans: ',
-                    value: `${bannedMember.totalBans}`,
-                },
-            ]);
-    }
-    else {
-        banInfoEmbed
-            .setDescription('This user is currently not banned from this server.')
-            .addFields([
-                {
-                    name: 'User: ',
-                    value: `${bannedMember.username}`,
-                    inline: true,
-                },
-                {
-                    name: 'User ID: ',
-                    value: `\`\`\`${bannedMember.id}\`\`\``,
-                    inline: true,
-                },
-                {
-                    name: '\u200B',
-                    value: '\u200B',
-                },
-                {
-                    name: 'Total Bans: ',
-                    value: `${bannedMember.totalBans}`,
                     inline: true,
                 }
             ]);
     }
+    else {
+        banInfoEmbed
+            .setDescription(userIsNotBannedMessage)
+            .addFields([
+                {
+                    name: userLiteral,
+                    value: `${bannedMember.username}`,
+                    inline: true,
+                },
+                {
+                    name: userIdLiteral,
+                    value: `\`\`\`${bannedMember.id}\`\`\``,
+                    inline: true,
+                }
+            ]);
+    }
+
+    banInfoEmbed
+        .addFields([
+            {
+                name: '\u200B',
+                value: '\u200B',
+            },
+            {
+                name: baninfoEmbedTotalBansTitle,
+                value: `${bannedMember.totalBans}`,
+                inline: true,
+            }
+        ]);
 
     await interaction.reply({
         embeds: [banInfoEmbed],

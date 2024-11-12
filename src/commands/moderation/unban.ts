@@ -1,39 +1,70 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, CommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
 import BannedMember from '../../models/bannedMember.js';
 import sendLog from '../../utils/sendLog.js';
-import supportButton from '../../utils/supportButton.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('unban')
     .setDescription('Unban selected user that is banned from the server.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addStringOption(option => option
         .setName('username')
         .setDescription('The username of the user to unban.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
         .setRequired(true)
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been unbanned. By default, this is set to true.')
+        .setDescription('To inform the user that they have been unbanned. Defaults to true, it\'s TRUE!')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
     .setContexts(0);
-export async function execute(interaction: CommandInteraction) {
+export async function execute(interaction: ChatInputCommandInteraction) {
+    const executeUser = await User.findOne({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    i18next.changeLanguage(executeUser?.language);
+    const unknownError = i18next.t('global:unknown_error');
+    const banManagePermissionError = i18next.t('ban:ban_manage_permission_error');
+    const bannedUserNotFoundError = i18next.t('ban:banned_user_not_found_error');
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
-            content: 'Something went wrong...',
+            content: unknownError,
             ephemeral: true,
         });
         return;
     }
+
     if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
         await interaction.reply({
-            content: 'I don\'t have permission to manage bans in this server!',
+            content: banManagePermissionError,
             ephemeral: true,
         });
         return;
     }
-    const username = interaction.options.get('username', true).value;
-    const notice = interaction.options.get('notice')?.value as boolean || true;
+    const username = interaction.options.getString('username', true);
+    const notice = interaction.options.getBoolean('notice') || true;
     const bannedMember = await BannedMember.findOne({
         where: {
             username: username,
@@ -44,20 +75,35 @@ export async function execute(interaction: CommandInteraction) {
 
     if (!bannedMember) {
         await interaction.reply({
-            content: 'This user is not banned from this server.',
+            content: bannedUserNotFoundError,
             ephemeral: true,
         });
         return;
     }
 
+    const guild = await Guild.findOne({
+        where: {
+            id: interaction.guild.id,
+        }
+    });
+    i18next.changeLanguage(guild?.language);
+    const unbanEmbedTitle = i18next.t('unban:unban_embed_title');
+    const userLiteral = i18next.t('global:user_literal');
+    const issuerFieldTitle = i18next.t('global:issuer_field_title');
+    const unbanEmbedFooter = i18next.t('unban:unban_embed_footer');
+    const unbannedNotice = i18next.t('unban:unban_notice', {
+        issuer: interaction.user,
+        server_name: interaction.guild.name,
+    });
+
     const user = await interaction.client.users.fetch(bannedMember.id);
 
     const unbanEmbed = new EmbedBuilder()
         .setColor('#5865F2')
-        .setTitle('🔓 Member Unbanned')
+        .setTitle(unbanEmbedTitle)
         .addFields([
             {
-                name: 'User: ',
+                name: userLiteral,
                 value: `${user}`,
                 inline: true,
             },
@@ -67,24 +113,22 @@ export async function execute(interaction: CommandInteraction) {
                 inline: true,
             },
             {
-                name: 'Issued by: ',
+                name: issuerFieldTitle,
                 value: `${interaction.user}`,
                 inline: true,
             },
         ])
         .setTimestamp()
         .setFooter({
-            text: 'The user can join the server now.',
+            text: unbanEmbedFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         });
-
-    const unbannedNotice = `${interaction.user} unbanned you from **${interaction.guild.name}**!`;
 
     if (!user.bot && notice) {
         await user.send(unbannedNotice);
     }
 
-    bannedMember.update({
+    await bannedMember.update({
         isBanned: false,
         bannedBy: null,
         bannedReason: null,

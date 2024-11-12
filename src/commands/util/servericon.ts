@@ -1,27 +1,61 @@
-import { SlashCommandBuilder, EmbedBuilder, CommandInteraction } from 'discord.js';
-import supportButton from '../../utils/supportButton.js';
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import Guild from '../../models/guild.js';
+import User from '../../models/user.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('servericon')
     .setDescription('Display the icon of the selected server.')
+    .setDescriptionLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .addStringOption(option => option
-        .setName('server')
+        .setName('server-id')
         .setDescription('The ID of the server to display the icon of. "/help ids" for how to get IDs.')
+        .setDescriptionLocalizations({
+            'en-US': '',
+            'ja': '',
+            'zh-CN': '',
+            'zh-TW': '',
+        })
     );
-export async function execute(interaction: CommandInteraction) {
-    if (!interaction.guild) {
-        await interaction.reply({
-            content: 'Something went wrong...',
-            ephemeral: true,
+export async function execute(interaction: ChatInputCommandInteraction) {
+    if (interaction.guild) {
+        const guild = await Guild.findOne({
+            where: {
+                id: interaction.guild.id,
+            }
         });
-        return;
+        i18next.changeLanguage(guild?.language);
     }
+    else {
+        const executeUser = await User.findOne({
+            where: {
+                id: interaction.user.id,
+            }
+        });
+        i18next.changeLanguage(executeUser?.language);
+    }
+    const requestedByAuthor = i18next.t('global:requested_by_author', {
+        user_displayName: interaction.user.displayName,
+    });
+    const displayedByFooter = i18next.t('global:displayed_by_footer');
+    const invalidServerIdError = i18next.t('servericon:invalid_server_id_error');
+    const invalidServerIconError = i18next.t('servericon:invalid_server_icon_error');
 
-    const serverID = interaction.options.get('server')?.value as string || interaction.guild.id;
+    let serverID = interaction.options.getString('server');
+
+    if (!serverID && interaction.guild) {
+        serverID = interaction.guild.id;
+    }
 
     if (!serverID) {
         await interaction.reply({
-            content: 'Invalid Server ID.',
+            content: invalidServerIdError,
             ephemeral: true,
         });
         return;
@@ -32,9 +66,16 @@ export async function execute(interaction: CommandInteraction) {
         size: 2048,
     });
 
+    const serverIconEmbedTitle = i18next.t('servericon:server_icon_embed_title', {
+        server_name: server.name,
+    });
+    const serverIconEmbedDescription = i18next.t('servericon:server_icon_embed_description', {
+        server_icon_url: serverIcon,
+    });
+
     if (!serverIcon) {
         await interaction.reply({
-            content: 'Invalid Server ID.',
+            content: invalidServerIconError,
             ephemeral: true,
         });
         return;
@@ -43,13 +84,13 @@ export async function execute(interaction: CommandInteraction) {
     const serverIconEmbed = new EmbedBuilder()
         .setColor('#5865F2')
         .setAuthor({
-            name: `Requested by ${interaction.user.displayName}`,
+            name: requestedByAuthor,
         })
-        .setTitle(`Server Icon of ${server.name}`)
-        .setDescription(`Icon URL: ${serverIcon}`)
+        .setTitle(serverIconEmbedTitle)
+        .setDescription(serverIconEmbedDescription)
         .setImage(serverIcon)
         .setFooter({
-            text: `Displayed by Nanaz`,
+            text: displayedByFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();

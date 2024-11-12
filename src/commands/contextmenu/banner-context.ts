@@ -1,16 +1,42 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, UserContextMenuCommandInteraction } from 'discord.js';
-import supportButton from '../../utils/supportButton.js';
+import User from '../../models/user.js';
+import { supportButton } from '../../utils/buttons.js';
+import i18next from 'i18next';
 
 export const data = new ContextMenuCommandBuilder()
     .setName('User Banner')
+    .setNameLocalizations({
+        'en-US': '',
+        'ja': '',
+        'zh-CN': '',
+        'zh-TW': '',
+    })
     .setType(ApplicationCommandType.User as ContextMenuCommandType);
 export async function execute(interaction: UserContextMenuCommandInteraction) {
-    const user = interaction.targetUser;
-    const member = await user.fetch();
+    const executeUser = await User.findOne({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    if (executeUser) {
+        i18next.changeLanguage(executeUser.language);
+    }
 
-    if (!member.bannerURL()) {
+    const user = interaction.targetUser;
+    const userFetched = await user.fetch();
+
+    const userNoBannerError = i18next.t('banner:user_no_banner_error');
+    const displayedByFooter = i18next.t('global:displayed_by_footer');
+    const bannerEmbedTitle = i18next.t('banner:banner_embed_title', {
+        user_displayName: userFetched.displayName,
+    });
+    const bannerURLDescription = i18next.t('banner:banner_url_description', {
+        banner_url: userFetched.bannerURL(),
+    });
+
+    if (!userFetched.bannerURL()) {
         await interaction.reply({
-            content: 'This user does not have a banner.',
+            content: userNoBannerError,
             ephemeral: true,
         });
         return;
@@ -18,13 +44,13 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     const bannerEmbed = new EmbedBuilder()
         .setColor('#5865F2')
-        .setTitle(`${member.displayName}'s Profile Banner`)
-        .setDescription(`Banner URL: ${member.bannerURL()}`)
-        .setImage(member.bannerURL({
+        .setTitle(bannerEmbedTitle)
+        .setDescription(bannerURLDescription)
+        .setImage(userFetched.bannerURL({
             size: 2048,
         }) ?? null)
         .setFooter({
-            text: `Displayed by Nanaz`,
+            text: displayedByFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp();

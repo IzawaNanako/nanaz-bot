@@ -3,6 +3,7 @@ import Guild from '../../models/guild.js';
 import GuildMember from '../../models/guildMember.js';
 import BannedMember from '../../models/bannedMember.js';
 import WelcomeRole from '../../models/welcomeRole.js';
+import i18next from 'i18next';
 
 export const name = 'guildMemberAdd';
 export async function execute(member: Member) {
@@ -15,7 +16,14 @@ export async function execute(member: Member) {
         return;
     }
 
-    let welcomeChannel;
+    i18next.setDefaultNamespace('events');
+    i18next.changeLanguage(guild.language);
+    const welcomeEmbedTitle = i18next.t('guildMemberAdd:welcome_embed_title', {
+        displayName: member.user.username,
+    });
+    const welcomeEmbedFooter = i18next.t('guildMemberAdd:welcome_embed_footer');
+    const welcomeEmbedWasKicked = i18next.t('guildMemberAdd:welcome_embed_was_kicked');
+    const welcomeEmbedWasBanned = i18next.t('guildMemberAdd:welcome_embed_was_banned');
 
     const guildMember = await GuildMember.findOne({
         where: {
@@ -34,6 +42,8 @@ export async function execute(member: Member) {
             guildId: member.guild.id,
         }
     });
+
+    let welcomeChannel;
     
     if (guild.welcomeChannelId && welcomeChannel && member.guild.members.me?.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.SendMessages)) {
         welcomeChannel = await member.guild.channels.fetch(guild.welcomeChannelId) as TextChannel;
@@ -42,21 +52,21 @@ export async function execute(member: Member) {
         const welcomeEmbed = new EmbedBuilder()
             .setColor('#2E4053')
             .setAuthor({
-                name: `Hello ${member.user.username}!`,
+                name: `Yo ${member.user.username}!`,
                 iconURL: member.user.displayAvatarURL(),
             })
-            .setTitle(`Welcome, ${member.user.displayName}!`)
+            .setTitle(welcomeEmbedTitle)
             .setThumbnail(member.guild.iconURL())
             .setDescription(`${welcomeMessage}`)
             .setFooter({
-                text: `Hi, I'm Nanaz!`,
+                text: welcomeEmbedFooter,
                 iconURL: member.client.user.avatarURL() ?? undefined,
             })
             .setTimestamp();
 
         if (guildMember?.isKicked) {
             welcomeEmbed
-                .setDescription('Welcome back! Better be nicer this time!');
+                .setDescription(welcomeEmbedWasKicked);
 
             guildMember.isKicked = false;
             await guildMember.save();
@@ -64,7 +74,7 @@ export async function execute(member: Member) {
 
         if (bannedMember?.isBanned && bannedMember?.totalBans > 0) {
             welcomeEmbed
-                .setDescription('You seems to have a bad record, hope you have learned your lessons.');
+                .setDescription(welcomeEmbedWasBanned);
         }
 
         welcomeChannel.send({

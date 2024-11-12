@@ -7,17 +7,17 @@ export const name = 'guildDelete';
 export async function execute(guild: DiscordGuild) {
     await Guild.destroy({
         where: {
-            id: guild.id
+            id: guild.id,
         }
     });
     await GuildMember.destroy({
         where: {
-            guildId: guild.id
+            guildId: guild.id,
         }
     });
     await BannedMember.destroy({
         where: {
-            guildId: guild.id
+            guildId: guild.id,
         }
     });
 }
