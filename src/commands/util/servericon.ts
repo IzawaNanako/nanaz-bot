@@ -8,19 +8,19 @@ export const data = new SlashCommandBuilder()
     .setName('servericon')
     .setDescription('Display the icon of the selected server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Display the icon of the selected server.',
+        'ja': '選択したサーバーのアイコンを表示する。',
+        'zh-CN': '显示所选服务器的图标。',
+        'zh-TW': '顯示所選伺服器的圖示。',
     })
     .addStringOption(option => option
         .setName('server-id')
         .setDescription('The ID of the server to display the icon of. "/help ids" for how to get IDs.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The ID of the server to display the icon of. "/help ids" for how to get IDs.',
+            'ja': 'アイコンを表示するサーバーのID。 IDの取得方法は"/help ids"を参照。',
+            'zh-CN': '要显示图标的服务器的ID。关于如何获取ID，请参见"/help ids"。',
+            'zh-TW': '要顯示圖示的伺服器ID。"/help ids"可瞭解如何取得ID。',
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
