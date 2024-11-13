@@ -6,6 +6,8 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kick selected member from the server.')

@@ -5,6 +5,8 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('set-channel')
     .setDescription('Set the logs channel or the channel to send bye messages in.')

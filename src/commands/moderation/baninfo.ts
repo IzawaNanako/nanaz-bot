@@ -5,6 +5,8 @@ import BannedMember from '../../models/bannedMember.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('baninfo')
     .setDescription('Get information about a user\'s ban status on this server.')

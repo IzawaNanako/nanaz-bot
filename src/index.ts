@@ -24,6 +24,7 @@ try {
         load: 'currentOnly',
         ns: ['commands', 'events', 'games', 'general', 'languages'],
         defaultNS: 'commands',
+        fallbackNS: 'commands',
         interpolation: {
             escapeValue: false,
         },

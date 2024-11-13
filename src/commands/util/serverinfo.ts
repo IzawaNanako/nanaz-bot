@@ -4,6 +4,8 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Display information about a server the bot is in.')

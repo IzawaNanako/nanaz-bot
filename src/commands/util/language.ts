@@ -11,6 +11,8 @@ const languageMap: { [key: string]: string } = {
     '繁體中文 (臺灣)': 'zh-TW',
 }
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('language')
     .setNameLocalizations({
@@ -53,6 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
 
     i18next.changeLanguage(languageMap[language]);
+    const languageAlreadyUsingError = i18next.t('language.languageAlreadyUsingError');
     const userLanguageChangedMessage = i18next.t('language.userLanguageChangedMessage');
     const previousLanguageLiteral = i18next.t('language.previousLanguageLiteral');
     const currentLanguageLiteral = i18next.t('language.currentLanguageLiteral');
@@ -63,6 +66,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const currentLanguageName = i18next.t(`${language}`, {
         ns: 'languages',
     });
+
+    if (user.language === languageMap[language]) {
+        await interaction.reply({
+            content: languageAlreadyUsingError,
+            ephemeral: true,
+        });
+        return;
+    }
 
     const actionEmbed = new EmbedBuilder()
         .setColor('#2E4053')

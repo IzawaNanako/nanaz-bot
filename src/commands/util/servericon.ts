@@ -4,6 +4,8 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('servericon')
     .setDescription('Display the icon of the selected server.')

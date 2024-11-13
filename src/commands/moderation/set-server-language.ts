@@ -6,6 +6,8 @@ import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 const languageMap: { [key: string]: string } = {
     'English (United States)': 'en-US',
     '日本語': 'ja',
@@ -56,6 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
     i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
+    const serverLanguageAlreadyUsingError = i18next.t('setServerLanguage.serverLanguageAlreadyUsingError');
 
     if (!interaction.guild) {
         await interaction.reply({
@@ -71,6 +74,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.guild.id,
         }
     });
+
+    if (languageMap[language] === guild.language) {
+        await interaction.reply({
+            content: serverLanguageAlreadyUsingError,
+            ephemeral: true,
+        });
+        return;
+    };
 
     i18next.changeLanguage(languageMap[language]);
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
@@ -121,7 +132,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await sendLog(interaction.guild, {
         embeds: [actionEmbed],
-        components: [supportButton],
     });
 }
 export async function autocomplete(interaction: AutocompleteInteraction) {

@@ -4,6 +4,8 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 const badgeMap: { [key: string]: string } = {
     'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
     'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
