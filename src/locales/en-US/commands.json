@@ -119,6 +119,7 @@
         "noReasonMessage": "No reason provided.",
         "banNotice": "{{issuer}} has banned you from **{{serverName}}**!",
         "banNoticeReason": " Reason: {{reason}}.",
+        "banExpiredMessage": "This ban has expired.",
         "banRandomTextOne": "Be gone!",
         "banRandomTextTwo": "They disgusted me.",
         "banRandomTextThree": "Who knows, maybe they'll be back someday?",

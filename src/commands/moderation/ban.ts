@@ -1,4 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { schedule } from 'node-cron';
 import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import BannedMember from '../../models/bannedMember.js';
@@ -174,6 +175,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const banRandomTextThree = i18next.t('ban.banRandomTextThree');
     const banRandomTextFour = i18next.t('ban.banRandomTextFour');
     const banRandomTextFive = i18next.t('ban.banRandomTextFive');
+    const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
+    const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
+    const banExpiredMessage = i18next.t('ban.banExpiredMessage');
 
     const banMsgID = Math.floor(Math.random() * 5);
     const banMsgs = [
@@ -239,6 +243,49 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (duration) {
         await bannedMember.update({
             bannedUntil: new Date(Date.now() + (duration * 86400000)),
+        });
+
+        const guildFetched = await interaction.guild.fetch();
+
+        schedule(`${bannedMember.bannedUntil}`, async () => {
+            if (bannedMember.isBanned === false) {
+                return;
+            }
+
+            const unbanEmbed = new EmbedBuilder()
+                .setColor('#FF0000')
+                .setTitle(unbanEmbedTitle)
+                .addFields([
+                    {
+                        name: userLiteral,
+                        value: `${user}`,
+                        inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
+                        inline: true,
+                    },
+                    {
+                        name: reasonLiteral,
+                        value: banExpiredMessage,
+                        inline: true,
+                    },
+                ])
+                .setTimestamp()
+                .setFooter({
+                    text: unbanEmbedFooter,
+                    iconURL: interaction.client.user.avatarURL() ?? undefined,
+                });
+
+            await bannedMember.update({
+                isBanned: false,
+                bannedUntil: null,
+            });
+            await guildFetched.members.unban(user);
+            await sendLog(guildFetched, {
+                embeds: [unbanEmbed],
+            });
         });
     }
 
