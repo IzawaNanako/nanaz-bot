@@ -10,19 +10,19 @@ export const data = new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kick selected member from the server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Kick selected member from the server.',
+        'ja': '選択したメンバーをサーバーからキックする。',
+        'zh-CN': '从服务器上踢出所选成员。',
+        'zh-TW': '從伺服器踢出所選的成員。',
     })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to kick.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user to kick.',
+            'ja': 'キックするユーザー。',
+            'zh-CN': '要踢出的用户。',
+            'zh-TW': '要踢出的使用者。',
         })
         .setRequired(true)
     )
@@ -30,20 +30,20 @@ export const data = new SlashCommandBuilder()
         .setName('reason')
         .setDescription('The reason you are kicking this user for.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The reason you are kicking this user for.',
+            'ja': 'このユーザーをキックする理由。',
+            'zh-CN': '您踢出这位用户的原因。',
+            'zh-TW': '您踢出該使用者的原因。',
         })
     )
     .addBooleanOption(option => option
         .setName('notice')
         .setDescription('To inform the user that they have been kicked. Defaults to false.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'To inform the user that they have been kicked. Defaults to false.',
+            'ja': 'ユーザーにキックされたことを通知する。 デフォルトはfalse。',
+            'zh-CN': '通知用户已被踢出。 默认为 false。',
+            'zh-TW': '通知使用者已被踢出。 預設為 false。',
         })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
