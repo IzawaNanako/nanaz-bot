@@ -6,10 +6,10 @@ import i18next from 'i18next';
 export const data = new ContextMenuCommandBuilder()
     .setName('Translate Message')
     .setNameLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Translate Message',
+        'ja': 'メッセージを翻訳する',
+        'zh-CN': '翻译信息',
+        'zh-TW': '翻譯訊息',
     })
     .setType(ApplicationCommandType.Message as ContextMenuCommandType);
 export const execute = async (interaction: MessageContextMenuCommandInteraction) => {
