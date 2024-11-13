@@ -1,4 +1,4 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import sendLog from '../../utils/sendLog.js';
@@ -15,10 +15,10 @@ const languageMap: { [key: string]: string } = {
 export const data = new SlashCommandBuilder()
     .setName('set-server-language')
     .setNameLocalizations({
-        'en-US': 'language',
-        'ja': '言語',
-        'zh-CN': '语言',
-        'zh-TW': '語言',
+        'en-US': 'set-server-language',
+        'ja': 'セットサーバー言語',
+        'zh-CN': '设置服务器语言',
+        'zh-TW': '設定伺服器語言',
     })
     .setDescription('Set the bot language for this server.')
     .setDescriptionLocalizations({
@@ -45,6 +45,7 @@ export const data = new SlashCommandBuilder()
         .setRequired(true)
         .setAutocomplete(true)
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
 export async function execute(interaction: ChatInputCommandInteraction) {
     const executeUser = await User.findOne({
