@@ -10,19 +10,19 @@ export const data = new SlashCommandBuilder()
     .setName('ban')
     .setDescription('Ban selected member from the server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Ban selected member from the server.',
+        'ja': '選択したメンバーをサーバーから追放する。',
+        'zh-CN': '从服务器中封禁所选成员。',
+        'zh-TW': '從伺服器封禁所選成員。',
     })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to ban.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user to ban.',
+            'ja': '禁止するユーザー。',
+            'zh-CN': '要封禁的用户。',
+            'zh-TW': '要封禁的使用者。',
         })
         .setRequired(true)
     )
@@ -30,20 +30,20 @@ export const data = new SlashCommandBuilder()
         .setName('reason')
         .setDescription('The reason you are banning this user for.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The reason you are banning this user for.',
+            'ja': 'このユーザーを追放する理由。',
+            'zh-CN': '您封禁该用户的原因。',
+            'zh-TW': '您封禁此使用者的原因。',
         })
     )
     .addNumberOption(option => option
         .setName('delete_messages')
-        .setDescription('How recent should their message be deleted in days? (Max 7, default 0, accepts decimals).')
+        .setDescription('Since how long ago you want to delete their messages, in days? (Max 7, default 0, accept decimals)')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Since how long ago you want to delete their messages, in days? (Max 7, default 0, accept decimals)',
+            'ja': '何日前からのメッセージを削除しますか？ (最大7、デフォルト0、小数可)',
+            'zh-CN': '以天为单位，您想从多长时间前开始删除他们的信息？ (最多7天，默认为0，接受小数点）',
+            'zh-TW': '以天為單位，您想從多長時間前開始刪除他們的資訊？ (最多7天，預設為0，接受小數點）',
         })
         .setMinValue(0)
         .setMaxValue(7)
@@ -52,20 +52,20 @@ export const data = new SlashCommandBuilder()
         .setName('notice')
         .setDescription('To inform the user that they have been banned. Defaults to false.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'To inform the user that they have been banned. Defaults to false.',
+            'ja': 'ユーザーに禁止されたことを通知する。 デフォルトはfalse。',
+            'zh-CN': '通知用户已被封禁。默认为 false。',
+            'zh-TW': '通知使用者已被封禁。預設為 false。',
         })
     )
     .addNumberOption(option => option
         .setName('duration')
-        .setDescription('How long should the ban last for in days? (Accepts decimals, leave empty for indefinite).')
+        .setDescription('How long should the ban last for, in days? (Accepts decimals, leave empty for permanent)')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'How long should the ban last for in days? (Accepts decimals, leave empty for permanent)',
+            'ja': '禁止期間は何日間ですか？ (小数可、永久の場合は空白にしてください）',
+            'zh-CN': '以天为单位，禁令应持续多长时间？ (接受小数，留空表示永久）',
+            'zh-TW': '以天為單位，禁令應該持續多久？ (接受小數點，留空表示永久）',
         })
         .setMinValue(0)
     )
