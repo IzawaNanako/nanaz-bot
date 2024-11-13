@@ -7,7 +7,7 @@ import WelcomeRole from './models/welcomeRole.js';
 import BotSettings from './models/botSettings.js';
 
 await Guild.sync({
-    alter: true,
+    alter: false,
 })
 .then(() => {
     console.log('Guild Database synced.');
@@ -37,7 +37,7 @@ await BannedMember.sync({
 });
 
 await User.sync({
-    alter: true,
+    alter: false,
 })
 .then(() => {
     console.log('User Database synced.');
