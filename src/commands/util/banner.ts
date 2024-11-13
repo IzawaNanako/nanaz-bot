@@ -8,19 +8,19 @@ export const data = new SlashCommandBuilder()
     .setName('banner')
     .setDescription('Display the banner of the selected user.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Display the banner of the selected user.',
+        'ja': '選択したユーザーのバナーを表示する。',
+        'zh-CN': '显示所选用户的横幅。',
+        'zh-TW': '顯示選取使用者的橫幅。',
     })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to display the banner of.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user to display the banner of.',
+            'ja': 'バナーを表示するユーザー。',
+            'zh-CN': '要显示横幅的用户。',
+            'zh-TW': '要顯示橫幅的使用者。',
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
