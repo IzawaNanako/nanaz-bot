@@ -10,19 +10,19 @@ export const data = new SlashCommandBuilder()
     .setName('unban')
     .setDescription('Unban selected user that is banned from the server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Unban selected user that is banned from the server.',
+        'ja': 'サーバーから追放されているユーザーを選択し、追放を解除します。',
+        'zh-CN': '解除所选用户的伺服器封禁。',
+        'zh-TW': '解除所選使用者的伺服器封禁。',
     })
     .addStringOption(option => option
         .setName('username')
         .setDescription('The username of the user to unban.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The username of the user to unban.',
+            'ja': 'アクセス禁止を解除するユーザのユーザ名。',
+            'zh-CN': '要解禁的用户的用户名。',
+            'zh-TW': '要解禁的使用者的使用者名稱。',
         })
         .setRequired(true)
     )
@@ -30,10 +30,10 @@ export const data = new SlashCommandBuilder()
         .setName('notice')
         .setDescription('To inform the user that they have been unbanned. Defaults to true, it\'s TRUE!')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'To inform the user that they have been unbanned. Defaults to true, it\'s TRUE!',
+            'ja': 'ユーザーに禁止解除を通知する。 デフォルトはTRUE！',
+            'zh-CN': '通知用户他们已被解禁。 默认为true，TRUE！',
+            'zh-TW': '通知使用者他們已被解除封禁。 預設為true，TRUE！',
         })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
