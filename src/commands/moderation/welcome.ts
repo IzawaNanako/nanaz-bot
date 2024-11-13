@@ -10,37 +10,37 @@ export const data = new SlashCommandBuilder()
     .setName('welcome')
     .setDescription('Configure how the bot welcome new members of this server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Configure how the bot welcome new members of this server.',
+        'ja': 'ボットがこのサーバーの新しいメンバーをどのように歓迎するかを設定します。',
+        'zh-CN': '設置机器人如何欢迎该服务器的新成员。',
+        'zh-TW': '設定機器人如何歡迎此伺服器的新成員。',
     })
     .addSubcommandGroup(group => group
         .setName('channel')
         .setDescription('Set the channel to send welcome messages in.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Set the channel to send welcome messages in.',
+            'ja': 'ウェルカムメッセージを送信するチャンネルを設定します。',
+            'zh-CN': '设置发送欢迎信息的频道。',
+            'zh-TW': '設定傳送歡迎訊息的頻道。',
         })
         .addSubcommand(subcommand => subcommand
             .setName('set')
             .setDescription('Set the channel to send welcome messages in.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Set the channel to send welcome messages in.',
+                'ja': 'ウェルカムメッセージを送信するチャンネルを設定します。',
+                'zh-CN': '设置发送欢迎信息的频道。',
+                'zh-TW': '設定傳送歡迎訊息的頻道。',
             })
             .addChannelOption(option => option
                 .setName('channel')
                 .setDescription('The channel to send welcome messages in.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The channel to send welcome messages in.',
+                    'ja': 'ウェルカムメッセージを送るチャンネル。',
+                    'zh-CN': '发送欢迎信息的通道。',
+                    'zh-TW': '傳送歡迎訊息的頻道。',
                 })
                 .setRequired(true)
                 .addChannelTypes(ChannelType.GuildText)
@@ -50,10 +50,10 @@ export const data = new SlashCommandBuilder()
             .setName('disable')
             .setDescription('Disable sending welcome messages in this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Disable sending welcome messages in this server.',
+                'ja': 'このサーバでウェルカムメッセージの送信を無効にする。',
+                'zh-CN': '停止在此服务器中发送欢迎信息。',
+                'zh-TW': '停止在此伺服器傳送歡迎訊息。',
             })
         )
     )
@@ -61,28 +61,28 @@ export const data = new SlashCommandBuilder()
         .setName('message')
         .setDescription('Set the message to send to new members of this server.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Set the message to send to new members of this server.',
+            'ja': 'このサーバーの新しいメンバーに送信するメッセージを設定します。',
+            'zh-CN': '设置向服务器新成员发送的信息。',
+            'zh-TW': '設定要傳送給此伺服器新成員的訊息。',
         })
         .addSubcommand(subcommand => subcommand
             .setName('set')
             .setDescription('Set the message to send to new members of this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Set the message to send to new members of this server.',
+                'ja': 'このサーバーの新しいメンバーに送信するメッセージを設定します。',
+                'zh-CN': '设置向服务器新成员发送的信息。',
+                'zh-TW': '設定要傳送給此伺服器新成員的訊息。',
             })
             .addStringOption(option => option
                 .setName('message')
                 .setDescription('The message to send, read "/help Welcome Message" for more info.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The message to send, read "/help Welcome Message" for more info.',
+                    'ja': '送信するメッセージ。詳しくは"/help Welcome Message"を参照のこと。',
+                    'zh-CN': '要发送的信息，详情请阅读"/help Welcome Message"。',
+                    'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Welcome Message"。',
                 })
                 .setRequired(true)
             )
@@ -92,28 +92,28 @@ export const data = new SlashCommandBuilder()
         .setName('role')
         .setDescription('Set the roles to give to new members of this server.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Set the roles to give to new members of this server.',
+            'ja': 'このサーバーの新しいメンバーに与えるロ一ルを設定します。',
+            'zh-CN': '设置给予服务器新成员的身份组。',
+            'zh-TW': '設定要賦予此伺服器新成員的身份組。',
         })
         .addSubcommand(subcommand => subcommand
             .setName('add')
             .setDescription('Add a role to give to new members of this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Add a role to give to new members of this server.',
+                'ja': 'このサーバーの新しいメンバーに贈るロ一ルを追加する。',
+                'zh-CN': '添加一个身份组，以给予本服务器的新成员。',
+                'zh-TW': '新增一個身份組，以給予這個伺服器的新成員。',
             })
             .addRoleOption(option => option
                 .setName('role')
                 .setDescription('The role to give to new members of this server.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The role to give to new members of this server.',
+                    'ja': 'このサーバーの新しいメンバーに与えるロ一ル。',
+                    'zh-CN': '给予本服务器新成员的身份组。',
+                    'zh-TW': '給這個伺服器新成員的身分組。',
                 })
                 .setRequired(true)
             )
@@ -122,31 +122,31 @@ export const data = new SlashCommandBuilder()
             .setName('remove')
             .setDescription('Remove a role from being given to new members of this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Remove a role from being given to new members of this server.',
+                'ja': 'このサーバーの新しいメンバーに与えられるロ一ルを削除する。',
+                'zh-CN': '移除一个给予此服务器新成员的身分组。',
+                'zh-TW': '移除一個給予此伺服器新成員的身分組。',
             })
             .addRoleOption(option => option
                 .setName('role')
                 .setDescription('The role to remove from being given to new members of this server.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The role to remove from being given to new members of this server.',
+                    'ja': 'このサーバーの新メンバーに与えられないようにするロ一ル。',
+                    'zh-CN': '要移除给予此服务器新成员的身分组。',
+                    'zh-TW': '要移除給予此伺服器新成員的身分組。',
                 })
                 .setRequired(true)
             )
         )
         .addSubcommand(subcommand => subcommand
             .setName('clear')
-            .setDescription('Clear all roles of this server.')
+            .setDescription('Clear all welcome roles of this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Clear all welcome roles of this server.',
+                'ja': 'このサーバーのウェルカムロ一ルをすべて消去する。',
+                'zh-CN': '清除本服务器的所有欢迎身份组。',
+                'zh-TW': '清除此伺服器的所有歡迎身分組。',
             })
         )
     )
