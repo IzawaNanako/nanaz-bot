@@ -9,7 +9,7 @@ export const data = new ContextMenuCommandBuilder()
         'en-US': 'User Avatar',
         'ja': 'ユーザーアバター',
         'zh-CN': '用户头像',
-        'zh-TW': '用戶頭像',
+        'zh-TW': '使用者頭像',
     })
     .setType(ApplicationCommandType.User as ContextMenuCommandType);
 export async function execute(interaction: UserContextMenuCommandInteraction) {
