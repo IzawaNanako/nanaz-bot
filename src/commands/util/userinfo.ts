@@ -24,19 +24,19 @@ export const data = new SlashCommandBuilder()
     .setName('userinfo')
     .setDescription('Display information about the selected user. Certain info can only be seen if user is in the server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Display information about the selected user. Certain info can only be seen if user is in the server.',
+        'ja': '選択したユーザーに関する情報を表示する。 特定の情報は、ユーザーがサーバー内にいる場合にのみ表示されます。',
+        'zh-CN': '显示所选用户的信息。 某些信息只有用户在服务器中时才能看到。',
+        'zh-TW': '顯示所選使用者的相關資訊。 某些資訊只有使用者在伺服器中時才能看到。',
     })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to display information about.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user to display information about.',
+            'ja': 'ユーザーに関する情報を表示する。',
+            'zh-CN': '要显示信息的用户。',
+            'zh-TW': '要顯示資訊的使用者。',
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
