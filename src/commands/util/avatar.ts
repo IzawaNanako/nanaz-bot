@@ -8,29 +8,29 @@ export const data = new SlashCommandBuilder()
     .setName('avatar')
     .setDescription('Display the avatar of the selected user.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Display the avatar of the selected user.',
+        'ja': '選択したユーザーのアバターを表示します。',
+        'zh-CN': '显示所选用户的头像。',
+        'zh-TW': '顯示所選使用者的頭像。',
     })
     .addUserOption(option => option
         .setName('user')
         .setDescription('The user to display the avatar of.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user to display the avatar of.',
+            'ja': 'アバターを表示するユーザー。',
+            'zh-CN': '要显示头像的用户。',
+            'zh-TW': '要顯示頭像的使用者。',
         })
     )
     .addBooleanOption(option => option
         .setName('default_avatar')
         .setDescription('Display the user\'s default avatar instead of their avatar in the server.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Display the user\'s default avatar instead of their avatar in the server.',
+            'ja': 'サーバー内のアバターではなく、ユーザーのデフォルトアバターを表示する。',
+            'zh-CN': '显示用户的默认头像，而不是其在服务器中的头像。',
+            'zh-TW': '顯示使用者的預設頭像，而不是他們在伺服器中的頭像。',
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
