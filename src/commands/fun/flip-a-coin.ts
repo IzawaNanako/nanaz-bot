@@ -7,10 +7,10 @@ export const data = new SlashCommandBuilder()
     .setName('flip-a-coin')
     .setDescription('Flip a coin!')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Flip a coin!',
+        'ja': 'コインを裏返す！',
+        'zh-CN': '掷硬币！',
+        'zh-TW': '擲硬幣！',
     });
 export const execute = async (interaction: ChatInputCommandInteraction) => {
     await interaction.deferReply();
