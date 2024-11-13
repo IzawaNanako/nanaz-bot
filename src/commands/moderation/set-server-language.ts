@@ -133,12 +133,19 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         '繁體中文 (臺灣)',
     ];
 
-    const fuse = new Fuse(choices, {
-        keys: ['value'],
-        threshold: 0.3,
-    });
+    let filtered;
 
-    const filtered = fuse.search(focusedValue).map(result => result.item);
+    if (focusedValue === '') {
+        filtered = choices;
+    }
+    else {
+        const fuse = new Fuse(choices, {
+            keys: ['value'],
+            threshold: 0.3,
+        });
+
+        filtered = fuse.search(focusedValue).map(result => result.item);
+    }
 
     await interaction.respond(
         filtered.map(choice => ({
