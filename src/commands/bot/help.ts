@@ -17,10 +17,10 @@ export const data = new SlashCommandBuilder()
         .setName('option')
         .setDescription('The thing you want to get help on, check "/help Menu" if you don\'t seem to find what you need.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The thing you want to get help on, check "/help Menu" if you don\'t seem to find what you need.',
+            'ja': '必要なものが見つからなければ、"/help Menu"をチェックしてください。',
+            'zh-CN': '您想得到帮助的事情，如果找不到所需的帮助，请查看"/help Menu"。',
+            'zh-TW': '您想要獲得幫助的事情，如果找不到所需的幫助，請查看"/help Menu"。',
         })
         .setAutocomplete(true)
     );
