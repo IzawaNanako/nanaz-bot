@@ -9,19 +9,19 @@ export const data = new SlashCommandBuilder()
     .setName('baninfo')
     .setDescription('Get information about a user\'s ban status on this server.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Get information about a user\'s ban status on this server.',
+        'ja': 'このサーバにおけるユーザの禁止ステータスに関する情報を取得します。',
+        'zh-CN': '获取用户在本服务器上的封禁状态信息。',
+        'zh-TW': '取得使用者在此伺服器上的封禁狀態資訊。',
     })
     .addStringOption(option => option
         .setName('username')
         .setDescription('The username of the user to get information about.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The username of the user to get information about.',
+            'ja': '情報を取得するユーザーのユーザー名。',
+            'zh-CN': '要获取信息的用户的用户名。',
+            'zh-TW': '要取得使用者資訊的使用者名稱。',
         })
         .setRequired(true)
     )
