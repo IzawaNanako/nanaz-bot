@@ -6,10 +6,10 @@ import i18next from 'i18next';
 export const data = new ContextMenuCommandBuilder()
     .setName('User Banner')
     .setNameLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'User Banner',
+        'ja': 'ユーザーバナー',
+        'zh-CN': '用户横幅',
+        'zh-TW': '使用者橫幅',
     })
     .setType(ApplicationCommandType.User as ContextMenuCommandType);
 export async function execute(interaction: UserContextMenuCommandInteraction) {
