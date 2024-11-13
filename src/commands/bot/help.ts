@@ -162,8 +162,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         'welcome-msg',
     ];
 
-    const filtered = choices.filter(choice => choice.startsWith(focusedValue.toLowerCase())
-    );
+    const filtered = choices.filter(choice => choice.startsWith(focusedValue.toLowerCase()));
 
     await interaction.respond(
         filtered.map(choice => ({

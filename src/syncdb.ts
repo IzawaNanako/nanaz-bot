@@ -7,7 +7,7 @@ import WelcomeRole from './models/welcomeRole.js';
 import BotSettings from './models/botSettings.js';
 
 await Guild.sync({
-    force: false,
+    alter: true,
 })
 .then(() => {
     console.log('Guild Database synced.');
@@ -17,7 +17,7 @@ await Guild.sync({
 });
 
 await GuildMember.sync({
-    force: false,
+    alter: false,
 })
 .then(() => {
     console.log('GuildMember Database synced.');
@@ -27,7 +27,7 @@ await GuildMember.sync({
 });
 
 await BannedMember.sync({
-    force: false,
+    alter: false,
 })
 .then(() => {
     console.log('BannedMember Database synced.');
@@ -37,7 +37,7 @@ await BannedMember.sync({
 });
 
 await User.sync({
-    force: false,
+    alter: true,
 })
 .then(() => {
     console.log('User Database synced.');
@@ -47,7 +47,7 @@ await User.sync({
 });
 
 await WelcomeRole.sync({
-    force: false,
+    alter: false,
 })
 .then(() => {
     console.log('WelcomeRole Database synced.');
@@ -57,7 +57,7 @@ await WelcomeRole.sync({
 })
 
 await BotSettings.sync({
-    force: false,
+    alter: false,
 })
 .then(() => {
     console.log('BotSettings Database synced.');

@@ -1,6 +1,7 @@
 import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
+import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
 const languageMap: { [key: string]: string } = {
@@ -102,8 +103,12 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         '繁體中文 (臺灣)',
     ];
 
-    const filtered = choices.filter(choice => choice.startsWith(focusedValue.toLowerCase())
-    );
+    const fuse = new Fuse(choices, {
+        keys: ['value'],
+        threshold: 0.3,
+    });
+
+    const filtered = fuse.search(focusedValue).map(result => result.item);
 
     await interaction.respond(
         filtered.map(choice => ({
