@@ -9,37 +9,37 @@ export const data = new SlashCommandBuilder()
     .setName('set-channel')
     .setDescription('Set the logs channel or the channel to send bye messages in.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Set the logs channel or the channel to send bye messages in.',
+        'ja': 'ログチャンネルまたはバイバイメッセージを送信するチャンネルを設定します。',
+        'zh-CN': '设置日志频道或发送再见信息的频道。',
+        'zh-TW': '設定記錄頻道或傳送再見訊息的頻道。',
     })
     .addSubcommandGroup(group => group
         .setName('log')
         .setDescription('Set the channel to send logs in.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Set the channel to send logs in.',
+            'ja': 'ログを送信するチャンネルを設定します。',
+            'zh-CN': '设置发送日志的频道。',
+            'zh-TW': '設定傳送記錄的頻道。',
         })
         .addSubcommand(subcommand => subcommand
             .setName('set')
             .setDescription('The channel to send logs in.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'The channel to send logs in.',
+                'ja': 'ログを送信するチャンネル。',
+                'zh-CN': '发送日志的频道。',
+                'zh-TW': '傳送記錄的頻道。',
             })
             .addChannelOption(option => option
                 .setName('channel')
                 .setDescription('The channel to send logs in.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The channel to send logs in.',
+                    'ja': 'ログを送信するチャンネル。',
+                    'zh-CN': '发送日志的频道。',
+                    'zh-TW': '傳送記錄的頻道。',
                 })
                 .setRequired(true)
                 .addChannelTypes(ChannelType.GuildText)
@@ -49,10 +49,10 @@ export const data = new SlashCommandBuilder()
             .setName('disable')
             .setDescription('Disable sending logs in this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Disable sending logs in this server.',
+                'ja': 'このサーバーのログ送信を無効にする。',
+                'zh-CN': '停止在该服务器发送日志。',
+                'zh-TW': '停止在此伺服器傳送記錄。',
             })
         )
     )
@@ -60,28 +60,28 @@ export const data = new SlashCommandBuilder()
         .setName('bye')
         .setDescription('Set the channel to send bye messages in.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'Set the channel to send bye messages in.',
+            'ja': 'バイバイメッセージを送信するチャンネルを設定する。',
+            'zh-CN': '设置发送再见信息的频道。',
+            'zh-TW': '設定傳送再見訊息的頻道。',
         })
         .addSubcommand(subcommand => subcommand
             .setName('set')
             .setDescription('Set the channel to send bye messages in.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Set the channel to send bye messages in.',
+                'ja': 'バイバイメッセージを送信するチャンネルを設定する。',
+                'zh-CN': '设置发送再见信息的频道。',
+                'zh-TW': '設定傳送再見訊息的頻道。',
             })
             .addChannelOption(option => option
                 .setName('channel')
                 .setDescription('The channel to send bye messages in.')
                 .setDescriptionLocalizations({
-                    'en-US': '',
-                    'ja': '',
-                    'zh-CN': '',
-                    'zh-TW': '',
+                    'en-US': 'The channel to send bye messages in.',
+                    'ja': '別れのメッセージを送るチャンネル。 ',
+                    'zh-CN': '发送再见信息的频道。',
+                    'zh-TW': '傳送再見訊息的頻道。',
                 })
                 .setRequired(true)
                 .addChannelTypes(ChannelType.GuildText)
@@ -91,10 +91,10 @@ export const data = new SlashCommandBuilder()
             .setName('disable')
             .setDescription('Disable sending bye messages in this server.')
             .setDescriptionLocalizations({
-                'en-US': '',
-                'ja': '',
-                'zh-CN': '',
-                'zh-TW': '',
+                'en-US': 'Disable sending bye messages in this server.',
+                'ja': 'このサーバでバイバイメッセージを送信しないようにする。',
+                'zh-CN': '停止在此服务器上发送再见信息。',
+                'zh-TW': '停止在此伺服器傳送再見訊息。',
             })
         )
     )
