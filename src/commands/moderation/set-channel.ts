@@ -111,6 +111,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
+    const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
@@ -122,7 +123,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.deferReply();
     const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
-    const channel = interaction.options.getChannel('channel', true);
+    const channel = interaction.options.getChannel('channel');
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,
@@ -145,6 +146,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.SendMessages)) {
         await interaction.editReply({
             content: sendMessagePermissionError,
+        });
+        return;
+    }
+
+    if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.ViewChannel)) {
+        await interaction.reply({
+            content: viewChannelPermissionError,
+            ephemeral: true,
         });
         return;
     }

@@ -11,7 +11,7 @@ export async function execute(member: Member) {
             id: member.guild.id,
         }
     });
-    if (!guild || !guild.byeChannelId || !member.guild.members.me?.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.SendMessages)) {
+    if (!guild || !guild.byeChannelId || (member.guild.members.me && (!member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.SendMessages) || !member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.ViewChannel)))) {
         return;
     }
 

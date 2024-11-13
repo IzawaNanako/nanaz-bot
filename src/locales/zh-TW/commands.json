@@ -17,6 +17,7 @@
         "issuerFieldTitle": "Issued by",
         "neverLiteral": "Never",
         "sendMessagePermissionError": "I don't have permission to send messages in that channel!",
+        "viewChannelPermissionError": "I don't have permission to view that channel!",
         "manageRolesPermissionError": "I don't have permission to manage roles in this server!"
     },
     "avatar": {

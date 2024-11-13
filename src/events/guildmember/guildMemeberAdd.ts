@@ -45,7 +45,7 @@ export async function execute(member: Member) {
 
     let welcomeChannel;
     
-    if (guild.welcomeChannelId && welcomeChannel && member.guild.members.me?.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.SendMessages)) {
+    if (guild.welcomeChannelId && welcomeChannel && member.guild.members.me && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.SendMessages) && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.ViewChannel)) {
         welcomeChannel = await member.guild.channels.fetch(guild.welcomeChannelId) as TextChannel;
         const welcomeMessage = guild.welcomeMessage;
 
@@ -83,7 +83,7 @@ export async function execute(member: Member) {
         });
     }
 
-    if (welcomeRoles.length > 0 && member.guild.members.me?.permissions.has(PermissionFlagsBits.ManageRoles)) {
+    if (welcomeRoles.length > 0 && member.guild.members.me && member.guild.members.me.permissions.has(PermissionFlagsBits.ManageRoles)) {
         for (const role of welcomeRoles) {
             const welcomeRole = await member.guild.roles.fetch(role.id);
             if (welcomeRole) {

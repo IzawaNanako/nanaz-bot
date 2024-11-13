@@ -1,4 +1,4 @@
-import { ChannelType, Message, Client, Events } from 'discord.js';
+import { ChannelType, Message, Client, Events, PermissionFlagsBits } from 'discord.js';
 import { generateWithAI } from '../../utils/generateWithAI.js';
 
 export const name = Events.MessageCreate;
@@ -8,7 +8,7 @@ export async function execute(message: Message, client: Client) {
         process.exit(1);
     }
 
-    if (message.author.bot) {
+    if (message.author.bot || (message.channel.type === ChannelType.GuildText && message.guild && message.guild.members.me && message.channel && (!message.guild.members.me.permissionsIn(message.channel).has(PermissionFlagsBits.SendMessages) || !message.guild.members.me.permissionsIn(message.channel).has(PermissionFlagsBits.ViewChannel)))) {
         return;
     }
 
