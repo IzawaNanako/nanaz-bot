@@ -58,7 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
     i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
-    const serverLanguageAlreadyUsingError = i18next.t('setServerLanguage.serverLanguageAlreadyUsingError');
+    const serverLanguageAlreadyUsingError = i18next.t('language.serverLanguageAlreadyUsingError');
 
     if (!interaction.guild) {
         await interaction.reply({
