@@ -8,10 +8,10 @@ export const data = new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Check the current latency of the bot.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Check the current latency of the bot.',
+        'ja': 'ボットの現在の待ち時間をチェックする。',
+        'zh-CN': '检查机器人当前的延迟时间。',
+        'zh-TW': '檢查機器人目前的延遲時間。',
     });
 export async function execute(interaction: ChatInputCommandInteraction) {
     if (interaction.guild) {
