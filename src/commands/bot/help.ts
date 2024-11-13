@@ -8,10 +8,10 @@ export const data = new SlashCommandBuilder()
     .setName('help')
     .setDescription('Get help on certain features of this bot.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Get help on certain features of this bot.',
+        'ja': 'このボットの特定の機能に関するヘルプを取得します。',
+        'zh-CN': '获取有关该机器人某些功能的帮助。',
+        'zh-TW': '取得本機器人某些功能的協助。',
     })
     .addStringOption(option => option
         .setName('option')
