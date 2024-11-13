@@ -8,10 +8,10 @@ export const data = new SlashCommandBuilder()
     .setName('serverinfo')
     .setDescription('Display information about a server the bot is in.')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Display information about a server the bot is in.',
+        'ja': 'ボットがサーバーにいる場合、サーバーに関する情報を表示する。',
+        'zh-CN': '显示一个机器人在其中的伺服器的相关资讯。',
+        'zh-TW': '顯示一個機器人在其中的伺服器的相關資訊。',
     })
     .addStringOption(option => option
         .setName('server-id')
