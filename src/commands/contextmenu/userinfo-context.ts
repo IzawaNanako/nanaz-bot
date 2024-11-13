@@ -22,10 +22,10 @@ const badgeMap = {
 export const data = new ContextMenuCommandBuilder()
     .setName('User Info')
     .setNameLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'User Info',
+        'ja': 'ユーザー情報',
+        'zh-CN': '用户信息',
+        'zh-TW': '使用者資訊',
     })
     .setType(ApplicationCommandType.User as ContextMenuCommandType)
     .setContexts(0);
