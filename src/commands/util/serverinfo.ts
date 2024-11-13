@@ -17,10 +17,10 @@ export const data = new SlashCommandBuilder()
         .setName('server-id')
         .setDescription('The ID of the server to display information about. "/help ids" for how to get IDs.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The ID of the server to display information about. "/help ids" for how to get IDs.',
+            'ja': '情報を表示するサーバーのID。IDの取得方法は"/help ids"を参照。',
+            'zh-CN': '要显示相关信息的服务器ID。 关于如何获取ID，请参见"/help ids"。',
+            'zh-TW': '要顯示資訊的伺服器ID。"/help ids"說明如何取得ID。',
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
