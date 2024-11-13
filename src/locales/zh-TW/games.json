@@ -1,0 +1,32 @@
+{
+    "global": {
+        "hosted_by_footer": "Hosted by Nanaz",
+        "rematch_request_message": "{{rematch_requester}} wants to rematch! Do you accept?",
+        "rematch_request_declined_message": "{{rematch_accepter}} has declined a rematch requested by {{rematch_requester}}.",
+        "rematch_request_ignored_message": "{{rematch_accepter}} didn't respond to a rematch requested by {{rematch_requester}}."
+    },
+    "rockpaperscissors": {
+        "rps_title": "Rock Paper Scissors",
+        "choose_move_message": "{{left_player}} ⚔️ {{right_player}}\n\nChoose your move!",
+        "rock_button_label": "🪨 Rock",
+        "paper_button_label": "📄 Paper",
+        "scissors_button_label": "✂️ Scissors",
+        "rock_versus_rock_result": "Rock + Rock = Pile of rocks!",
+        "paper_versus_paper_result": "Paper + Paper = Stack of paper!",
+        "scissors_versus_scissors_result": "Scissors + Scissors = Never ending fight!",
+        "rock_versus_scissors_result": "Rock + Scissors = Broken scissors!",
+        "scissors_versus_paper_result": "Scissors + Paper = Torn paper!",
+        "paper_versus_rock_result": "Paper + Rock = Paper ball!",
+        "game_end_win_message": "{{left_player_emoji}} ${left_player} ⚔️ ${right_player} ${right_player_emoji}\n\n👑 {{winner}} **Won!**",
+        "game_end_draw_message": "{{left_player_emoji}} ${left_player} ⚔️ ${right_player} ${right_player_emoji}\n\nIt's a draw!",
+        "game_end_inactivity_message": "{{left_player}} ⚔️ {{right_player}}\n\nGame ended due to inactivity."
+    },
+    "tictactoe": {
+        "ttt_title": "Tic Tac Toe",
+        "current_turn_message": "**Tic Tac Toe**\n{{left_player_symbol}} {{left_player}} ⚔️ {{right_player}} {{right_player_symbol}}\n\nIt's {{current_player}}'s turn!",
+        "game_end_win_message": "**Tic Tac Toe**\n{{left_player_symbol}} ${left_player} ⚔️ ${right_player} ${right_player_symbol}\n\n👑 {{winner}} **Won!**",
+        "game_end_draw_message": "**Tic Tac Toe**\n{{left_player_symbol}} ${left_player} ⚔️ ${right_player} ${right_player_symbol}\n\nIt's a draw!",
+        "game_end_inactivity_message": "**Tic Tac Toe**\n{{left_player_symbol}} ${left_player} ⚔️ ${right_player} ${right_player_symbol}\n\nGame ended due to inactivity.",
+        "game_end_bot_win_message": "**Tic Tac Toe**\n{{left_player_symbol}} ${left_player} ⚔️ ${right_player} ${right_player_symbol}\n\n👑 **I won! ùwú**"
+    }
+}

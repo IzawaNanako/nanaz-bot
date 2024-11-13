@@ -1,0 +1,17 @@
+{
+    "guildMemberRemove": {
+        "bye_embed_author": "Farewell {{username}}!",
+        "bye_embed_title": "Goodbye, {{displayName}}!",
+        "bye_embed_description": "We are sad to see you go...",
+        "bye_embed_footer": "I hope to see you somewhere else!"
+    },
+    "guildMemberAdd": {
+        "welcome_embed_title": "Welcome, {{displayName}}!",
+        "welcome_embed_footer": "Hi, I'm Nanaz!",
+        "welcome_embed_was_kicked": "Try harder to not get kicked again, mate.",
+        "welcome_embed_was_banned": "Naughty user, hope you have learned your lesson."
+    },
+    "interactionCreate": {
+        "command_error_message": "There was an error while executing this command!"
+    }
+}
