@@ -15,19 +15,19 @@ export const data = new SlashCommandBuilder()
     .setName('challenge')
     .setDescription('Challenge someone to a game!')
     .setDescriptionLocalizations({
-        'en-US': '',
-        'ja': '',
-        'zh-CN': '',
-        'zh-TW': '',
+        'en-US': 'Challenge someone to a game!',
+        'ja': '誰かに勝負を挑む！',
+        'zh-CN': '挑战某人来一场比赛！',
+        'zh-TW': '挑戰某人來一場比賽！',
     })
     .addStringOption(option => option
         .setName('game')
         .setDescription('The game you want to play.')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The game you want to play.',
+            'ja': 'あなたがプレーしたい試合。',
+            'zh-CN': '您想玩的游戏。',
+            'zh-TW': '您想玩的遊戲。',
         })
         .addChoices(
             {
@@ -45,10 +45,10 @@ export const data = new SlashCommandBuilder()
         .setName('user')
         .setDescription('The user you want to challenge. You can also challenge me!')
         .setDescriptionLocalizations({
-            'en-US': '',
-            'ja': '',
-            'zh-CN': '',
-            'zh-TW': '',
+            'en-US': 'The user you want to challenge. You can also challenge me!',
+            'ja': '挑戦したいユーザー。私に挑戦することもできます！',
+            'zh-CN': '您要挑战的用户。 您也可以挑战我！',
+            'zh-TW': '您要挑戰的使用者。 您也可以挑戰我！',
         })
         .setRequired(true)
     );
