@@ -3,7 +3,7 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-const badgeMap = {
+const badgeMap: { [key: string]: string } = {
     'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
     'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
     'HypeSquadOnlineHouse3': '<:HypeSquadBalance:1295711412294778931>',
@@ -38,28 +38,28 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     if (executeUser) {
         i18next.changeLanguage(executeUser.language);
     }
-    const unknownErrorMessage = i18next.t('global:unknown_error_message');
-    const noneLiteral = i18next.t('global:none_literal');
-    const unknownLiteral = i18next.t('global:unknown_literal');
-    const fetchedByFooter = i18next.t('global:fetched_by_footer');
-    const usernameLiteral = i18next.t('userinfo:username_literal');
-    const userIdLiteral = i18next.t('userinfo:user_id_literal');
-    const badgesLiteral = i18next.t('userinfo:badges_literal');
-    const statusLiteral = i18next.t('userinfo:status_literal');
-    const rolesLiteral = i18next.t('userinfo:roles_literal');
-    const joinedServerAtLiteral = i18next.t('userinfo:joined_server_at_literal');
-    const createdAtLiteral = i18next.t('userinfo:created_at_literal');
-    const offlineLiteral = i18next.t('userinfo:offline_literal');
-    const dndLiteral = i18next.t('userinfo:dnd_literal');
-    const idleLiteral = i18next.t('userinfo:idle_literal');
-    const onlineLiteral = i18next.t('userinfo:online_literal');
-    const randomTextOne = i18next.t('userinfo:random_text_one');
-    const randomTextTwo = i18next.t('userinfo:random_text_two');
-    const randomTextThree = i18next.t('userinfo:random_text_three');
-    const randomTextFour = i18next.t('userinfo:random_text_four');
-    const randomTextFive = i18next.t('userinfo:random_text_five');
-    const userInfoEmbedTitle = i18next.t('userinfo:user_info_embed_title', {
-        user_displayName: interaction.targetUser.displayName,
+    const unknownErrorMessage = i18next.t('global.unknownErrorMessage');
+    const noneLiteral = i18next.t('global.noneLiteral');
+    const unknownLiteral = i18next.t('global.unknownLiteral');
+    const fetchedByFooter = i18next.t('global.fetchedByFooter');
+    const usernameLiteral = i18next.t('userInfo.usernameLiteral');
+    const userIdLiteral = i18next.t('userInfo.userIdLiteral');
+    const badgesLiteral = i18next.t('userInfo.badgesLiteral');
+    const statusLiteral = i18next.t('userInfo.statusLiteral');
+    const rolesLiteral = i18next.t('userInfo.rolesLiteral');
+    const joinedServerAtLiteral = i18next.t('userInfo.joinedServerAtLiteral');
+    const createdAtLiteral = i18next.t('userInfo.createdAtLiteral');
+    const offlineLiteral = i18next.t('userInfo.offlineLiteral');
+    const dndLiteral = i18next.t('userInfo.dnd_Literal');
+    const idleLiteral = i18next.t('userInfo.idleLiteral');
+    const onlineLiteral = i18next.t('userInfo.onlineLiteral');
+    const userInfoRandomTextOne = i18next.t('userInfo.randomTextOne');
+    const userInfoRandomTextTwo = i18next.t('userInfo.randomTextTwo');
+    const userInfoRandomTextThree = i18next.t('userInfo.randomTextThree');
+    const userInfoRandomTextFour = i18next.t('userInfo.randomTextFour');
+    const userInfoRandomTextFive = i18next.t('userInfo.randomTextFive');
+    const userInfoEmbedTitle = i18next.t('userInfo.userInfoEmbedTitle', {
+        userDisplayName: interaction.targetUser.displayName,
     });
 
     const user = interaction.targetUser;
@@ -73,7 +73,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     }
     const guildMember = await interaction.guild?.members.fetch(user.id);
     const badges = user.flags.toArray()
-        .map((badge) => badgeMap[badge as keyof typeof badgeMap] ?? '')
+        .map((badge) => badgeMap[badge] ?? '')
         .join(' ') || noneLiteral;
     let roles;
     let joinedAt;
@@ -110,11 +110,11 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     const infoTextNum = Math.floor(Math.random() * 5);
     const infoTexts = [
-        randomTextOne,
-        randomTextTwo,
-        randomTextThree,
-        randomTextFour,
-        randomTextFive,
+        userInfoRandomTextOne,
+        userInfoRandomTextTwo,
+        userInfoRandomTextThree,
+        userInfoRandomTextFour,
+        userInfoRandomTextFive,
     ];
 
     const userInfoEmbed = new EmbedBuilder()

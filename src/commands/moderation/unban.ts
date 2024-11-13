@@ -28,9 +28,9 @@ export const data = new SlashCommandBuilder()
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been unbanned. Defaults to true, it\'s TRUE!')
+        .setDescription('To inform the user that they have been unbanned. Defaults to true, TRUE!')
         .setDescriptionLocalizations({
-            'en-US': 'To inform the user that they have been unbanned. Defaults to true, it\'s TRUE!',
+            'en-US': 'To inform the user that they have been unbanned. Defaults to true, TRUE!',
             'ja': 'ユーザーに禁止解除を通知する。 デフォルトはTRUE！',
             'zh-CN': '通知用户他们已被解禁。 默认为true，TRUE！',
             'zh-TW': '通知使用者他們已被解除封禁。 預設為true，TRUE！',
@@ -45,9 +45,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const banManagePermissionError = i18next.t('ban:ban_manage_permission_error');
-    const bannedUserNotFoundError = i18next.t('ban:banned_user_not_found_error');
+    const unknownError = i18next.t('global.unknownError');
+    const banManagePermissionError = i18next.t('ban.banManagePermissionError');
+    const bannedUserNotFoundError = i18next.t('ban.bannedUserNotFoundError');
+
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
@@ -87,13 +88,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
-    const unbanEmbedTitle = i18next.t('unban:unban_embed_title');
-    const userLiteral = i18next.t('global:user_literal');
-    const issuerFieldTitle = i18next.t('global:issuer_field_title');
-    const unbanEmbedFooter = i18next.t('unban:unban_embed_footer');
-    const unbannedNotice = i18next.t('unban:unban_notice', {
+    const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
+    const userLiteral = i18next.t('global.userLiteral');
+    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
+    const unbannedNotice = i18next.t('unban.unbanNotice', {
         issuer: interaction.user,
-        server_name: interaction.guild.name,
+        serverName: interaction.guild.name,
     });
 
     const user = await interaction.client.users.fetch(bannedMember.id);

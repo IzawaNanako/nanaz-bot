@@ -6,14 +6,13 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\"",
+        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" && node -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
         "start": "node .",
         "deploy-global": "node dist/deploy-commands-global.js",
         "deploy-guild": "node dist/deploy-commands-guild.js",
         "rs-global": "node dist/rs-global-cmds.js",
         "rs-guild": "node dist/rs-guild-cmds.js",
-        "syncdb": "node dist/syncdb.js",
-        "prepare": "husky"
+        "syncdb": "node dist/syncdb.js"
     },
     "keywords": [],
     "author": "Izawa Nanako",

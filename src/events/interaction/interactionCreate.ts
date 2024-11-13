@@ -11,7 +11,7 @@ export async function execute(interaction: CommandInteraction | AutocompleteInte
     });
     i18next.setDefaultNamespace('events');
     i18next.changeLanguage(executeUser?.language);
-    const commandErrorMessage = i18next.t('interactionCreate:command_error_message');
+    const commandErrorMessage = i18next.t('interactionCreate.commandErrorMessage');
 
     if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isContextMenuCommand()) {
         return;

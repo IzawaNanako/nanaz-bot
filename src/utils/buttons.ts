@@ -2,10 +2,10 @@ import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 
 i18next.setDefaultNamespace('general');
-const rematchLabel = i18next.t('buttons:rematch_label');
-const supportServerLabel = i18next.t('buttons:support_server_label');
-const acceptLable = i18next.t('buttons:accept_label');
-const declineLable = i18next.t('buttons:decline_label');
+const rematchLabel = i18next.t('buttons.rematchLabel');
+const supportServerLabel = i18next.t('buttons.supportServerLabel');
+const acceptLabel = i18next.t('buttons.acceptLabel');
+const declineLabel = i18next.t('buttons.declineLabel');
 
 export const rematchButton = new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
@@ -22,7 +22,7 @@ if (!supportServer) {
     process.exit(1);
 }
 
-export const supportButton = new ActionRowBuilder<ButtonBuilder>()
+export const supportButton = new ActionRowBuilder<ButtonBuilder> ()
     .addComponents(
         new ButtonBuilder()
             .setLabel(supportServerLabel)
@@ -31,14 +31,14 @@ export const supportButton = new ActionRowBuilder<ButtonBuilder>()
             .setURL(supportServer)
     );
 
-export const acceptAndDeclineButton = new ActionRowBuilder<ButtonBuilder>()
+export const acceptAndDeclineButton = new ActionRowBuilder<ButtonBuilder> ()
     .addComponents(
         new ButtonBuilder()
             .setCustomId('accept')
-            .setLabel(acceptLable)
+            .setLabel(acceptLabel)
             .setStyle(ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId('decline')
-            .setLabel(declineLable)
+            .setLabel(declineLabel)
             .setStyle(ButtonStyle.Danger)
     );

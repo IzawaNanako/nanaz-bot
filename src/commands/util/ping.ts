@@ -30,14 +30,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const pingingMessage = i18next.t('ping:pinging_message');
-    const pingFinishedMessage = i18next.t('ping:ping_finished_message');
-    const latencyLiteral = i18next.t('ping:latency_literal');
-    const apiLatencyLiteral = i18next.t('ping:api_latency_literal');
-    const pingedByFooter = i18next.t('ping:pinged_by_footer');
+    const pingingMessage = i18next.t('ping.pingingMessage');
+    const pingFinishedMessage = i18next.t('ping.pingFinishedMessage');
+    const latencyLiteral = i18next.t('ping.latencyLiteral');
+    const apiLatencyLiteral = i18next.t('ping.apiLatencyLiteral');
+    const pingedByFooter = i18next.t('ping.pingedByFooter');
 
     const pingEmbed = new EmbedBuilder()
         .setColor('#808080')

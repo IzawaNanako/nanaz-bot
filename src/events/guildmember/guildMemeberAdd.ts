@@ -18,12 +18,12 @@ export async function execute(member: Member) {
 
     i18next.setDefaultNamespace('events');
     i18next.changeLanguage(guild.language);
-    const welcomeEmbedTitle = i18next.t('guildMemberAdd:welcome_embed_title', {
-        displayName: member.user.username,
+    const welcomeEmbedTitle = i18next.t('guildMemberAdd.welcomeEmbedTitle', {
+        userDisplayName: member.user.username,
     });
-    const welcomeEmbedFooter = i18next.t('guildMemberAdd:welcome_embed_footer');
-    const welcomeEmbedWasKicked = i18next.t('guildMemberAdd:welcome_embed_was_kicked');
-    const welcomeEmbedWasBanned = i18next.t('guildMemberAdd:welcome_embed_was_banned');
+    const welcomeEmbedFooter = i18next.t('guildMemberAdd.welcomeEmbedFooter');
+    const welcomeEmbedWasKicked = i18next.t('guildMemberAdd.welcomeEmbedWasKicked');
+    const welcomeEmbedWasBanned = i18next.t('guildMemberAdd.welcomeEmbedWasBanned');
 
     const guildMember = await GuildMember.findOne({
         where: {

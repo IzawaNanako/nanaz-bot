@@ -41,23 +41,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const invalidOptionError = i18next.t('global:invalid_option_error');
-    const helpMenuTitle = i18next.t('help:help_menu_title');
-    const helpMenuDescription = i18next.t('help:help_menu_description');
-    const helpMenuOptionMenuDescription = i18next.t('help:help_menu_option_menu_description');
-    const helpMenuOptionSettingsDescription = i18next.t('help:help_menu_option_settings_description');
-    const helpMenuOptionFormatsDescription = i18next.t('help:help_menu_option_formats_description');
-    const helpMenuOptionIdsDescription = i18next.t('help:help_menu_option_ids_description');
-    const helpMenuOptionWelcomeMsgDescription = i18next.t('help:help_menu_option_welcome_msg_description');
-    const settingsHelpsTitle = i18next.t('help:settings_helps_title');
-    const formattingHelpsTitle = i18next.t('help:formatting_helps_title');
-    const idsHelpsTitle = i18next.t('help:ids_helps_title');
-    const welcomeMsgHelpsTitle = i18next.t('help:welcome_msg_helps_title');
-    const helpEmbedFooter = i18next.t('help:help_embed_footer');
-    const settingsHelpsContent = i18next.t('help:settings_helps_content');
-    const formattingHelpsContent = i18next.t('help:formatting_helps_content');
-    const idsHelpsContent = i18next.t('help:ids_helps_content');
-    const welcomeMsgHelpsContent = i18next.t('help:welcome_msg_helps_content');
+    const invalidOptionError = i18next.t('global.invalidOptionError');
+    const helpMenuTitle = i18next.t('help.helpMenuTitle');
+    const helpMenuDescription = i18next.t('help.helpMenuDescription');
+    const helpMenuOptionMenuDescription = i18next.t('help.helpMenuOptionMenuDescription');
+    const helpMenuOptionSettingsDescription = i18next.t('help.helpMenuOptionSettingsDescription');
+    const helpMenuOptionFormatsDescription = i18next.t('help.helpMenuOptionFormatsDescription');
+    const helpMenuOptionIdsDescription = i18next.t('help.helpMenuOptionIdsDescription');
+    const helpMenuOptionWelcomeMsgDescription = i18next.t('help.helpMenuOptionWelcomeMsgDescription');
+    const settingsHelpsTitle = i18next.t('help.settingsHelpsTitle');
+    const formattingHelpsTitle = i18next.t('help.formattingHelpsTitle');
+    const idsHelpsTitle = i18next.t('help.idsHelpsTitle');
+    const welcomeMsgHelpsTitle = i18next.t('help.welcomeMsgHelpsTitle');
+    const helpEmbedFooter = i18next.t('help.helpEmbedFooter');
+    const settingsHelpsContent = i18next.t('help.settingsHelpsContent');
+    const formattingHelpsContent = i18next.t('help.formattingHelpsContent');
+    const idsHelpsContent = i18next.t('help.idsHelpsContent');
+    const welcomeMsgHelpsContent = i18next.t('help.welcomeMsgHelpsContent');
     
     let option = interaction.options.get('option')?.value as string;
 

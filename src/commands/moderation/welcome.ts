@@ -158,9 +158,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const sendMessagePermissionError = i18next.t('global:send_message_permission_error');
-    const manageRolesPermissionError = i18next.t('global:manage_roles_permission_error');
+    const unknownError = i18next.t('global.unknownError');
+    const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
+    const manageRolesPermissionError = i18next.t('global.manageRolesPermissionError');
+
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
@@ -175,23 +176,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild.language);
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const executedByFooter = i18next.t('global:executed_by_footer');
-    const disabledLiteral = i18next.t('global:disabled_literal');
-    const noneLiteral = i18next.t('global:none_literal');
-    const welcomeChannelChangedMessage = i18next.t('welcome:welcome_channel_changed_message');
-    const welcomeMessageChangedMessage = i18next.t('welcome:welcome_message_changed_message');
-    const welcomeRolesChangedMessage = i18next.t('welcome:welcome_roles_changed_message');
-    const previousChannelLiteral = i18next.t('welcome:previous_channel_literal');
-    const newChannelLiteral = i18next.t('welcome:new_channel_literal');
-    const currentChannelLiteral = i18next.t('welcome:current_channel_literal');
-    const previousMessageLiteral = i18next.t('welcome:previous_message_literal');
-    const currentMessageLiteral = i18next.t('welcome:current_message_literal');
-    const previousRolesLiteral = i18next.t('welcome:previous_roles_literal');
-    const currentRolesLiteral = i18next.t('welcome:current_roles_literal');
-    const roleAlreadyInListError = i18next.t('welcome:role_already_in_list_error');
+    const executedByFooter = i18next.t('global.executedByFooter');
+    const disabledLiteral = i18next.t('global.disabledLiteral');
+    const noneLiteral = i18next.t('global.noneLiteral');
+    const welcomeChannelChangedMessage = i18next.t('welcome.welcomeChannelChangedMessage');
+    const welcomeMessageChangedMessage = i18next.t('welcome.welcomeMessageChangedMessage');
+    const welcomeRolesChangedMessage = i18next.t('welcome.welcomeRolesChangedMessage');
+    const previousChannelLiteral = i18next.t('welcome.previousChannelLiteral');
+    const newChannelLiteral = i18next.t('welcome.newChannelLiteral');
+    const currentChannelLiteral = i18next.t('welcome.currentChannelLiteral');
+    const previousMessageLiteral = i18next.t('welcome.previousMessageLiteral');
+    const currentMessageLiteral = i18next.t('welcome.currentMessageLiteral');
+    const previousRolesLiteral = i18next.t('welcome.previousRolesLiteral');
+    const currentRolesLiteral = i18next.t('welcome.currentRolesLiteral');
+    const roleAlreadyInListError = i18next.t('welcome.roleAlreadyInListError');
 
     const subCommandGroupChosen = interaction.options.getSubcommandGroup();
     if (subCommandGroupChosen === 'channel') {

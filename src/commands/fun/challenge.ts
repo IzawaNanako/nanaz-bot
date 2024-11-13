@@ -69,10 +69,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const notTextChannelError = i18next.t('challenge:not_text_channel_error');
-    const invalidGameError = i18next.t('challenge:invalid_game_error');
-    const invalidUserError = i18next.t('global:invalid_user_error');
-    const challengeOtherBotError = i18next.t('challenge:challenge_other_bot_error');
+    const notTextChannelError = i18next.t('challenge.notTextChannelError');
+    const invalidGameError = i18next.t('challenge.invalidGameError');
+    const invalidUserError = i18next.t('global.invalidUserError');
+    const challengeOtherBotError = i18next.t('challenge.challengeOtherBotError');
     try {
         if (interaction.channel instanceof TextChannel === false) {
             await interaction.reply({
@@ -105,21 +105,21 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        const challengeLetterLiteral = i18next.t('challenge:challenge_letter_literal');
-        const challengeLetterMessage = i18next.t('challenge:challenge_letter_message', {
+        const challengeLetterLiteral = i18next.t('challenge.challengeLetterLiteral');
+        const challengeLetterMessage = i18next.t('challenge.challengeLetterMessage', {
             challenger: interaction.user,
             game: gameMap[game],
         });
-        const deliveredByFooter = i18next.t('challenge:delivered_by_footer');
-        const challengeDeclinedMessage = i18next.t('challenge:challenge_declined_message', {
+        const deliveredByFooter = i18next.t('challenge.deliveredByFooter');
+        const challengeDeclinedMessage = i18next.t('challenge.challengeDeclinedMessage', {
             challenger: interaction.user,
             challenged: opponent,
         });
-        const challengeNotRespondedMessage = i18next.t('challenge:challenge_not_responded_message', {
+        const challengeNotRespondedMessage = i18next.t('challenge.challengeNotRespondedMessage', {
             challenged: opponent,
         });
-        const challengeThemselvesMessage = i18next.t('challenge:challenge_themselves_message');
-        const challengeCurrentBotMessage = i18next.t('challenge:challenge_current_bot_message');
+        const challengeThemselvesMessage = i18next.t('challenge.challengeThemselvesMessage');
+        const challengeCurrentBotMessage = i18next.t('challenge.challengeCurrentBotMessage');
 
         if (opponent !== interaction.client.user && opponent !== interaction.user) {
             const letterEmbed = new EmbedBuilder()

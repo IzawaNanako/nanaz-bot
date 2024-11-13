@@ -78,11 +78,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const banPermissionError = i18next.t('ban:ban_permission_error');
-    const invalidUserError = i18next.t('global:invalid_user_error');
-    const banningThemselvesError = i18next.t('ban:banning_themselves_error');
-    const failedToBanError = i18next.t('ban:failed_to_ban_error');
+    const unknownError = i18next.t('global.unknownError');
+    const banPermissionError = i18next.t('ban.banPermissionError');
+    const invalidUserError = i18next.t('global.invalidUserError');
+    const banningThemselvesError = i18next.t('ban.banningThemselvesError');
+    const failedToBanError = i18next.t('ban.failedToBanError');
+
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
@@ -153,26 +154,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
-    const banEmbedTitle = i18next.t('ban:ban_embed_title');
-    const userLiteral = i18next.t('global:user_literal');
-    const issuerFieldTitle = i18next.t('global:issuer_field_title');
-    const reasonLiteral = i18next.t('global:reason_literal');
-    const banEmbedFooter = i18next.t('ban:ban_embed_footer');
-    const banEmbedExpireDateTitle = i18next.t('ban:ban_embed_expire_date_title');
-    const neverLiteral = i18next.t('ban:never_literal');
-    const noReasonMessage = i18next.t('ban:no_reason_message');
-    const banNotice = i18next.t('ban:ban_notice', {
+    const banEmbedTitle = i18next.t('ban.banEmbedTitle');
+    const userLiteral = i18next.t('global.userLiteral');
+    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const reasonLiteral = i18next.t('global.reasonLiteral');
+    const banEmbedFooter = i18next.t('ban.banEmbedFooter');
+    const banEmbedExpireDateTitle = i18next.t('ban.banEmbedExpireDateTitle');
+    const neverLiteral = i18next.t('ban.neverLiteral');
+    const noReasonMessage = i18next.t('ban.noReasonMessage');
+    const banNotice = i18next.t('ban:banNotice', {
         issuer: interaction.user,
-        server_name: interaction.guild.name,
+        serverName: interaction.guild.name,
     });
-    const banNoticeReason = i18next.t('ban:ban_notice_reason', {
+    const banNoticeReason = i18next.t('ban.banNoticeReason', {
         reason: reason,
     });
-    const banRandomTextOne = i18next.t('ban:ban_random_text_one');
-    const banRandomTextTwo = i18next.t('ban:ban_random_text_two');
-    const banRandomTextThree = i18next.t('ban:ban_random_text_three');
-    const banRandomTextFour = i18next.t('ban:ban_random_text_four');
-    const banRandomTextFive = i18next.t('ban:ban_random_text_five');
+    const banRandomTextOne = i18next.t('ban.banRandomTextOne');
+    const banRandomTextTwo = i18next.t('ban.banRandomTextTwo');
+    const banRandomTextThree = i18next.t('ban.banRandomTextThree');
+    const banRandomTextFour = i18next.t('ban.banRandomTextFour');
+    const banRandomTextFive = i18next.t('ban.banRandomTextFive');
 
     const banMsgID = Math.floor(Math.random() * 5);
     const banMsgs = [

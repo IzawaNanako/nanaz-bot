@@ -13,22 +13,26 @@ if (!token) {
     process.exit(1);
 }
 
-i18next.use(Backend).init({
-    backend: {
-        loadPath: join('dist/languages/{{lng}}/{{ns}}.json'),
-    },
-    lng: 'en',
-    fallbackLng: 'en',
-    preload: ['en'],
-    ns: ['commands', 'events', 'games', 'general', 'languages'],
-    defaultNS: 'commands',
-    interpolation: {
-        escapeValue: false,
-    },
-}, (error) => {
-    console.error('i18next initialization error: ', error);
+try {
+    i18next.use(Backend).init({
+        backend: {
+            loadPath: join('dist/locales/{{lng}}/{{ns}}.json'),
+        },
+        lng: 'en-US',
+        fallbackLng: 'en-US',
+        preload: ['en-US'],
+        load: 'currentOnly',
+        ns: ['commands', 'events', 'games', 'general', 'languages'],
+        defaultNS: 'commands',
+        interpolation: {
+            escapeValue: false,
+        },
+    });
+}
+catch (error) {
+    console.error(`i18next initialization error: ${error}`);
     process.exit(1);
-});
+}
 
 const client = new Client({
     intents: [

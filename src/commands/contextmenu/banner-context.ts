@@ -25,13 +25,13 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     const user = interaction.targetUser;
     const userFetched = await user.fetch();
 
-    const userNoBannerError = i18next.t('banner:user_no_banner_error');
-    const displayedByFooter = i18next.t('global:displayed_by_footer');
-    const bannerEmbedTitle = i18next.t('banner:banner_embed_title', {
-        user_displayName: userFetched.displayName,
+    const userNoBannerError = i18next.t('banner.userNoBannerError');
+    const displayedByFooter = i18next.t('global.displayedByFooter');
+    const bannerEmbedTitle = i18next.t('banner.bannerEmbedTitle', {
+        userDisplayName: userFetched.displayName,
     });
-    const bannerURLDescription = i18next.t('banner:banner_url_description', {
-        banner_url: userFetched.bannerURL(),
+    const bannerURLDescription = i18next.t('banner.bannerUrlDescription', {
+        bannerUrl: userFetched.bannerURL(),
     });
 
     if (!userFetched.bannerURL()) {

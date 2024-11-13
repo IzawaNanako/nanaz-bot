@@ -54,18 +54,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user') || interaction.user;
     const defaultAvatar = interaction.options.getBoolean('default_avatar') || false;
 
-    const displayedByFooter = i18next.t('global:displayed_by_footer');
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const displayedByFooter = i18next.t('global.displayedByFooter');
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const avatarEmbedTitle = i18next.t('avatar:avatar_embed_title', {
-        user_displayName: user.displayName,
+    const avatarEmbedTitle = i18next.t('avatar.avatarEmbedTitle', {
+        userDisplayName: user.displayName,
     });
-    const avatarURLDescription = i18next.t('avatar:avatar_url_description', {
-        avatar_url: user.avatarURL(),
+    const avatarURLDescription = i18next.t('avatar.avatarUrlDescription', {
+        avatarUrl: user.avatarURL(),
     });
-    const displayAvatarURLDescription = i18next.t('avatar:display_avatar_url_description', {
-        display_avatar_url: user.displayAvatarURL(),
+    const displayAvatarURLDescription = i18next.t('avatar.displayAvatarUrlDescription', {
+        displayAvatarUrl: user.displayAvatarURL(),
     });
 
     const avatarEmbed = new EmbedBuilder()

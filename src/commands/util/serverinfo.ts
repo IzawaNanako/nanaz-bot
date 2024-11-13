@@ -40,27 +40,27 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const fetchedByFooter = i18next.t('global:fetched_by_footer');
-    const invalidServerError = i18next.t('serverinfo:invalid_server_error');
-    const serverInformationLiteral = i18next.t('serverinfo:server_information_literal');
-    const serverNameLiteral = i18next.t('serverinfo:server_name_literal');
-    const serverOwnerLiteral = i18next.t('serverinfo:server_owner_literal');
-    const serverIdLiteral = i18next.t('serverinfo:server_id_literal');
-    const totalMembersLiteral = i18next.t('serverinfo:total_members_literal');
-    const boostCountLiteral = i18next.t('serverinfo:boost_count_literal');
-    const boostLevelLiteral = i18next.t('serverinfo:boost_level_literal');
-    const roleCountLiteral = i18next.t('serverinfo:role_count_literal');
-    const channelCountLiteral = i18next.t('serverinfo:channel_count_literal');
-    const customEmojiCountLiteral = i18next.t('serverinfo:custom_emoji_count_literal');
-    const createdAtLiteral = i18next.t('serverinfo:created_at_literal');
-    const serverRandomTextOne = i18next.t('serverinfo:serverinfo_random_text_one');
-    const serverRandomTextTwo = i18next.t('serverinfo:serverinfo_random_text_two');
-    const serverRandomTextThree = i18next.t('serverinfo:serverinfo_random_text_three');
-    const serverRandomTextFour = i18next.t('serverinfo:serverinfo_random_text_four');
-    const serverRandomTextFive = i18next.t('serverinfo:serverinfo_random_text_five');
+    const fetchedByFooter = i18next.t('global.fetchedByFooter');
+    const invalidServerError = i18next.t('serverInfo.invalidServerError');
+    const serverInformationLiteral = i18next.t('serverInfo.serverInformationLiteral');
+    const serverNameLiteral = i18next.t('serverInfo.serverNameLiteral');
+    const serverOwnerLiteral = i18next.t('serverInfo.serverOwnerLiteral');
+    const serverIdLiteral = i18next.t('serverInfo.serverIdLiteral');
+    const totalMembersLiteral = i18next.t('serverInfo.totalMembersLiteral');
+    const boostCountLiteral = i18next.t('serverInfo.boostCountLiteral');
+    const boostLevelLiteral = i18next.t('serverInfo.boostLevelLiteral');
+    const roleCountLiteral = i18next.t('serverInfo.roleCountLiteral');
+    const channelCountLiteral = i18next.t('serverInfo.channelCountLiteral');
+    const customEmojiCountLiteral = i18next.t('serverInfo.customEmojiCountLiteral');
+    const createdAtLiteral = i18next.t('serverInfo.createdAtLiteral');
+    const serverInfoRandomTextOne = i18next.t('serverInfo.serverInfoRandomTextOne');
+    const serverInfoRandomTextTwo = i18next.t('serverInfo.serverInfoRandomTextTwo');
+    const serverInfoRandomTextThree = i18next.t('serverInfo.serverInfoRandomTextThree');
+    const serverInfoRandomTextFour = i18next.t('serverInfo.serverInfoRandomTextFour');
+    const serverInfoRandomTextFive = i18next.t('serverInfo.serverInfoRandomTextFive');
 
     const serverId = interaction.options.getString('server-id') || interaction.guild?.id;
     let server;
@@ -80,11 +80,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const infoTextNum = Math.floor(Math.random() * 5);
     const infoTexts = [
-        serverRandomTextOne,
-        serverRandomTextTwo,
-        serverRandomTextThree,
-        serverRandomTextFour,
-        serverRandomTextFive,
+        serverInfoRandomTextOne,
+        serverInfoRandomTextTwo,
+        serverInfoRandomTextThree,
+        serverInfoRandomTextFour,
+        serverInfoRandomTextFive,
     ];
 
     const serverInfoEmbed = new EmbedBuilder()

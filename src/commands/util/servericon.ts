@@ -40,12 +40,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const displayedByFooter = i18next.t('global:displayed_by_footer');
-    const invalidServerIdError = i18next.t('servericon:invalid_server_id_error');
-    const invalidServerIconError = i18next.t('servericon:invalid_server_icon_error');
+    const displayedByFooter = i18next.t('global.displayedByFooter');
+    const invalidServerIdError = i18next.t('serverIcon.invalidServerIdError');
+    const invalidServerIconError = i18next.t('serverIcon.invalidServerIconError');
 
     let serverID = interaction.options.getString('server');
 
@@ -66,11 +66,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         size: 2048,
     });
 
-    const serverIconEmbedTitle = i18next.t('servericon:server_icon_embed_title', {
-        server_name: server.name,
+    const serverIconEmbedTitle = i18next.t('serverIcon.serverIconEmbedTitle', {
+        serverName: server.name,
     });
-    const serverIconEmbedDescription = i18next.t('servericon:server_icon_embed_description', {
-        server_icon_url: serverIcon,
+    const serverIconEmbedDescription = i18next.t('serverIcon.serverIconEmbedDescription', {
+        serverIconUrl: serverIcon,
     });
 
     if (!serverIcon) {

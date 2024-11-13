@@ -1,8 +1,8 @@
 {
     "buttons": {
-        "rematch_label": "Rematch",
-        "support_server_label": "Support Server",
-        "accept_lable": "Accept",
-        "decline_lable": "Decline"
+        "rematchLabel": "Rematch",
+        "supportServerLabel": "Support Server",
+        "acceptLabel": "Accept",
+        "declineLabel": "Decline"
     }
 }

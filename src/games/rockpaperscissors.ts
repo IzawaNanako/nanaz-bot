@@ -34,26 +34,26 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const rpsTitle = i18next.t('rockpaperscissors:rps_title');
-    const hostedByFooter = i18next.t('global:hosted_by_footer');
-    const rockButtonLable = i18next.t('rockpaperscissors:rock_button_lable');
-    const paperButtonLable = i18next.t('rockpaperscissors:paper_button_lable');
-    const scissorsButtonLable = i18next.t('rockpaperscissors:scissors_button_lable');
-    const rockVersusRockResult = i18next.t('rockpaperscissors:rock_versus_rock_result');
-    const paperVersusPaperResult = i18next.t('rockpaperscissors:paper_versus_paper_result');
-    const scissorsVersusScissorsResult = i18next.t('rockpaperscissors:scissors_versus_scissors_result');
-    const rockVersusScissorsResult = i18next.t('rockpaperscissors:rock_versus_scissors_result');
-    const scissorsVersusPaperResult = i18next.t('rockpaperscissors:scissors_versus_paper_result');
-    const paperVersusRockResult = i18next.t('rockpaperscissors:paper_versus_rock_result');
+    const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
+    const hostedByFooter = i18next.t('global.hostedByFooter');
+    const rockButtonLable = i18next.t('rockPaperScissors.rockButtonLable');
+    const paperButtonLable = i18next.t('rockPaperScissors.paperButtonLable');
+    const scissorsButtonLable = i18next.t('rockPaperScissors.scissorsButtonLable');
+    const rockVersusRockResult = i18next.t('rockPaperScissors.rockVersusRockResult');
+    const paperVersusPaperResult = i18next.t('rockPaperScissors.paperVersusPaperResult');
+    const scissorsVersusScissorsResult = i18next.t('rockPaperScissors.scissorsVersusScissorsResult');
+    const rockVersusScissorsResult = i18next.t('rockPaperScissors.rockVersusScissorsResult');
+    const scissorsVersusPaperResult = i18next.t('rockPaperScissors.scissorsVersusPaperResult');
+    const paperVersusRockResult = i18next.t('rockPaperScissors.paperVersusRockResult');
 
     const leftPlayer = Math.random() < 0.5 ? interaction.user : opponent;
     const rightPlayer = leftPlayer === interaction.user ? opponent : interaction.user;
 
-    const chooseMoveMessage = i18next.t('rockpaperscissors:choose_move_message', {
+    const chooseMoveMessage = i18next.t('rockPaperScissors.chooseMoveMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
     });
-    const gameEndInactivityMessage = i18next.t('rockpaperscissors:game_end_inactivity_message', {
+    const gameEndInactivityMessage = i18next.t('rockPaperScissors.gameEndInactivityMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
     });
@@ -129,7 +129,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             rightPlayerEmoji = leftPlayer === interaction.user ? opponentChoiceEmoji : userChoiceEmoji;
 
             if (userChoice === opponentChoice) {
-                const gameEndDrawMessage = i18next.t('rockpaperscissors:game_end_draw_message', {
+                const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_emoji: leftPlayerEmoji,
@@ -169,7 +169,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 }
             }
             else if ((userChoice === 'rock' && opponentChoice === 'scissors') || (userChoice === 'scissors' && opponentChoice === 'rock')) {
-                const gameEndWinMessage = i18next.t('rockpaperscissors:game_end_win_message', {
+                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_emoji: leftPlayerEmoji,
@@ -187,7 +187,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                     .setImage('https://i.imgur.com/AIF5JpE.png');
             }
             else if ((userChoice === 'scissors' && opponentChoice === 'paper') || (userChoice === 'paper' && opponentChoice === 'scissors')) {
-                const gameEndWinMessage = i18next.t('rockpaperscissors:game_end_win_message', {
+                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_emoji: leftPlayerEmoji,
@@ -205,7 +205,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                     .setImage('https://i.imgur.com/CUi7LYq.png');
             }
             else if ((userChoice === 'paper' && opponentChoice === 'rock') || (userChoice === 'rock' && opponentChoice === 'paper')) {
-                const gameEndWinMessage = i18next.t('rockpaperscissors:game_end_win_message', {
+                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_emoji: leftPlayerEmoji,
@@ -256,14 +256,14 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 const rematchRequester = i.user;
                 const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
 
-                const rematchRequestMessage = i18next.t('global:rematch_request_message', {
+                const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
                     rematch_requester: rematchRequester,
                 });
-                const rematchRequestDeclinedMessage = i18next.t('global:rematch_request_declined_message', {
+                const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
                     rematch_requester: rematchRequester,
                     rematch_accepter: rematchAccepter,
                 });
-                const rematchRequestIgnoredMessage = i18next.t('global:rematch_request_ignored_message', {
+                const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
                     rematch_requester: rematchRequester,
                     rematch_accepter: rematchAccepter,
                 });
@@ -349,26 +349,26 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const rpsTitle = i18next.t('rockpaperscissors:rps_title');
-    const hostedByFooter = i18next.t('global:hosted_by_footer');
-    const rockButtonLable = i18next.t('rockpaperscissors:rock_button_lable');
-    const paperButtonLable = i18next.t('rockpaperscissors:paper_button_lable');
-    const scissorsButtonLable = i18next.t('rockpaperscissors:scissors_button_lable');
-    const rockVersusRockResult = i18next.t('rockpaperscissors:rock_versus_rock_result');
-    const paperVersusPaperResult = i18next.t('rockpaperscissors:paper_versus_paper_result');
-    const scissorsVersusScissorsResult = i18next.t('rockpaperscissors:scissors_versus_scissors_result');
-    const rockVersusScissorsResult = i18next.t('rockpaperscissors:rock_versus_scissors_result');
-    const scissorsVersusPaperResult = i18next.t('rockpaperscissors:scissors_versus_paper_result');
-    const paperVersusRockResult = i18next.t('rockpaperscissors:paper_versus_rock_result');
+    const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
+    const hostedByFooter = i18next.t('global.hostedByFooter');
+    const rockButtonLable = i18next.t('rockPaperScissors.rockButtonLable');
+    const paperButtonLable = i18next.t('rockPaperScissors.paperButtonLable');
+    const scissorsButtonLable = i18next.t('rockPaperScissors.scissorsButtonLable');
+    const rockVersusRockResult = i18next.t('rockPaperScissors.rockVersusRockResult');
+    const paperVersusPaperResult = i18next.t('rockPaperScissors.paperVersusPaperResult');
+    const scissorsVersusScissorsResult = i18next.t('rockPaperScissors.scissorsVersusScissorsResult');
+    const rockVersusScissorsResult = i18next.t('rockPaperScissors.rockVersusScissorsResult');
+    const scissorsVersusPaperResult = i18next.t('rockPaperScissors.scissorsVersusPaperResult');
+    const paperVersusRockResult = i18next.t('rockPaperScissors.paperVersusRockResult');
 
     const leftPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const rightPlayer = leftPlayer === interaction.user ? interaction.client.user : interaction.user;
 
-    const chooseMoveMessage = i18next.t('rockpaperscissors:choose_move_message', {
+    const chooseMoveMessage = i18next.t('rockPaperScissors.chooseMoveMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
     });
-    const gameEndInactivityMessage = i18next.t('rockpaperscissors:game_end_inactivity_message', {
+    const gameEndInactivityMessage = i18next.t('rockPaperScissors.gameEndInactivityMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
     });
@@ -429,13 +429,13 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         leftPlayerEmoji = leftPlayer === interaction.user ? userChoiceEmoji : botEmojiMap[userChoiceEmoji];
         rightPlayerEmoji = leftPlayer === interaction.user ? botEmojiMap[userChoiceEmoji] : userChoiceEmoji;
 
-        const gameEndDrawMessage = i18next.t('rockpaperscissors:game_end_draw_message', {
+        const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
             left_player: leftPlayer,
             right_player: rightPlayer,
             left_player_emoji: leftPlayerEmoji,
             right_player_emoji: rightPlayerEmoji,
         });
-        const gameEndWinMessage = i18next.t('rockpaperscissors:game_end_win_message', {
+        const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
             left_player: leftPlayer,
             right_player: rightPlayer,
             left_player_emoji: leftPlayerEmoji,

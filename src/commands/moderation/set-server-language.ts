@@ -13,19 +13,19 @@ const languageMap: { [key: string]: string } = {
 }
 
 export const data = new SlashCommandBuilder()
-    .setName('language')
+    .setName('set-server-language')
     .setNameLocalizations({
         'en-US': 'language',
         'ja': '言語',
         'zh-CN': '语言',
         'zh-TW': '語言',
     })
-    .setDescription('Set your preferred bot language. Note that some features prioritize server\'s language when used in one.')
+    .setDescription('Set the bot language for this server.')
     .setDescriptionLocalizations({
-        'en-US': 'Set your preferred bot language. Note that some features prioritize server\'s language when used in one.',
-        'ja': 'お好みのボット言語を設定してください。機能によっては、サーバーの言語を優先するものもあります。',
-        'zh-CN': '设置您喜欢的机器人语言。请注意，某些功能会优先使用服务器语言。',
-        'zh-TW': '設定您偏好的機器人語言。請注意，某些功能會優先使用伺服器的語言。',
+        'en-US': 'Set the bot language for this server.',
+        'ja': 'このサーバーのボット言語を設定します。',
+        'zh-CN': '设置该服务器的机器人语言。',
+        'zh-TW': '設定此伺服器的機器人語言。',
     })
     .addStringOption(option => option
         .setName('language')
@@ -35,12 +35,12 @@ export const data = new SlashCommandBuilder()
             'zh-CN': '语言',
             'zh-TW': '語言',
         })
-        .setDescription('Languages supported. Note that command names and descriptions are based on your Discord language.')
+        .setDescription('Languages supported. Note that command names and descriptions are based on users\' Discord language.')
         .setDescriptionLocalizations({
-            'en-US': 'Languages supported. Note that command names and descriptions are based on your Discord language.',
-            'ja': '対応言語。コマンド名と説明はDiscordの言語に基づいています。',
-            'zh-CN': '设置您喜欢的机器人语言。请注意，某些功能会优先使用服务器语言。',
-            'zh-TW': '設定您偏好的機器人語言。請注意，某些功能會優先使用伺服器的語言。',
+            'en-US': 'Languages supported. Note that command names and descriptions are based on users\' Discord language.',
+            'ja': '対応言語。コマンド名と説明はユーザーのDiscord言語に基づいている。',
+            'zh-CN': '支持的语言。请注意，命令名称和描述是基于用户的Discord语言。',
+            'zh-TW': '支援的語言。請注意，指令名稱和說明是基於使用者的Discord語言。',
         })
         .setRequired(true)
         .setAutocomplete(true)
@@ -53,7 +53,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
+    const unknownError = i18next.t('global.unknownError');
+
     if (!interaction.guild) {
         await interaction.reply({
             content: unknownError,
@@ -70,13 +71,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
 
     i18next.changeLanguage(languageMap[language]);
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const serverLanguageChangedMessage = i18next.t('language:server_language_changed_message');
-    const previousLanguageLiteral = i18next.t('language:previous_language_literal');
-    const currentLanguageLiteral = i18next.t('language:current_language_literal');
-    const executedByFooter = i18next.t('global:executed_by_footer');
+    const serverLanguageChangedMessage = i18next.t('language.serverLanguageChangedMessage');
+    const previousLanguageLiteral = i18next.t('language.previousLanguageLiteral');
+    const currentLanguageLiteral = i18next.t('language.currentLanguageLiteral');
+    const executedByFooter = i18next.t('global.executedByFooter');
     const previousLanguageName = i18next.t(`${guild.language}`, {
         ns: 'languages',
     });

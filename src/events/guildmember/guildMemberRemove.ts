@@ -17,14 +17,14 @@ export async function execute(member: Member) {
 
     i18next.setDefaultNamespace('events');
     i18next.changeLanguage(guild.language);
-    const byeEmbedAuthor = i18next.t('guildMemberRemove:bye_embed_author', {
+    const byeEmbedAuthor = i18next.t('guildMemberRemove.byeEmbedAuthor', {
         username: member.user.username,
     });
-    const byeEmbedTitle = i18next.t('guildMemberRemove:bye_embed_title', {
-        displayName: member.user.username,
+    const byeEmbedTitle = i18next.t('guildMemberRemove.byeEmbedTitle', {
+        userDisplayName: member.user.username,
     });
-    const byeEmbedDescription = i18next.t('guildMemberRemove:bye_embed_description');
-    const byeEmbedFooter = i18next.t('guildMemberRemove:bye_embed_footer');
+    const byeEmbedDescription = i18next.t('guildMemberRemove.byeEmbedDescription');
+    const byeEmbedFooter = i18next.t('guildMemberRemove.byeEmbedFooter');
 
     const byeChannel = await member.guild.channels.fetch(guild.byeChannelId) as TextChannel;
     if (!byeChannel) {

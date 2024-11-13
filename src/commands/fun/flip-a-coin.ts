@@ -31,15 +31,15 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const coinEmbedTitle = i18next.t('flip-a-coin:coin_embed_title');
-    const coinEmbedFooter = i18next.t('flip-a-coin:coin_embed_footer');
-    const flippingCoinMessage = i18next.t('flip-a-coin:flipping_coin_message');
-    const headsMessage = i18next.t('flip-a-coin:heads_message');
-    const tailsMessage = i18next.t('flip-a-coin:tails_message');
-    const retryLiteral = i18next.t('flip-a-coin:retry_literal');
+    const coinEmbedTitle = i18next.t('flipACoin.coinEmbedTitle');
+    const coinEmbedFooter = i18next.t('flipACoin.coinEmbedFooter');
+    const flippingCoinMessage = i18next.t('flipACoin.flippingCoinMessage');
+    const headsMessage = i18next.t('flipACoin.headsMessage');
+    const tailsMessage = i18next.t('flipACoin.tailsMessage');
+    const retryLiteral = i18next.t('flipACoin.retryLiteral');
 
     const coinEmbed = new EmbedBuilder()
         .setColor('#00ff00')

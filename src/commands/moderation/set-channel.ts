@@ -107,8 +107,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const sendMessagePermissionError = i18next.t('global:send_message_permission_error');
+    const unknownError = i18next.t('global.unknownError');
+    const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
+
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
@@ -119,7 +120,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.deferReply();
     const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
-    const typeName = type.charAt(0).toUpperCase() + type.slice(1);
     const channel = interaction.options.getChannel('channel', true);
     const [guild] = await Guild.findOrCreate({
         where: {
@@ -130,17 +130,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const previousChannel = guild[channelKey];
 
     i18next.changeLanguage(guild.language);
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const executedByFooter = i18next.t('global:executed_by_footer');
-    const disabledLiteral = i18next.t('global:disabled_literal');
-    const channelChangedMessage = i18next.t(`set-channel:channel_changed_message`, {
-        type_name: typeName,
-    });
-    const previousChannelLiteral = i18next.t(`set-channel:previous_channel_literal`);
-    const newChannelLiteral = i18next.t(`set-channel:new_channel_literal`);
-    const currentChannelLiteral = i18next.t(`set-channel:current_channel_literal`);
+    const executedByFooter = i18next.t('global.executedByFooter');
+    const disabledLiteral = i18next.t('global.disabledLiteral');
+    const channelChangedMessage = type === 'log' ? i18next.t('setChannel.logChannelChangedMessage') : i18next.t('setChannel.byeChannelChangedMessage');
+    const previousChannelLiteral = i18next.t(`setChannel.previousChannelLiteral`);
+    const newChannelLiteral = i18next.t(`setChannel.newChannelLiteral`);
+    const currentChannelLiteral = i18next.t(`setChannel.currentChannelLiteral`);
 
     if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.SendMessages)) {
         await interaction.editReply({

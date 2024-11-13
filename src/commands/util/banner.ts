@@ -44,16 +44,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user') || interaction.user;
     const userFetched = await user.fetch();
 
-    const userNoBannerError = i18next.t('banner:user_no_banner_error');
-    const requestedByAuthor = i18next.t('global:requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const userNoBannerError = i18next.t('banner.userNoBannerError');
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
-    const displayedByFooter = i18next.t('global:displayed_by_footer');
-    const bannerEmbedTitle = i18next.t('banner:banner_embed_title', {
-        user_displayName: userFetched.displayName,
+    const displayedByFooter = i18next.t('global.displayedByFooter');
+    const bannerEmbedTitle = i18next.t('banner.bannerEmbedTitle', {
+        userDisplayName: userFetched.displayName,
     });
-    const bannerURLDescription = i18next.t('banner:banner_url_description', {
-        banner_url: userFetched.bannerURL(),
+    const bannerURLDescription = i18next.t('banner.bannerUrlDescription', {
+        bannerUrl: userFetched.bannerURL(),
     });
 
     if (!userFetched.bannerURL()) {

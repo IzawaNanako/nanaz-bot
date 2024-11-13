@@ -34,8 +34,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const userNeverBannedMessage = i18next.t('baninfo:user_never_banned_message');
+    const unknownError = i18next.t('global.unknownError');
+    const userNeverBannedMessage = i18next.t('banInfo.userNeverBannedMessage');
+
     if (!interaction.guild) {
         await interaction.reply({
             content: unknownError,
@@ -65,19 +66,19 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
-    const neverLiteral = i18next.t('global:never_literal');
-    const userLiteral = i18next.t('global:user_literal');
-    const usernameLiteral = i18next.t('global:username_literal');
-    const userIdLiteral = i18next.t('global:user_id_literal');
-    const issuerFieldTitle = i18next.t('global:issuer_field_title');
-    const reasonLiteral = i18next.t('global:reason_literal');
-    const fetchedByFooter = i18next.t('global:fetched_by_footer');
-    const banInformationLiteral = i18next.t('baninfo:ban_information_literal');
-    const userIsBannedMessage = i18next.t('baninfo:user_is_banned_message');
-    const userIsNotBannedMessage = i18next.t('baninfo:user_is_not_banned_message');
-    const baninfoEmbedBannedAtTitle = i18next.t('baninfo:baninfo_embed_banned_at_title');
-    const baninfoEmbedExpireDateTitle = i18next.t('baninfo:baninfo_embed_expire_date_title');
-    const baninfoEmbedTotalBansTitle = i18next.t('baninfo:baninfo_embed_total_bans_title');
+    const neverLiteral = i18next.t('global.neverLiteral');
+    const userLiteral = i18next.t('global.userLiteral');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
+    const userIdLiteral = i18next.t('global.userIdLiteral');
+    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const reasonLiteral = i18next.t('global.reasonLiteral');
+    const fetchedByFooter = i18next.t('global.fetchedByFooter');
+    const banInformationLiteral = i18next.t('banInfo.banInformationLiteral');
+    const userIsBannedMessage = i18next.t('banInfo.userIsBannedMessage');
+    const userIsNotBannedMessage = i18next.t('banInfo.userIsNotBannedMessage');
+    const banInfoEmbedBannedAtTitle = i18next.t('banInfo.banInfoEmbedBannedAtTitle');
+    const banInfoEmbedExpireDateTitle = i18next.t('banInfo.banInfoEmbedExpireDateTitle');
+    const banInfoEmbedTotalBansTitle = i18next.t('banInfo.banInfoEmbedTotalBansTitle');
 
     const expireDate = bannedMember.bannedUntil ?? neverLiteral;
 
@@ -123,12 +124,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     value: '\u200B',
                 },
                 {
-                    name: baninfoEmbedBannedAtTitle,
+                    name: banInfoEmbedBannedAtTitle,
                     value: `${bannedMember.bannedAt}`,
                     inline: true,
                 },
                 {
-                    name: baninfoEmbedExpireDateTitle,
+                    name: banInfoEmbedExpireDateTitle,
                     value: `${expireDate}`,
                     inline: true,
                 }
@@ -158,7 +159,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 value: '\u200B',
             },
             {
-                name: baninfoEmbedTotalBansTitle,
+                name: banInfoEmbedTotalBansTitle,
                 value: `${bannedMember.totalBans}`,
                 inline: true,
             }

@@ -37,8 +37,8 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const tttTitle = i18next.t('tictactoe:ttt_title');
-    const hostedByFooter = i18next.t('global:hosted_by_footer');
+    const tttTitle = i18next.t('ticTacToe.tttTitle');
+    const hostedByFooter = i18next.t('global.hostedByFooter');
 
     let turn = Math.random() < 0.5 ? PLAYER_X : PLAYER_O;
     let currentPlayer = Math.random() < 0.5 ? interaction.user : opponent;
@@ -49,20 +49,20 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
     let gameEnded = false;
     let resettingCollector = false;
 
-    let currentTurnMessage = i18next.t('tictactoe:current_turn_message', {
+    let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
         right_player_symbol: rightPlayerSymbol,
         current_player: currentPlayer,
     });
-    const gameEndDrawMessage = i18next.t('tictactoe:game_end_draw_message', {
+    const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
         right_player_symbol: rightPlayerSymbol,
     });
-    const gameEndInactivityMessage = i18next.t('tictactoe:game_end_inactivity_message', {
+    const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
@@ -124,7 +124,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 gameEnded = true;
                 moveCollector.stop();
 
-                const gameEndWinMessage = i18next.t('tictactoe:game_end_win_message', {
+                const gameEndWinMessage = i18next.t('ticTacToe.gameEndWinMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_symbol: leftPlayerSymbol,
@@ -175,14 +175,14 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     const rematchRequester = i.user;
                     const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
 
-                    const rematchRequestMessage = i18next.t('global:rematch_request_message', {
+                    const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
                         rematch_requester: rematchRequester,
                     });
-                    const rematchRequestDeclinedMessage = i18next.t('global:rematch_request_declined_message', {
+                    const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
                         rematch_requester: rematchRequester,
                         rematch_accepter: rematchAccepter,
                     });
-                    const rematchRequestIgnoredMessage = i18next.t('global:rematch_request_ignored_message', {
+                    const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
                         rematch_requester: rematchRequester,
                         rematch_accepter: rematchAccepter,
                     });
@@ -244,7 +244,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 turn = turn === PLAYER_X ? PLAYER_O : PLAYER_X;
                 currentPlayer = currentPlayer === interaction.user ? opponent : interaction.user;
 
-                currentTurnMessage = i18next.t('tictactoe:current_turn_message', {
+                currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
                     left_player: leftPlayer,
                     right_player: rightPlayer,
                     left_player_symbol: leftPlayerSymbol,
@@ -306,26 +306,26 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     let gameEnded = false;
     let resettingCollector = false;
 
-    let currentTurnMessage = i18next.t('tictactoe:current_turn_message', {
+    let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
         right_player_symbol: rightPlayerSymbol,
         current_player: currentPlayer,
     });
-    const gameEndDrawMessage = i18next.t('tictactoe:game_end_draw_message', {
+    const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
         right_player_symbol: rightPlayerSymbol,
     });
-    const gameEndInactivityMessage = i18next.t('tictactoe:game_end_inactivity_message', {
+    const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
         right_player_symbol: rightPlayerSymbol,
     });
-    const gameEndBotWinMessage = i18next.t('tictactoe:game_end_bot_win_message', {
+    const gameEndBotWinMessage = i18next.t('ticTacToe.gameEndBotWinMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
         left_player_symbol: leftPlayerSymbol,
@@ -425,7 +425,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     function switchTurn() {
         currentPlayer = currentPlayer === interaction.user ? interaction.client.user : interaction.user;
         
-        currentTurnMessage = i18next.t('tictactoe:current_turn_message', {
+        currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
             left_player: leftPlayer,
             right_player: rightPlayer,
             left_player_symbol: leftPlayerSymbol,

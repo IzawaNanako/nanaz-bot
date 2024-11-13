@@ -4,7 +4,7 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-const badgeMap = {
+const badgeMap: { [key: string]: string } = {
     'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
     'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
     'HypeSquadOnlineHouse3': '<:HypeSquadBalance:1295711412294778931>',
@@ -56,34 +56,34 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
         i18next.changeLanguage(executeUser?.language);
     }
-    const unknownError = i18next.t('global:unknown_error');
-    const noneLiteral = i18next.t('global:none_literal');
-    const unknownLiteral = i18next.t('global:unknown_literal');
-    const fetchedByFooter = i18next.t('global:fetched_by_footer');
-    const usernameLiteral = i18next.t('global:username_literal');
-    const userIdLiteral = i18next.t('global:user_id_literal');
-    const badgesLiteral = i18next.t('userinfo:badges_literal');
-    const statusLiteral = i18next.t('userinfo:status_literal');
-    const rolesLiteral = i18next.t('userinfo:roles_literal');
-    const joinedServerAtLiteral = i18next.t('userinfo:joined_server_at_literal');
-    const createdAtLiteral = i18next.t('userinfo:created_at_literal');
-    const offlineLiteral = i18next.t('userinfo:offline_literal');
-    const dndLiteral = i18next.t('userinfo:dnd_literal');
-    const idleLiteral = i18next.t('userinfo:idle_literal');
-    const onlineLiteral = i18next.t('userinfo:online_literal');
-    const userinfoRandomTextOne = i18next.t('userinfo:userinfo_random_text_one');
-    const userinfoRandomTextTwo = i18next.t('userinfo:userinfo_random_text_two');
-    const userinfoRandomTextThree = i18next.t('userinfo:userinfo_random_text_three');
-    const userinfoRandomTextFour = i18next.t('userinfo:userinfo_random_text_four');
-    const userinfoRandomTextFive = i18next.t('userinfo:userinfo_random_text_five');
-    const requestedByAuthor = i18next.t('global:userinfo_requested_by_author', {
-        user_displayName: interaction.user.displayName,
+    const requestedByAuthor = i18next.t('global.userInfoRequestedByAuthor', {
+        userDisplayName: interaction.user.displayName,
     });
+    const unknownError = i18next.t('global.unknownError');
+    const noneLiteral = i18next.t('global.noneLiteral');
+    const unknownLiteral = i18next.t('global.unknownLiteral');
+    const fetchedByFooter = i18next.t('global.fetchedByFooter');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
+    const userIdLiteral = i18next.t('global.userIdLiteral');
+    const badgesLiteral = i18next.t('userInfo.badgesLiteral');
+    const statusLiteral = i18next.t('userInfo.statusLiteral');
+    const rolesLiteral = i18next.t('userInfo.rolesLiteral');
+    const joinedServerAtLiteral = i18next.t('userInfo.joinedServerAtLiteral');
+    const createdAtLiteral = i18next.t('userInfo.createdAtLiteral');
+    const offlineLiteral = i18next.t('userInfo.offlineLiteral');
+    const dndLiteral = i18next.t('userInfo.dndLiteral');
+    const idleLiteral = i18next.t('userInfo.idleLiteral');
+    const onlineLiteral = i18next.t('userInfo.onlineLiteral');
+    const userInfoRandomTextOne = i18next.t('userInfo.userInfoRandomTextOne');
+    const userInfoRandomTextTwo = i18next.t('userInfo.userInfoRandomTextTwo');
+    const userInfoRandomTextThree = i18next.t('userInfo.userInfoRandomTextThree');
+    const userInfoRandomTextFour = i18next.t('userInfo.userInfoRandomTextFour');
+    const userInfoRandomTextFive = i18next.t('userInfo.userInfoRandomTextFive');
 
     const user = interaction.options.getUser('user') || interaction.user;
 
-    const userInfoEmbeddTitle = i18next.t('userinfo:user_info_embed_title', {
-        user_displayName: user,
+    const userInfoEmbeddTitle = i18next.t('userInfo.userInfoEmbedTitle', {
+        userDisplayName: user,
     });
 
     const createdAtTimestamp = Math.floor(user.createdAt.getTime() / 1000);
@@ -95,7 +95,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
     const badges = user.flags.toArray()
-        .map((badge) => badgeMap[badge as keyof typeof badgeMap] ?? '')
+        .map((badge) => badgeMap[badge] ?? '')
         .join(' ') || noneLiteral;
     let roles;
     let joinedAt;
@@ -146,11 +146,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const infoTextNum = Math.floor(Math.random() * 5);
     const infoTexts = [
-        userinfoRandomTextOne,
-        userinfoRandomTextTwo,
-        userinfoRandomTextThree,
-        userinfoRandomTextFour,
-        userinfoRandomTextFive,
+        userInfoRandomTextOne,
+        userInfoRandomTextTwo,
+        userInfoRandomTextThree,
+        userInfoRandomTextFour,
+        userInfoRandomTextFive,
     ];
 
     const userInfoEmbed = new EmbedBuilder()

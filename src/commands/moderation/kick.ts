@@ -55,11 +55,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(executeUser?.language);
-    const unknownError = i18next.t('global:unknown_error');
-    const kickPermissionError = i18next.t('kick:kick_permission_error');
-    const invalidUserError = i18next.t('global:invalid_user_error');
-    const kickingThemselvesError = i18next.t('kick:kicking_themselves_error');
-    const failedToKickError = i18next.t('kick:failed_to_kick_error');
+    const unknownError = i18next.t('global.unknownError');
+    const kickPermissionError = i18next.t('kick.kickPermissionError');
+    const invalidUserError = i18next.t('global.invalidUserError');
+    const kickingThemselvesError = i18next.t('kick.kickingThemselvesError');
+    const failedToKickError = i18next.t('kick.failedToKickError');
+
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
@@ -120,23 +121,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
-    const kickEmbedTitle = i18next.t('kick:kick_embed_title');
-    const userLiteral = i18next.t('global:user_literal');
-    const issuerFieldTitle = i18next.t('global:issuer_field_title');
-    const reasonLiteral = i18next.t('global:reason_literal');
-    const kickEmbedFooter = i18next.t('kick:kick_embed_footer');
-    const kickNotice = i18next.t('kick:kick_notice', {
+    const kickEmbedTitle = i18next.t('kick.kickEmbedTitle');
+    const userLiteral = i18next.t('global.userLiteral');
+    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const reasonLiteral = i18next.t('global.reasonLiteral');
+    const kickEmbedFooter = i18next.t('kick.kickEmbedFooter');
+    const kickNotice = i18next.t('kick.kickNotice', {
         issuer: interaction.user,
-        server_name: interaction.guild.name,
+        serverName: interaction.guild.name,
     });
-    const kickNoticeReason = i18next.t('kick:kick_notice_reason', {
+    const kickNoticeReason = i18next.t('kick.kickNoticeReason', {
         reason: reason,
     });
-    const kickRandomTextOne = i18next.t('kick:kick_random_text_one');
-    const kickRandomTextTwo = i18next.t('kick:kick_random_text_two');
-    const kickRandomTextThree = i18next.t('kick:kick_random_text_three');
-    const kickRandomTextFour = i18next.t('kick:kick_random_text_four');
-    const kickRandomTextFive = i18next.t('kick:kick_random_text_five');
+    const kickRandomTextOne = i18next.t('kick.kickRandomTextOne');
+    const kickRandomTextTwo = i18next.t('kick.kickRandomTextTwo');
+    const kickRandomTextThree = i18next.t('kick.kickRandomTextThree');
+    const kickRandomTextFour = i18next.t('kick.kickRandomTextFour');
+    const kickRandomTextFive = i18next.t('kick.kickRandomTextFive');
 
     const kickMsgID = Math.floor(Math.random() * 5);
     const kickMsgs = [

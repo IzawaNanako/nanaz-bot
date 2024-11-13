@@ -22,7 +22,7 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
         i18next.changeLanguage(executeUser.language);
     }
 
-    const invalidMessageError = i18next.t('translate:invalid_message_error');
+    const invalidMessageError = i18next.t('translate.invalidMessageError');
 
     const message = interaction.targetMessage.content;
     if (message.trim() === '') {
@@ -38,9 +38,9 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
     const languageName = i18next.t(`${language}`, {
         ns: 'languages',
     });
-    const translatedToMessage = i18next.t('translate:translated_to_message', {
-        translated_language: languageName,
-        translated_message: translatedText,
+    const translatedToMessage = i18next.t('translate.translatedToMessage', {
+        translatedLanguage: languageName,
+        translatedMessage: translatedText,
     });
 
     await interaction.reply({
