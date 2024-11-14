@@ -11,6 +11,8 @@ const gameMap: { [key: string]: string } = {
     'rps': 'Rock Paper Scissors',
 };
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('challenge')
     .setDescription('Challenge someone to a game!')
