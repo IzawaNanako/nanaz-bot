@@ -3,6 +3,8 @@ import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('commands');
+
 export const data = new SlashCommandBuilder()
     .setName('flip-a-coin')
     .setDescription('Flip a coin!')
