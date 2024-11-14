@@ -161,8 +161,8 @@
         "roleAlreadyInListError": "This role is already in the list!"
     },
     "flipACoin": {
-        "flipCoinEmbedTitle": "Flip a Coin!",
-        "flipCoinEmbedFooter": "Flipped by Nanaz",
+        "coinEmbedTitle": "Flip a Coin!",
+        "coinEmbedFooter": "Flipped by Nanaz",
         "flippingCoinMessage": "Flipping a coin...",
         "headsMessage": "Heads!",
         "tailsMessage": "Tails!",
