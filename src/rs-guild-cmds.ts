@@ -20,7 +20,8 @@ async function deleteGuildCommands() {
             rest.delete(Routes.applicationGuildCommand(clientId, guildId, command.id))
         );
         await Promise.all(deletePromises);
-        console.log('Successfully deleted all guild commands.');
+
+        console.log('Successfully deleted all guild commands. (Exceptions made for "dev" and "attack" commands)');
         process.exit(0);
     }
     catch (error) {
