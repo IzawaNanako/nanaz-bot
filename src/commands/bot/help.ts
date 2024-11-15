@@ -2,6 +2,7 @@ import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, Autocom
 import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
+import Fuse from 'fuse.js'
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
@@ -162,7 +163,19 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         'welcome-msg',
     ];
 
-    const filtered = choices.filter(choice => choice.startsWith(focusedValue.toLowerCase()));
+    let filtered;
+
+    if (focusedValue === '') {
+        filtered = choices;
+    }
+    else {
+        const fuse = new Fuse(choices, {
+            keys: ['value'],
+            threshold: 0.3,
+        });
+
+        filtered = fuse.search(focusedValue).map(result => result.item);
+    }
 
     await interaction.respond(
         filtered.map(choice => ({
