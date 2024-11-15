@@ -6,6 +6,10 @@ import i18next from 'i18next';
 
 export const name = 'guildMemberRemove';
 export async function execute(member: Member) {
+    if (member === member.guild.members.me) {
+        return;
+    }
+
     const guild = await Guild.findOne({
         where: {
             id: member.guild.id,
