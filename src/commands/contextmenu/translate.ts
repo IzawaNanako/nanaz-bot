@@ -19,7 +19,7 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
         }
     });
     if (executeUser) {
-        i18next.changeLanguage(executeUser.language);
+        await i18next.changeLanguage(executeUser.language);
     }
 
     const invalidMessageError = i18next.t('translate.invalidMessageError');

@@ -28,4 +28,4 @@ async function deleteGlobalCommands() {
     }
 }
 
-deleteGlobalCommands();
+await deleteGlobalCommands();

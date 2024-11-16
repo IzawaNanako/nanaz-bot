@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
 try {
-    i18next.use(Backend).init({
+    await i18next.use(Backend).init({
         backend: {
             loadPath: join('dist/locales/{{lng}}/{{ns}}.json'),
         },

@@ -15,16 +15,15 @@ const botEmojiMap: { [key: string]: string } = {
     '✂️': '🪨',
 };
 
-i18next.setDefaultNamespace('games');
-
 export async function rockpaperscissors(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
+    i18next.setDefaultNamespace('games');
     if (interaction.guild) {
         const guild = await Guild.findOne({
             where: {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -32,13 +31,13 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
-    const rockButtonLable = i18next.t('rockPaperScissors.rockButtonLable');
-    const paperButtonLable = i18next.t('rockPaperScissors.paperButtonLable');
-    const scissorsButtonLable = i18next.t('rockPaperScissors.scissorsButtonLable');
+    const rockButtonLabel = i18next.t('rockPaperScissors.rockButtonLabel');
+    const paperButtonLabel = i18next.t('rockPaperScissors.paperButtonLabel');
+    const scissorsButtonLabel = i18next.t('rockPaperScissors.scissorsButtonLabel');
     const rockVersusRockResult = i18next.t('rockPaperScissors.rockVersusRockResult');
     const paperVersusPaperResult = i18next.t('rockPaperScissors.paperVersusPaperResult');
     const scissorsVersusScissorsResult = i18next.t('rockPaperScissors.scissorsVersusScissorsResult');
@@ -49,7 +48,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const leftPlayer = Math.random() < 0.5 ? interaction.user : opponent;
     const rightPlayer = leftPlayer === interaction.user ? opponent : interaction.user;
 
-    const chooseMoveMessage = i18next.t('rockPaperScissors.chooseMoveMessage', {
+    const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
         left_player: leftPlayer,
         right_player: rightPlayer,
     });
@@ -61,7 +60,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const gameEmbed = new EmbedBuilder()
         .setColor('#00ff00')
         .setTitle(rpsTitle)
-        .setDescription(chooseMoveMessage)
+        .setDescription(chooseChoiceMessage)
         .setImage('https://i.imgur.com/8r6dKEH.png')
         .setFooter({
             text: hostedByFooter,
@@ -77,15 +76,15 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('rock')
-                        .setLabel(rockButtonLable)
+                        .setLabel(rockButtonLabel)
                         .setStyle(ButtonStyle.Primary),
                     new ButtonBuilder()
                         .setCustomId('paper')
-                        .setLabel(paperButtonLable)
+                        .setLabel(paperButtonLabel)
                         .setStyle(ButtonStyle.Success),
                     new ButtonBuilder()
                         .setCustomId('scissors')
-                        .setLabel(scissorsButtonLable)
+                        .setLabel(scissorsButtonLabel)
                         .setStyle(ButtonStyle.Danger),
                 )
         ],
@@ -108,7 +107,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     });
 
     choiceCollector.on('collect', async (i: MessageComponentInteraction) => {
-        i.deferUpdate();
+        await i.deferUpdate();
         if ((i.user === interaction.user && opponent !== interaction.user) || (i.user === interaction.user && opponentChosen)) {
             userChoice = i.customId;
             userChoiceEmoji = choiceMap[userChoice];
@@ -130,10 +129,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
 
             if (userChoice === opponentChoice) {
                 const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_emoji: leftPlayerEmoji,
-                    right_player_emoji: rightPlayerEmoji,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerEmoji: leftPlayerEmoji,
+                    rightPlayerEmoji: rightPlayerEmoji,
                 });
                 gameEmbed
                     .setDescription(gameEndDrawMessage);
@@ -170,10 +169,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'rock' && opponentChoice === 'scissors') || (userChoice === 'scissors' && opponentChoice === 'rock')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_emoji: leftPlayerEmoji,
-                    right_player_emoji: rightPlayerEmoji,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerEmoji: leftPlayerEmoji,
+                    rightPlayerEmoji: rightPlayerEmoji,
                     winner: userChoice === 'rock' ? interaction.user : opponent,
                 });
                 gameEmbed
@@ -188,10 +187,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'scissors' && opponentChoice === 'paper') || (userChoice === 'paper' && opponentChoice === 'scissors')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_emoji: leftPlayerEmoji,
-                    right_player_emoji: rightPlayerEmoji,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerEmoji: leftPlayerEmoji,
+                    rightPlayerEmoji: rightPlayerEmoji,
                     winner: userChoice === 'scissors' ? interaction.user : opponent,
                 });
                 gameEmbed
@@ -206,10 +205,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'paper' && opponentChoice === 'rock') || (userChoice === 'rock' && opponentChoice === 'paper')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_emoji: leftPlayerEmoji,
-                    right_player_emoji: rightPlayerEmoji,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerEmoji: leftPlayerEmoji,
+                    rightPlayerEmoji: rightPlayerEmoji,
                     winner: userChoice === 'paper' ? interaction.user : opponent,
                 });
                 gameEmbed
@@ -234,7 +233,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             });
 
             rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                i.deferUpdate();
+                await i.deferUpdate();
                 resettingCollector = true;
                 rematchCollector.stop();
                 resettingCollector = false;
@@ -257,15 +256,15 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
 
                 const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
-                    rematch_requester: rematchRequester,
+                    rematchRequester: rematchRequester,
                 });
                 const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
-                    rematch_requester: rematchRequester,
-                    rematch_accepter: rematchAccepter,
+                    rematchRequester: rematchRequester,
+                    rematchAccepter: rematchAccepter,
                 });
                 const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
-                    rematch_requester: rematchRequester,
-                    rematch_accepter: rematchAccepter,
+                    rematchRequester: rematchRequester,
+                    rematchAccepter: rematchAccepter,
                 });
 
                 await gameMessage.edit({
@@ -284,7 +283,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 });
 
                 acceptCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    i.deferUpdate();
+                    await i.deferUpdate();
                     resettingCollector = true;
                     acceptCollector.stop();
                     resettingCollector = false;
@@ -301,9 +300,9 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                     }
                 });
 
-                acceptCollector.on('end', () => {
+                acceptCollector.on('end', async () => {
                     if (gameMessage && !resettingCollector) {
-                        gameMessage.edit({
+                        await gameMessage.edit({
                             content: rematchRequestIgnoredMessage,
                             embeds: [gameEmbed],
                         });
@@ -311,9 +310,9 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 });
             });
 
-            rematchCollector.on('end', () => {
+            rematchCollector.on('end', async () => {
                 if (gameMessage && !resettingCollector) {
-                    gameMessage.edit({
+                    await gameMessage.edit({
                         components: [],
                     });
                 }
@@ -321,10 +320,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
         }
     });
 
-    choiceCollector.on('end', () => {
+    choiceCollector.on('end', async () => {
         if (gameMessage && !resettingCollector) {
             gameEmbed.setDescription(gameEndInactivityMessage);
-            gameMessage.edit({
+            await gameMessage.edit({
                 embeds: [gameEmbed],
                 components: [],
             });
@@ -333,13 +332,14 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
 };
 
 export async function rockpaperscissorsBot(interaction: ChatInputCommandInteraction) {
+    i18next.setDefaultNamespace('games');
     if (interaction.guild) {
         const guild = await Guild.findOne({
             where: {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -347,13 +347,13 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
-    const rockButtonLable = i18next.t('rockPaperScissors.rockButtonLable');
-    const paperButtonLable = i18next.t('rockPaperScissors.paperButtonLable');
-    const scissorsButtonLable = i18next.t('rockPaperScissors.scissorsButtonLable');
+    const rockButtonLabel = i18next.t('rockPaperScissors.rockButtonLabel');
+    const paperButtonLabel = i18next.t('rockPaperScissors.paperButtonLabel');
+    const scissorsButtonLabel = i18next.t('rockPaperScissors.scissorsButtonLabel');
     const rockVersusRockResult = i18next.t('rockPaperScissors.rockVersusRockResult');
     const paperVersusPaperResult = i18next.t('rockPaperScissors.paperVersusPaperResult');
     const scissorsVersusScissorsResult = i18next.t('rockPaperScissors.scissorsVersusScissorsResult');
@@ -364,19 +364,19 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     const leftPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const rightPlayer = leftPlayer === interaction.user ? interaction.client.user : interaction.user;
 
-    const chooseMoveMessage = i18next.t('rockPaperScissors.chooseMoveMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
+    const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
     });
     const gameEndInactivityMessage = i18next.t('rockPaperScissors.gameEndInactivityMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
     });
 
     const gameEmbed = new EmbedBuilder()
         .setColor('#00ff00')
         .setTitle(rpsTitle)
-        .setDescription(chooseMoveMessage)
+        .setDescription(chooseChoiceMessage)
         .setImage('https://i.imgur.com/8r6dKEH.png')
         .setFooter({
             text: hostedByFooter,
@@ -392,15 +392,15 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
                 .addComponents(
                     new ButtonBuilder()
                         .setCustomId('rock')
-                        .setLabel(rockButtonLable)
+                        .setLabel(rockButtonLabel)
                         .setStyle(ButtonStyle.Primary),
                     new ButtonBuilder()
                         .setCustomId('paper')
-                        .setLabel(paperButtonLable)
+                        .setLabel(paperButtonLabel)
                         .setStyle(ButtonStyle.Success),
                     new ButtonBuilder()
                         .setCustomId('scissors')
-                        .setLabel(scissorsButtonLable)
+                        .setLabel(scissorsButtonLabel)
                         .setStyle(ButtonStyle.Danger),
                 )
         ],
@@ -419,7 +419,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     });
 
     choiceCollector.on('collect', async (i: MessageComponentInteraction) => {
-        i.deferUpdate();
+        await i.deferUpdate();
         resettingCollector = true;
         choiceCollector.stop();
         resettingCollector = false;
@@ -430,16 +430,16 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         rightPlayerEmoji = leftPlayer === interaction.user ? botEmojiMap[userChoiceEmoji] : userChoiceEmoji;
 
         const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
-            left_player: leftPlayer,
-            right_player: rightPlayer,
-            left_player_emoji: leftPlayerEmoji,
-            right_player_emoji: rightPlayerEmoji,
+            leftPlayer: leftPlayer,
+            rightPlayer: rightPlayer,
+            leftPlayerEmoji: leftPlayerEmoji,
+            rightPlayerEmoji: rightPlayerEmoji,
         });
         const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-            left_player: leftPlayer,
-            right_player: rightPlayer,
-            left_player_emoji: leftPlayerEmoji,
-            right_player_emoji: rightPlayerEmoji,
+            leftPlayer: leftPlayer,
+            rightPlayer: rightPlayer,
+            leftPlayerEmoji: leftPlayerEmoji,
+            rightPlayerEmoji: rightPlayerEmoji,
             winner: leftPlayer === interaction.client.user ? leftPlayer : rightPlayer,
         });
 
@@ -523,7 +523,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         });
 
         rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-            i.deferUpdate();
+            await i.deferUpdate();
             resettingCollector = true;
             rematchCollector.stop();
             resettingCollector = false;
@@ -532,19 +532,19 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
             return;
         });
 
-        rematchCollector.on('end', () => {
+        rematchCollector.on('end', async () => {
             if (gameMessage) {
-                gameMessage.edit({
+                await gameMessage.edit({
                     components: [],
                 });
             }
         });
     });
 
-    choiceCollector.on('end', () => {
+    choiceCollector.on('end', async () => {
         if (gameMessage && !resettingCollector) {
             gameEmbed.setDescription(gameEndInactivityMessage);
-            gameMessage.edit({
+            await gameMessage.edit({
                 embeds: [gameEmbed],
                 components: [],
             });

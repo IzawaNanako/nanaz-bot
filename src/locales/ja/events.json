@@ -1,17 +1,17 @@
 {
     "guildMemberRemove": {
-        "byeEmbedAuthor": "Farewell {{username}}!",
-        "byeEmbedTitle": "Goodbye, {{userDisplayName}}!",
-        "byeEmbedDescription": "We are sad to see you go...",
-        "byeEmbedFooter": "I hope to see you somewhere else!"
+        "byeEmbedAuthor": "さらば{{username}}！",
+        "byeEmbedTitle": "さようなら、{{userDisplayName}}！",
+        "byeEmbedDescription": "君がいなくなるのは寂しいよ...。",
+        "byeEmbedFooter": "またどこかで会えるといいね！"
     },
     "guildMemberAdd": {
-        "welcomeEmbedTitle": "Welcome, {{userDisplayName}}!",
-        "welcomeEmbedFooter": "Hi, I'm Nanaz!",
-        "welcomeEmbedWasKicked": "Try harder to not get kicked again, mate.",
-        "welcomeEmbedWasBanned": "Naughty user, hope you have learned your lesson."
+        "welcomeEmbedTitle": "ようこそ、{{userDisplayName}}！",
+        "welcomeEmbedFooter": "こんにちは、Nanazです！",
+        "welcomeEmbedWasKicked": "また蹴られないように、もっと頑張れよ。",
+        "welcomeEmbedWasBanned": "やんちゃなユーザー、懲りたかな？"
     },
     "interactionCreate": {
-        "commandErrorMessage": "There was an error while executing this command!"
+        "commandErrorMessage": "このコマンドの実行中にエラーが発生しました！"
     }
 }

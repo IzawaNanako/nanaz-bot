@@ -7,7 +7,7 @@ import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
 try {
-    i18next.use(Backend).init({
+    await i18next.use(Backend).init({
         backend: {
             loadPath: join('dist/locales/{{lng}}/{{ns}}.json'),
         },
@@ -36,7 +36,7 @@ if (!clientId || !guildId || !token) {
     process.exit(1);
 }
 
-const commands = [];
+const commands = [] as ApplicationCommand[];
 const foldersPath = join('dist/commands');
 const commandFolders = readdirSync(foldersPath);
 
@@ -58,7 +58,12 @@ for (const folder of commandFolders) {
 
 const rest = new REST().setToken(token);
 
-(async () => {
+async function refreshCommands() {
+    if (!clientId || !guildId || !token) {
+        console.error('Client ID or guild ID or token not found.');
+        process.exit(1);
+    }
+
 	try {
 		console.log(`Started refreshing ${commands.length} application commands.`);
 
@@ -76,4 +81,6 @@ const rest = new REST().setToken(token);
 		console.error(error);
         process.exit(1);
 	}
-})();
+}
+
+await refreshCommands();

@@ -20,7 +20,7 @@ export async function execute(member: Member) {
     }
 
     i18next.setDefaultNamespace('events');
-    i18next.changeLanguage(guild.language);
+    await i18next.changeLanguage(guild.language);
     const byeEmbedAuthor = i18next.t('guildMemberRemove.byeEmbedAuthor', {
         username: member.user.username,
     });
@@ -66,7 +66,7 @@ export async function execute(member: Member) {
         })
         .setTimestamp();
 
-    byeChannel.send({
+    await byeChannel.send({
         embeds: [byeEmbed],
     });
 }

@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" && node -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
+        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
         "start": "node .",
         "deploy-global": "node dist/deploy-commands-global.js",
         "deploy-guild": "node dist/deploy-commands-guild.js",

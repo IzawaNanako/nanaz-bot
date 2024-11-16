@@ -18,16 +18,15 @@ const winningCombos = [
     [2, 4, 6],
 ];
 
-i18next.setDefaultNamespace('games');
-
 export async function tictactoe(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
+    i18next.setDefaultNamespace('games');
     if (interaction.guild) {
         const guild = await Guild.findOne({
             where: {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -35,7 +34,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const tttTitle = i18next.t('ticTacToe.tttTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
@@ -50,23 +49,23 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
     let resettingCollector = false;
 
     let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
-        current_player: currentPlayer,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
+        currentPlayer: currentPlayer,
     });
     const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
     });
 
     const board = Array(9).fill(EMPTY);
@@ -104,7 +103,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
     let moveCollector: InteractionCollector<StringSelectMenuInteraction<CacheType> | UserSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType> | MentionableSelectMenuInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction<CacheType>>;;
 
-    const startCollector = () => {
+    const startCollector = async () => {
         moveCollector = gameMessage.createMessageComponentCollector({
             filter: (i: MessageComponentInteraction) => 
                 i.user === currentPlayer,
@@ -112,7 +111,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
         });
 
         moveCollector.on('collect', async (i: MessageComponentInteraction) => {
-            i.deferUpdate();
+            await i.deferUpdate();
             const index = parseInt(i.customId);
             if (!board.includes(EMPTY) || gameEnded) {
                 return;
@@ -125,10 +124,10 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 moveCollector.stop();
 
                 const gameEndWinMessage = i18next.t('ticTacToe.gameEndWinMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_symbol: leftPlayerSymbol,
-                    right_player_symbol: rightPlayerSymbol,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerSymbol: leftPlayerSymbol,
+                    rightPlayerSymbol: rightPlayerSymbol,
                     winner: currentPlayer,
                 });
 
@@ -152,7 +151,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 });
     
                 rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    i.deferUpdate();
+                    await i.deferUpdate();
                     resettingCollector = true;
                     rematchCollector.stop();
                     resettingCollector = false;
@@ -176,15 +175,15 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
 
                     const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
-                        rematch_requester: rematchRequester,
+                        rematchRequester: rematchRequester,
                     });
                     const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
-                        rematch_requester: rematchRequester,
-                        rematch_accepter: rematchAccepter,
+                        rematchRequester: rematchRequester,
+                        rematchAccepter: rematchAccepter,
                     });
                     const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
-                        rematch_requester: rematchRequester,
-                        rematch_accepter: rematchAccepter,
+                        rematchRequester: rematchRequester,
+                        rematchAccepter: rematchAccepter,
                     });
     
                     await gameMessage.edit({
@@ -203,7 +202,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     });
     
                     acceptCollector.on('collect', async (i: MessageComponentInteraction) => {
-                        i.deferUpdate();
+                        await i.deferUpdate();
                         resettingCollector = true;
                         acceptCollector.stop();
                         resettingCollector = false;
@@ -221,9 +220,9 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                         }
                     });
     
-                    acceptCollector.on('end', () => {
+                    acceptCollector.on('end', async () => {
                         if (gameMessage && !resettingCollector) {
-                            gameMessage.edit({
+                            await gameMessage.edit({
                                 content: `${gameEndResultContent}\n\n${rematchRequestIgnoredMessage}`,
                                 embeds: [],
                                 components: createBoard(),
@@ -232,9 +231,9 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     });
                 });
     
-                rematchCollector.on('end', () => {
+                rematchCollector.on('end', async () => {
                     if (gameMessage && !resettingCollector) {
-                        gameMessage.edit({
+                        await gameMessage.edit({
                             components: createBoard(),
                         });
                     }
@@ -245,11 +244,11 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 currentPlayer = currentPlayer === interaction.user ? opponent : interaction.user;
 
                 currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-                    left_player: leftPlayer,
-                    right_player: rightPlayer,
-                    left_player_symbol: leftPlayerSymbol,
-                    right_player_symbol: rightPlayerSymbol,
-                    current_player: currentPlayer,
+                    leftPlayer: leftPlayer,
+                    rightPlayer: rightPlayer,
+                    leftPlayerSymbol: leftPlayerSymbol,
+                    rightPlayerSymbol: rightPlayerSymbol,
+                    currentPlayer: currentPlayer,
                 });
 
                 await gameMessage.edit({
@@ -260,7 +259,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 resettingCollector = true;
                 moveCollector.stop();
                 resettingCollector = false;
-                startCollector();
+                await startCollector();
             }
         });
 
@@ -279,13 +278,14 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 };
 
 export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
+    i18next.setDefaultNamespace('games');
     if (interaction.guild) {
         const guild = await Guild.findOne({
             where: {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -293,7 +293,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
 
     let currentPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
@@ -307,29 +307,29 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     let resettingCollector = false;
 
     let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
-        current_player: currentPlayer,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
+        currentPlayer: currentPlayer,
     });
     const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndBotWinMessage = i18next.t('ticTacToe.gameEndBotWinMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
-        left_player_symbol: leftPlayerSymbol,
-        right_player_symbol: rightPlayerSymbol,
+        leftPlayer: leftPlayer,
+        rightPlayer: rightPlayer,
+        leftPlayerSymbol: leftPlayerSymbol,
+        rightPlayerSymbol: rightPlayerSymbol,
     });
 
     const board = new Array(9).fill(EMPTY);
@@ -367,7 +367,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     };
 
     const botMove = () => {
-        function minimax(newBoard: string[], isMaximizing: boolean): number {
+        const minimax = (newBoard: string[], isMaximizing: boolean) => {
             if (checkWin(botSymbol)) {
                 return 1;
             }
@@ -422,24 +422,24 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         return bestMove;
     }
 
-    function switchTurn() {
+    const switchTurn = async () => {
         currentPlayer = currentPlayer === interaction.user ? interaction.client.user : interaction.user;
         
         currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-            left_player: leftPlayer,
-            right_player: rightPlayer,
-            left_player_symbol: leftPlayerSymbol,
-            right_player_symbol: rightPlayerSymbol,
-            current_player: currentPlayer,
+            leftPlayer: leftPlayer,
+            rightPlayer: rightPlayer,
+            leftPlayerSymbol: leftPlayerSymbol,
+            rightPlayerSymbol: rightPlayerSymbol,
+            currentPlayer: currentPlayer,
         });
 
-        gameMessage.edit({
+        await gameMessage.edit({
             content: currentTurnMessage,
             components: createBoard(),
         });
     }
 
-    function startCollector() {
+    const startCollector = async () => {
         moveCollector = gameMessage.createMessageComponentCollector({
             filter: (i: MessageComponentInteraction) => 
                 i.user === interaction.user,
@@ -447,7 +447,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         });
 
         moveCollector.on('collect', async (i: MessageComponentInteraction) => {
-            i.deferUpdate();
+            await i.deferUpdate();
             resettingCollector = true;
             moveCollector.stop();
             resettingCollector = false;
@@ -471,7 +471,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 });
         
                 rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    i.deferUpdate();
+                    await i.deferUpdate();
                     resettingCollector = true;
                     rematchCollector.stop();
                     resettingCollector = false;
@@ -479,24 +479,24 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                     await tictactoeBot(interaction);
                 });
         
-                rematchCollector.on('end', () => {
+                rematchCollector.on('end', async () => {
                     if (gameMessage) {
-                        gameMessage.edit({
+                        await gameMessage.edit({
                             components: createBoard(),
                         });
                     }
                 });
             }
             else {
-                switchTurn();
-                startBotMove();
+                await switchTurn();
+                await startBotMove();
             }
         });
 
-        moveCollector.on('end', () => {
+        moveCollector.on('end', async () => {
             if (gameMessage && !gameEnded && !resettingCollector) {
                 gameEnded = true;
-                gameMessage.edit({
+                await gameMessage.edit({
                     content: gameEndInactivityMessage,
                     components: createBoard(),
                 });
@@ -504,19 +504,19 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         });
     }
 
-    function startBotMove() {
+    const startBotMove = async () => {
         board[botMove()] = botSymbol;
 
         if (checkWin(botSymbol)) {
             gameEnded = true;
-            gameMessage.edit({
+            await gameMessage.edit({
                 content: gameEndBotWinMessage,
                 components: createBoard(true),
             });
         }
         else if (!board.includes(EMPTY)) {
             gameEnded = true;
-            gameMessage.edit({
+            await gameMessage.edit({
                 content: gameEndDrawMessage,
                 components: createBoard(true),
             });
@@ -530,7 +530,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
             });
     
             rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                i.deferUpdate();
+                await i.deferUpdate();
                 resettingCollector = true;
                 rematchCollector.stop();
                 resettingCollector = false;
@@ -539,18 +539,18 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 return;
             });
     
-            rematchCollector.on('end', () => {
+            rematchCollector.on('end', async () => {
                 if (gameMessage) {
-                    gameMessage.edit({
+                    await gameMessage.edit({
                         components: createBoard(),
                     });
                 }
             });
         }
         else {
-            setTimeout(() => {
-                switchTurn();
-                startCollector();
+            setTimeout(async () => {
+                await switchTurn();
+                await startCollector();
             }, 1500);
         }
     }
@@ -570,12 +570,12 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
             board[4] = botSymbol;
         }
 
-        setTimeout(() => {
-            switchTurn();
-            startCollector();
-        }, 500);
+        setTimeout(async () => {
+            await switchTurn();
+            await startCollector();
+        }, 1000);
     }
     else {
-        startCollector();
+        await startCollector();
     }
 };

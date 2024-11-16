@@ -14,7 +14,7 @@ if (!token) {
 }
 
 try {
-    i18next.use(Backend).init({
+    await i18next.use(Backend).init({
         backend: {
             loadPath: join('dist/locales/{{lng}}/{{ns}}.json'),
         },
@@ -93,7 +93,7 @@ for (const folder of eventFolders) {
     }
 }
 
-client.login(token);
+await client.login(token);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 process.on('unhandledRejection', (error: any) => {

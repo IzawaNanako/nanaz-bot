@@ -16,8 +16,9 @@ async function deleteGuildCommands() {
         const commands = await rest.get(Routes.applicationGuildCommands(clientId, guildId));
         const commandsArray = commands as ApplicationCommand[];
 
-        const deletePromises = commandsArray.filter(command => command.name !== 'dev' && command.name !== 'attack').map(command =>
-            rest.delete(Routes.applicationGuildCommand(clientId, guildId, command.id))
+        const deletePromises = commandsArray.filter(command => command.name !== 'dev' && command.name !== 'attack').map(command => async () => {
+                await rest.delete(Routes.applicationGuildCommand(clientId, guildId, command.id));
+            }
         );
         await Promise.all(deletePromises);
 
@@ -30,4 +31,4 @@ async function deleteGuildCommands() {
     }
 }
 
-deleteGuildCommands();
+await deleteGuildCommands();

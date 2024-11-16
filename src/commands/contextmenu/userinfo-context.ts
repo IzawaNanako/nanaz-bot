@@ -36,7 +36,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
         }
     });
     if (executeUser) {
-        i18next.changeLanguage(executeUser.language);
+        await i18next.changeLanguage(executeUser.language);
     }
     const unknownErrorMessage = i18next.t('global.unknownErrorMessage');
     const noneLiteral = i18next.t('global.noneLiteral');

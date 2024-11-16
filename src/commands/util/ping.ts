@@ -22,7 +22,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -30,14 +30,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });
     const pingingMessage = i18next.t('ping.pingingMessage');
     const pingFinishedMessage = i18next.t('ping.pingFinishedMessage');
-    const latencyLiteral = i18next.t('ping.latencyLiteral');
+    const botLatencyLiteral = i18next.t('ping.botLatencyLiteral');
     const apiLatencyLiteral = i18next.t('ping.apiLatencyLiteral');
     const pingedByFooter = i18next.t('ping.pingedByFooter');
 
@@ -65,12 +65,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 .setTitle(pingFinishedMessage)
                 .addFields([
                     {
-                        name: latencyLiteral,
+                        name: botLatencyLiteral,
                         value: `${Math.floor(msg.createdTimestamp - interaction.createdTimestamp)}ms`,
+                        inline: true,
                     },
                     {
                         name: apiLatencyLiteral,
                         value: `${interaction.client.ws.ping}ms`,
+                        inline: true,
                     }
                 ])
         ],

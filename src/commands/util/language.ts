@@ -54,7 +54,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
 
-    i18next.changeLanguage(languageMap[language]);
+    await i18next.changeLanguage(languageMap[language]);
     const languageAlreadyUsingError = i18next.t('language.languageAlreadyUsingError');
     const userLanguageChangedMessage = i18next.t('language.userLanguageChangedMessage');
     const previousLanguageLiteral = i18next.t('language.previousLanguageLiteral');

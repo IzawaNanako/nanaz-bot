@@ -80,7 +80,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    i18next.changeLanguage(executeUser?.language);
+    await i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
     const banPermissionError = i18next.t('ban.banPermissionError');
     const invalidUserError = i18next.t('global.invalidUserError');

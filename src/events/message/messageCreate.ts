@@ -20,7 +20,6 @@ export async function execute(message: Message, client: Client) {
     if (message.mentions.has(client.user, { ignoreEveryone: true, ignoreRoles: true }) || message.channel.type === ChannelType.DM) {
         try {
             let reply;
-
             if (message.author.id === process.env.OWNER_ID) {
                 reply = await generateWithAI(message.content, true);
             }

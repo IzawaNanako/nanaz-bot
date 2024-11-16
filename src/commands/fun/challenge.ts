@@ -6,11 +6,6 @@ import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
 import { rockpaperscissors, rockpaperscissorsBot } from '../../games/rockpaperscissors.js';
 import i18next from 'i18next';
 
-const gameMap: { [key: string]: string } = {
-    'ttt': 'Tic Tac Toe',
-    'rps': 'Rock Paper Scissors',
-};
-
 i18next.setDefaultNamespace('commands');
 
 export const data = new SlashCommandBuilder()
@@ -61,7 +56,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -69,8 +64,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
+    const gameMap: { [key: string]: string } = {
+        'ttt': i18next.t('challenge.tttName'),
+        'rps': i18next.t('challenge.rpsName'),
+    };
     const notTextChannelError = i18next.t('challenge.notTextChannelError');
     const invalidGameError = i18next.t('challenge.invalidGameError');
     const invalidUserError = i18next.t('global.invalidUserError');
@@ -151,7 +150,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 if (i.customId === 'decline') {
                     letterEmbed
                         .setDescription(challengeDeclinedMessage);
-                    challengeLetter.edit({
+                    await challengeLetter.edit({
                         content: '',
                         embeds: [letterEmbed],
                         components: [],
@@ -160,10 +159,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 }
                 else {
                     if (game === 'ttt') {
-                        tictactoe(interaction, opponent);
+                        await tictactoe(interaction, opponent);
                     }
                     else if (game === 'rps') {
-                        rockpaperscissors(interaction, opponent);
+                        await rockpaperscissors(interaction, opponent);
                     }
                 }
             });
@@ -171,7 +170,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 if (!received) {
                     letterEmbed
                         .setDescription(challengeNotRespondedMessage);
-                    challengeLetter.edit({
+                    await challengeLetter.edit({
                         content: '',
                         embeds: [letterEmbed],
                         components: [],
@@ -184,12 +183,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await interaction.reply({
                 content: challengeThemselvesMessage,
             });
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (game === 'ttt') {
-                    tictactoe(interaction, opponent);
+                    await tictactoe(interaction, opponent);
                 }
                 else if (game === 'rps') {
-                    rockpaperscissors(interaction, opponent);
+                    await rockpaperscissors(interaction, opponent);
                 }
             }, 2000);
         }
@@ -197,12 +196,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             await interaction.reply({
                 content: challengeCurrentBotMessage,
             });
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (game === 'ttt') {
-                    tictactoeBot(interaction);
+                    await tictactoeBot(interaction);
                 }
                 else if (game === 'rps') {
-                    rockpaperscissorsBot(interaction);
+                    await rockpaperscissorsBot(interaction);
                 }
             }, 2000);
         }

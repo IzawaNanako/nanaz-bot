@@ -152,6 +152,7 @@ export const data = new SlashCommandBuilder()
             })
         )
     )
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
 export async function execute(interaction: ChatInputCommandInteraction) {
     const executeUser = await User.findOne({
@@ -159,7 +160,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    i18next.changeLanguage(executeUser?.language);
+    await i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const manageRolesPermissionError = i18next.t('global.manageRolesPermissionError');
@@ -178,7 +179,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.guild.id,
         }
     });
-    i18next.changeLanguage(guild.language);
+    await i18next.changeLanguage(guild.language);
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

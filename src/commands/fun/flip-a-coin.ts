@@ -23,7 +23,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -31,7 +31,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
@@ -54,8 +54,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
             iconURL: interaction.client.user.avatarURL() ?? undefined
         })
         .setTimestamp()
-
-    await flipCoin();
 
     async function flipCoin() {
         let resettingCollector = false;
@@ -120,4 +118,6 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
             });
         }, 3000);
     }
+
+    await flipCoin();
 }

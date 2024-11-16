@@ -48,7 +48,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.guild.id,
             }
         });
-        i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild?.language);
     }
     else {
         const executeUser = await User.findOne({
@@ -56,7 +56,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        i18next.changeLanguage(executeUser?.language);
+        await i18next.changeLanguage(executeUser?.language);
     }
     const requestedByAuthor = i18next.t('global.userInfoRequestedByAuthor', {
         userDisplayName: interaction.user.displayName,
@@ -113,7 +113,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             guildMember = null;
         }
         else {
-            throw error;
+            console.error(error);
         }
     }
 

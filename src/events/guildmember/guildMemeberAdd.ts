@@ -17,7 +17,7 @@ export async function execute(member: Member) {
     }
 
     i18next.setDefaultNamespace('events');
-    i18next.changeLanguage(guild.language);
+    await i18next.changeLanguage(guild.language);
     const welcomeEmbedTitle = i18next.t('guildMemberAdd.welcomeEmbedTitle', {
         userDisplayName: member.user.username,
     });
@@ -77,7 +77,7 @@ export async function execute(member: Member) {
                 .setDescription(welcomeEmbedWasBanned);
         }
 
-        welcomeChannel.send({
+        await welcomeChannel.send({
             content: `${member.user}`,
             embeds: [welcomeEmbed],
         });

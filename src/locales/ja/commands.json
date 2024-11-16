@@ -62,7 +62,7 @@
     "ping": {
         "pingingMessage": "Pinging...",
         "pingFinishedMessage": "Pong!",
-        "latencyLiteral": "Latency",
+        "botLatencyLiteral": "Bot Latency",
         "apiLatencyLiteral": "API Latency",
         "pingedByFooter": "Pinged by Nanaz"
     },
@@ -104,7 +104,7 @@
         "failedToKickError": "I can't seem to kick that user.\nNote that their highest role cannot be higher than mine.",
         "kickEmbedTitle": "👋 Member Kicked",
         "kickEmbedFooter": "The user can join back at anytime.",
-        "kickNotice": "{{issuer}} has kicked you from **{{serverName}}**!",
+        "kickNotice": "<@{{issuer}}> has kicked you from **{{serverName}}**!",
         "kickNoticeReason": " Reason: {{reason}}.",
         "kickRandomTextOne": "They have seen better days...",
         "kickRandomTextTwo": "They'll probably not be missed.",
@@ -120,7 +120,7 @@
         "banEmbedFooter": "Check Server Settings -> Bans or /baninfo for more information.",
         "banEmbedExpireDateTitle": "Expires At",
         "noReasonMessage": "No reason provided.",
-        "banNotice": "{{issuer}} has banned you from **{{serverName}}**!",
+        "banNotice": "<@{{issuer}}> has banned you from **{{serverName}}**!",
         "banNoticeReason": " Reason: {{reason}}.",
         "banExpiredMessage": "This ban has expired.",
         "banRandomTextOne": "Be gone!",
@@ -134,7 +134,7 @@
         "bannedUserNotFoundError": "This user is not banned from this server.",
         "unbanEmbedTitle": "🔓 Member Unbanned",
         "unbanEmbedFooter": "The user can join the server now.",
-        "unbanNotice": "{{issuer}} has unbanned you from **{{serverName}}**!"
+        "unbanNotice": "<@{{issuer}}> has unbanned you from **{{serverName}}**!"
     },
     "banInfo": {
         "bannedUserNotFoundError": "This user is not banned from this server.",
@@ -150,7 +150,7 @@
     "welcome": {
         "welcomeChannelChangedMessage": "Welcome Channel Changed",
         "welcomeMessageChangedMessage": "Welcome Message Changed",
-        "welcomeRolesChanged_message": "Welcome Roles Changed",
+        "welcomeRolesChangedMessage": "Welcome Roles Changed",
         "previousChannelLiteral": "Previous Channel",
         "newChannelLiteral": "New Channel",
         "currentChannelLiteral": "Current Channel",
@@ -173,12 +173,14 @@
         "invalidGameError": "Invalid Game.",
         "challengeOtherBotError": "You cannot challenge any other bots, just me!",
         "challengeLetterLiteral": "Challenge Letter",
-        "challengeLetterMessage": "You have been challenged by {{challenger}} into a game of {{game}}! Do you accept the challenge?",
+        "challengeLetterMessage": "You have been challenged by <@{{challenger}}> into a game of {{game}}! Do you accept the challenge?",
         "deliveredByFooter": "Delivered by Nanaz",
-        "challengeDeclinedMessage": "{{challenged}} has declined {{challenger}}'s challenge. :(",
-        "challengeNotRespondedMessage": "{{challenged}} didn't respond to the challenge...",
+        "challengeDeclinedMessage": "<@{{challenged}}> has declined <@{{challenger}}>'s challenge. :(",
+        "challengeNotRespondedMessage": "<@{{challenged}}> didn't respond to the challenge...",
         "challengeThemselvesMessage": "Why would you challenge yourself? You're weird, but I'll let you do it anyway.",
-        "challengeCurrentBotMessage": "Challenging me? It's impossible to win, but you can try to not lose!"
+        "challengeCurrentBotMessage": "Challenging me? It's impossible to win, but you can try to not lose!",
+        "tttName": "Tic Tac Toe",
+        "rpsName": "Rock Paper Scissors"
     },
     "help": {
         "helpMenuTitle": "Help Menu",

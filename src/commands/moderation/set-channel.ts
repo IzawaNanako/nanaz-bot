@@ -108,7 +108,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    i18next.changeLanguage(executeUser?.language);
+    await i18next.changeLanguage(executeUser?.language);
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');

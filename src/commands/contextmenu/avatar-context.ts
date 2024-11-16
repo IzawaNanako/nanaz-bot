@@ -19,7 +19,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
         }
     });
     if (executeUser) {
-        i18next.changeLanguage(executeUser.language);
+        await i18next.changeLanguage(executeUser.language);
     }
 
     const user = interaction.targetUser;
