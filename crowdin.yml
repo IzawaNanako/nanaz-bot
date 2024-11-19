@@ -7,6 +7,13 @@ preserve_hierarchy: true
 files: [
   {
     source: "/en-US/*.json",
-    translation: "/%locale%/%original_file_name%"
+    translation: "/%locale%/%original_file_name%",
+    type: "json",
+    update_option: "update_as_unapproved",
+    languages_mapping: {
+      "locale": {
+        "ja-JP": "ja",
+      }
+    }
   }
 ]
