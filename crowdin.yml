@@ -2,8 +2,6 @@ project_id_env: "738315"
 api_token_env: "e260bb7bbb9e4715f52179e4b80f482803a98b4d61124246433a3aa26260b655ed9b943073b01b4f"
 base_path: "./src/locales"
 
-preserve_hierarchy: true
-
 files: [
   {
     source: "/en-US/*.json",
@@ -12,7 +10,7 @@ files: [
     update_option: "update_as_unapproved",
     languages_mapping: {
       "locale": {
-        "ja-JP": "ja",
+        "ja-JP": "ja"
       }
     }
   }
