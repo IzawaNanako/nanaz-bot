@@ -125,7 +125,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     i18next.changeLanguage(guild?.language);
     const kickEmbedTitle = i18next.t('kick.kickEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
-    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const issuerLiteral = i18next.t('global.issuerLiteral');
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const kickEmbedFooter = i18next.t('kick.kickEmbedFooter');
     const kickNotice = i18next.t('kick.kickNotice', {
@@ -161,7 +161,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: issuerFieldTitle,
+                name: issuerLiteral,
                 value: `${interaction.user}`,
                 inline: true,
             },

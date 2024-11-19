@@ -16,35 +16,6 @@ function mapLanguageCode(language: string) {
     }
 }
 
-const possibleLanguages = [
-    'id',
-    'en-US',
-    'en-GB',
-    'bg',
-    'cs',
-    'da',
-    'de',
-    'el',
-    'fi',
-    'fr',
-    'hu',
-    'it',
-    'ja',
-    'ko',
-    'lt',
-    'nl',
-    'pl',
-    'pt-BR',
-    'ro',
-    'ru',
-    'sv-SE',
-    'tr',
-    'uk',
-    'es',
-    'zh-CN',
-    'zh-TW',
-].map(mapLanguageCode);
-
 const DeepLAPIKey = process.env.DEEPL_API_KEY;
 if (!DeepLAPIKey) {
     console.error('DeepL API key not found.');
@@ -54,11 +25,14 @@ if (!DeepLAPIKey) {
 const translator = new Translator(DeepLAPIKey);
 
 async function translateWithDeepL(message: string, language: string) {
-    if (!possibleLanguages.includes(language)) {
-        language = 'en-US';
+    const supportedLanguages = await translator.getTargetLanguages();
+    let targetLanguage = mapLanguageCode(language) as TargetLanguageCode;
+
+    if (!supportedLanguages.some(lang => lang.code === language)) {
+        targetLanguage = 'en-US';
     }
 
-    const result = await translator.translateText(message, null, language as TargetLanguageCode);
+    const result = await translator.translateText(message, null, targetLanguage);
 
     return result.text;
 };

@@ -72,7 +72,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const userLiteral = i18next.t('global.userLiteral');
     const usernameLiteral = i18next.t('global.usernameLiteral');
     const userIdLiteral = i18next.t('global.userIdLiteral');
-    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const issuerLiteral = i18next.t('global.issuerLiteral');
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const fetchedByFooter = i18next.t('global.fetchedByFooter');
     const banInformationLiteral = i18next.t('banInfo.banInformationLiteral');
@@ -112,7 +112,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     value: '\u200B',
                 },
                 {
-                    name: issuerFieldTitle,
+                    name: issuerLiteral,
                     value: `${interaction.user}`,
                     inline: true,
                 },

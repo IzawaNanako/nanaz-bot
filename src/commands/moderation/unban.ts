@@ -92,7 +92,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     i18next.changeLanguage(guild?.language);
     const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
-    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const issuerLiteral = i18next.t('global.issuerLiteral');
     const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
     const unbannedNotice = i18next.t('unban.unbanNotice', {
         issuer: interaction.user,
@@ -116,7 +116,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: issuerFieldTitle,
+                name: issuerLiteral,
                 value: `${interaction.user}`,
                 inline: true,
             },

@@ -159,7 +159,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     i18next.changeLanguage(guild?.language);
     const banEmbedTitle = i18next.t('ban.banEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
-    const issuerFieldTitle = i18next.t('global.issuerFieldTitle');
+    const issuerLiteral = i18next.t('global.issuerLiteral');
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const banEmbedFooter = i18next.t('ban.banEmbedFooter');
     const banEmbedExpireDateTitle = i18next.t('ban.banEmbedExpireDateTitle');
@@ -201,7 +201,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: issuerFieldTitle,
+                name: issuerLiteral,
                 value: `${interaction.user}`,
                 inline: true,
             },
