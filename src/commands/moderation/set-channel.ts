@@ -103,6 +103,7 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .setContexts(0);
 export async function execute(interaction: ChatInputCommandInteraction) {
+    const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
     const executeUser = await User.findOne({
         where: {
             id: interaction.user.id,
@@ -112,6 +113,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
+    const featureAlreadyDisabledError = type === 'log' ? i18next.t('setChannel.loggingAlreadyDisabledError') : i18next.t('setChannel.byeMessageAlreadyDisabledError');
+    const featureChannelUnchangeError = type === 'log' ? i18next.t('setChannel.loggingChannelUnchangedError') : i18next.t('setChannel.byeMessageChannelUnchangedError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
@@ -122,7 +125,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     };
 
     await interaction.deferReply();
-    const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
     const channel = interaction.options.getChannel('channel');
     const [guild] = await Guild.findOrCreate({
         where: {
@@ -138,7 +140,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
     const executedByFooter = i18next.t('global.executedByFooter');
     const disabledLiteral = i18next.t('global.disabledLiteral');
-    const channelChangedMessage = type === 'log' ? i18next.t('setChannel.logChannelChangedMessage') : i18next.t('setChannel.byeChannelChangedMessage');
+    const channelChangedMessage = type === 'log' ? i18next.t('setChannel.logChannelChangedMessage') : i18next.t('setChannel.byeMessageChannelChangedMessage');
     const previousChannelLiteral = i18next.t(`setChannel.previousChannelLiteral`);
     const newChannelLiteral = i18next.t(`setChannel.newChannelLiteral`);
     const currentChannelLiteral = i18next.t(`setChannel.currentChannelLiteral`);
@@ -156,6 +158,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             ephemeral: true,
         });
         return;
+    }
+
+    if (!channel && !previousChannel) {
+        await interaction.editReply({
+            content: featureAlreadyDisabledError,
+            components: [supportButton]
+        });
+    }
+
+    if (channel && channel.id === previousChannel) {
+        await interaction.editReply({
+            content: featureChannelUnchangeError,
+            components: [supportButton]
+        });
     }
 
     const actionEmbed = new EmbedBuilder()
@@ -178,7 +194,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: previousChannel ? newChannelLiteral : currentChannelLiteral,
-                value: `${channel}` || disabledLiteral,
+                value: channel ? `${channel}` : disabledLiteral,
                 inline: true,
             }
         ])

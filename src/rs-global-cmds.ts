@@ -1,5 +1,5 @@
 import 'dotenv/config.js';
-import { ApplicationCommand, REST, Routes } from 'discord.js';
+import { REST, Routes } from 'discord.js';
 
 const clientId = process.env.CLIENT_ID;
 const token = process.env.TOKEN;
@@ -12,12 +12,10 @@ async function deleteGlobalCommands() {
         }
 
         const rest = new REST().setToken(token);
-        const commands = await rest.get(Routes.applicationCommands(clientId));
-        const commandsArray = commands as ApplicationCommand[];
 
-        for (const command of commandsArray) {
-            await rest.delete(Routes.applicationCommand(clientId, command.id));
-        }
+        rest.put(Routes.applicationCommands(clientId), {
+            body: [],
+        });
 
         console.log('Successfully deleted all global commands.');
         process.exit(0);

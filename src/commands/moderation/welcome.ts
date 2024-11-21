@@ -165,6 +165,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const manageRolesPermissionError = i18next.t('global.manageRolesPermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
+    const welcomeMessageAlreadyDisabledError = i18next.t('welcome.welcomeMessageAlreadyDisabledError');
+    const welcomeChannelUnchangedError = i18next.t('welcome.welcomeChannelUnchangedError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
@@ -221,6 +223,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         await interaction.deferReply();
         const previousChannel = guild.welcomeChannelId;
 
+        if (!channel && !previousChannel) {
+            await interaction.editReply({
+                content: welcomeMessageAlreadyDisabledError,
+                components: [supportButton]
+            });
+        }
+
+        if (channel && channel.id === previousChannel) {
+            await interaction.editReply({
+                content: welcomeChannelUnchangedError,
+                components: [supportButton]
+            });
+        }
+
         const actionEmbed = new EmbedBuilder()
             .setColor('#2E4053')
             .setAuthor({
@@ -241,7 +257,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
                 {
                     name: previousChannel ? newChannelLiteral : currentChannelLiteral,
-                    value: `${channel}` || noneLiteral,
+                    value: channel ? `${channel}` : noneLiteral,
                     inline: true,
                 }
             ])

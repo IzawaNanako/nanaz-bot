@@ -1,7 +1,7 @@
 {
     "guildMemberRemove": {
-        "byeEmbedAuthor": "别了 {{username}}！",
-        "byeEmbedTitle": "再见，{{userDisplayName}}！",
+        "byeEmbedAuthor": "再见，{{userDisplayName}}！",
+        "byeEmbedTitle": "{{userDisplayName}}离开了服务器。",
         "byeEmbedDescription": "我们很舍不得你离开...",
         "byeEmbedFooter": "我希望能在别的地方见到你！"
     },

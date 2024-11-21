@@ -92,8 +92,12 @@
         "serverInfoRandomTextFive": "Wow, that's a lot of info!"
     },
     "setChannel": {
+        "loggingAlreadyDisabledError": "The logging feature is already disabled!",
+        "byeMessageAlreadyDisabledError": "The bye message feature is already disabled!",
+        "loggingChannelUnchangedError": "The logging channel is already set to this channel!",
+        "byeMessageChannelUnchangedError": "The bye message channel is already set to this channel!",
         "logChannelChangedMessage": "Log Channel Changed",
-        "byeChannelChangedMessage": "Bye Channel Changed",
+        "byeMessageChannelChangedMessage": "Bye Channel Changed",
         "previousChannelLiteral": "Previous Channel",
         "newChannelLiteral": "New Channel",
         "currentChannelLiteral": "Current Channel"
@@ -148,6 +152,8 @@
         "baninfoEmbedTotalBansTitle": "Total Bans"
     },
     "welcome": {
+        "welcomeMessageAlreadyDisabledError": "The welcome message feature is already disabled!",
+        "welcomeChannelUnchangedError": "The welcome channel is already set to this channel!",
         "welcomeChannelChangedMessage": "Welcome Channel Changed",
         "welcomeMessageChangedMessage": "Welcome Message Changed",
         "welcomeRolesChangedMessage": "Welcome Roles Changed",

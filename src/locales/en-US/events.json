@@ -1,7 +1,7 @@
 {
     "guildMemberRemove": {
-        "byeEmbedAuthor": "Farewell {{username}}!",
-        "byeEmbedTitle": "Goodbye, {{userDisplayName}}!",
+        "byeEmbedAuthor": "Goodbye, {{username}}!",
+        "byeEmbedTitle": "{{userDisplayName}} left the server.",
         "byeEmbedDescription": "We are sad to see you go...",
         "byeEmbedFooter": "I hope to see you somewhere else!"
     },
@@ -12,6 +12,7 @@
         "welcomeEmbedWasBanned": "Naughty user, hope you have learned your lesson."
     },
     "interactionCreate": {
-        "commandErrorMessage": "There was an error while executing this command!"
+        "commandUnknownError": "There was an error while executing this command!",
+        "commandNoPermissionError": "You do not have the permission to use this command in this channel!"
     }
 }

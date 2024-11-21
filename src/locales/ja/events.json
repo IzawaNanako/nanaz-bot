@@ -1,7 +1,7 @@
 {
     "guildMemberRemove": {
-        "byeEmbedAuthor": "さらば{{username}}！",
-        "byeEmbedTitle": "さようなら、{{userDisplayName}}！",
+        "byeEmbedAuthor": "さようなら、{{userDisplayName}}！",
+        "byeEmbedTitle": "{{userDisplayName}}がサーバーを離れました。",
         "byeEmbedDescription": "君がいなくなるのは寂しいよ...。",
         "byeEmbedFooter": "またどこかで会えるといいね！"
     },

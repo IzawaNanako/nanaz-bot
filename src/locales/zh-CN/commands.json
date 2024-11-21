@@ -93,7 +93,7 @@
     },
     "setChannel": {
         "logChannelChangedMessage": "Log Channel Changed",
-        "byeChannelChangedMessage": "Bye Channel Changed",
+        "byeMessageChannelChangedMessage": "Bye Channel Changed",
         "previousChannelLiteral": "Previous Channel",
         "newChannelLiteral": "New Channel",
         "currentChannelLiteral": "Current Channel"
