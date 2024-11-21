@@ -17,12 +17,13 @@ jobs:
         with:
           upload_sources: true
           upload_translations: true
-          download_translations: false
-          export_only_approved: true
+          download_translations: true
+          push_sources: true
           localization_branch_name: i18n_crowdin_translations
           create_pull_request: true
           pull_request_title: 'New Crowdin Translations'
           pull_request_body: 'New Crowdin translations by [Crowdin GH Action](https://github.com/crowdin/github-action)'
+          pull_request_labels: 'i18n'
           pull_request_base_branch_name: 'main'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
