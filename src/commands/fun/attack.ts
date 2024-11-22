@@ -27,6 +27,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
                 content: 'I cannot attack that channel!',
                 ephemeral: true,
             });
+            return;
         }
 
         const metalPipeSound = createAudioResource('dist/assets/sounds/metal-pipe-falling.mp3', {

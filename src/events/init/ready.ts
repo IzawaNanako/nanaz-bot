@@ -1,10 +1,11 @@
-import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder } from 'discord.js';
+import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder, ChannelType } from 'discord.js';
 import { schedule } from 'node-cron';
 import BotSettings from '../../models/botSettings.js';
 import BannedMember from '../../models/bannedMember.js';
 import Guild from '../../models/guild.js';
 import sendLog from '../../utils/sendLog.js';
 import i18next from 'i18next';
+import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
 
 export const name = Events.ClientReady;
 export const once = true;
@@ -165,5 +166,69 @@ export async function execute(client: Client) {
                 bannedUntil: null,
             });
         });
+    }
+
+    try {
+        console.log('Caching attack command.');
+
+        const serverId = process.env.DEV_GUILD_ID;
+        const channelId = process.env.CACHE_CHANNEL_ID;
+
+        if (!serverId || !channelId) {
+            console.error('Server ID or channel ID not found.');
+            return;
+        }
+
+        const server = await client.guilds.fetch(serverId);
+        const channel = await server.channels.fetch(channelId);
+
+        if (!client.guilds.cache.has(serverId) || !channel || channel.type !== ChannelType.GuildVoice) {
+            return;
+        }
+
+        const metalPipeSound = createAudioResource('dist/assets/sounds/metal-pipe-falling.mp3', {
+            inputType: StreamType.Arbitrary,
+        });
+
+        if (!channel || channel.type !== ChannelType.GuildVoice) {
+            return;
+        }
+
+        const connection = joinVoiceChannel({
+            channelId: channel.id,
+            guildId: serverId,
+            adapterCreator: server.voiceAdapterCreator as unknown as DiscordGatewayAdapterCreator,
+        });
+
+        const audioPlayer = createAudioPlayer({
+            behaviors: {
+                noSubscriber: NoSubscriberBehavior.Pause,
+            },
+        });
+
+        connection.subscribe(audioPlayer);
+
+        audioPlayer.play(metalPipeSound);
+
+        audioPlayer.on('stateChange', (_oldState, newState) => {
+            if (newState.status === 'idle') {
+                connection.destroy();
+                audioPlayer.stop();
+                return;
+            }
+        });
+
+        connection.on(VoiceConnectionStatus.Disconnected, () => {
+            if (connection) {
+                connection.destroy();
+            }
+            audioPlayer.stop();
+            return;
+        });
+
+        console.log('Attack command successfully cached.');
+    }
+    catch (error) {
+        console.error(error);
     }
 }
