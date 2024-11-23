@@ -194,7 +194,7 @@
         "helpMenuOptionMenuDescription": "Show up this menu.",
         "helpMenuOptionSettingsDescription": "Get help on how to configure this bot.",
         "helpMenuOptionFormatsDescription": "Get help on how to format your messages.",
-        "helpMenuOptionIdsDescription": "Get help on how to use IDs. You can check users not inside your server or other server's info with this!",
+        "helpMenuOptionIdsDescription": "Get help on how to use IDs. You can check users not inside this server or other server's info with this!",
         "helpMenuOptionWelcomeMsgDescription": "Get help on the welcome message feature.",
         "settingsHelpsTitle": "Settings Helps",
         "formattingHelpsTitle": "Formatting Helps",
