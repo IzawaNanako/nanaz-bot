@@ -17,6 +17,7 @@ jobs:
         with:
           upload_sources: true
           upload_translations: true
+          download_sources: true
           download_translations: true
           push_sources: true
           localization_branch_name: i18n_crowdin_translations
