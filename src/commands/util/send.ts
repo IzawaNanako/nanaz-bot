@@ -89,18 +89,16 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     else {
         await i18next.changeLanguage(interaction.locale);
     }
+    languageCodes.forEach(code => {
+        languageCodeMap[code] = i18next.t(`${code}`, {
+            ns: 'languages',
+        });
+    });
 
     const unknownError = i18next.t('global.unknownError');
     const invalidMessageError = i18next.t('translate.invalidMessageError');
     const invalidLanguageError = i18next.t('translate.invalidLanguageError');
     const sendSuccessMessage = i18next.t('send.sendSuccessMessage');
-
-    if (!interaction.guild) {
-        await interaction.editReply({
-            content: unknownError,
-        });
-        return;
-    }
 
     const message = interaction.options.getString('message', true);
     if (message.trim() === '') {
@@ -120,8 +118,20 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     }
 
     const translatedText = await translateWithDeepL(message, targetLanguage);
+
     const channel = interaction.channel;
-    if (!channel || !(channel instanceof TextChannel)) {
+    if (!channel) {
+        await interaction.editReply({
+            content: sendSuccessMessage,
+        });
+
+        await interaction.followUp({
+            content: `${interaction.user} > ${translatedText}`,
+        });
+        return;
+    }
+
+    if (!(channel instanceof TextChannel)) {
         await interaction.editReply({
             content: unknownError,
         });
@@ -143,6 +153,10 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         await webhook.delete();
     }
     catch {
+        await interaction.editReply({
+            content: sendSuccessMessage,
+        });
+
         await interaction.followUp({
             content: `${interaction.user} > ${translatedText}`,
         });
