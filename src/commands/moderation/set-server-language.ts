@@ -6,9 +6,7 @@ import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
-const languageMap: { [key: string]: string } = {
+const languageMap: Record<string, string> = {
     'English (United States)': 'en-US',
     '日本語': 'ja',
     '简体中文 (中国)': 'zh-CN',
@@ -56,9 +54,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const serverLanguageAlreadyUsingError = i18next.t('language.serverLanguageAlreadyUsingError');
+    const invalidLanguageError = i18next.t('translate.invalidLanguageError');
 
     if (!interaction.guild) {
         await interaction.reply({
@@ -69,6 +74,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     };
 
     const language = interaction.options.getString('language', true);
+    if (!languageMap[language]) {
+        await interaction.reply({
+            content: invalidLanguageError,
+            ephemeral: true,
+        });
+        return;
+    };
+
     const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild.id,
@@ -84,6 +97,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     };
 
     i18next.changeLanguage(languageMap[language]);
+    
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

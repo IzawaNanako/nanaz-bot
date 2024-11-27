@@ -21,6 +21,9 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     if (executeUser) {
         await i18next.changeLanguage(executeUser.language);
     }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
 
     const user = interaction.targetUser;
     const userFetched = await user.fetch();

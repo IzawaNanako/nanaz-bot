@@ -34,8 +34,14 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+
     const tttTitle = i18next.t('ticTacToe.tttTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
 
@@ -293,7 +299,12 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
 
     let currentPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;

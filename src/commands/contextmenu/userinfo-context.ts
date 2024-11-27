@@ -38,6 +38,10 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     if (executeUser) {
         await i18next.changeLanguage(executeUser.language);
     }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownErrorMessage = i18next.t('global.unknownErrorMessage');
     const noneLiteral = i18next.t('global.noneLiteral');
     const unknownLiteral = i18next.t('global.unknownLiteral');

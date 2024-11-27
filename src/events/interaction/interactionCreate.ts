@@ -10,7 +10,13 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
         }
     });
     i18next.setDefaultNamespace('events');
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+    
     const commandUnknownError = i18next.t('interactionCreate.commandUnknownError');
     const commandNoPermissionError = i18next.t('interactionCreate.commandNoPermissionError');
 

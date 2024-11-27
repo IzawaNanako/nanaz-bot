@@ -6,8 +6,6 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('kick')
     .setDescription('Kick selected member from the server.')
@@ -40,9 +38,9 @@ export const data = new SlashCommandBuilder()
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been kicked. Defaults to false.')
+        .setDescription('Try to inform the user that they have been kicked. Defaults to false.')
         .setDescriptionLocalizations({
-            'en-US': 'To inform the user that they have been kicked. Defaults to false.',
+            'en-US': 'Try to inform the user that they have been kicked. Defaults to false.',
             'ja': 'ユーザーにキックされたことを通知する。 デフォルトはfalse。',
             'zh-CN': '通知用户已被踢出。 默认为 false。',
             'zh-TW': '通知使用者已被踢出。 預設為 false。',
@@ -56,7 +54,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const kickPermissionError = i18next.t('kick.kickPermissionError');
     const invalidUserError = i18next.t('global.invalidUserError');
@@ -123,6 +127,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
+
     const kickEmbedTitle = i18next.t('kick.kickEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
@@ -185,7 +190,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     if (!member.user.bot && notice) {
-        await member.send(kickedNotice);
+        await member.send(kickedNotice).catch(() => {});
     }
 
     await guildMember.update({

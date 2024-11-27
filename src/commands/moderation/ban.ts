@@ -7,16 +7,14 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('ban')
     .setDescription('Ban selected member from the server.')
     .setDescriptionLocalizations({
         'en-US': 'Ban selected member from the server.',
         'ja': '選択したメンバーをサーバーから追放する。',
-        'zh-CN': '从服务器中封禁所选成员。',
-        'zh-TW': '從伺服器封禁所選成員。',
+        'zh-CN': '从服务器中停权所选成员。',
+        'zh-TW': '從伺服器停權所選成員。',
     })
     .addUserOption(option => option
         .setName('user')
@@ -24,8 +22,8 @@ export const data = new SlashCommandBuilder()
         .setDescriptionLocalizations({
             'en-US': 'The user to ban.',
             'ja': '禁止するユーザー。',
-            'zh-CN': '要封禁的用户。',
-            'zh-TW': '要封禁的使用者。',
+            'zh-CN': '要停权的用户。',
+            'zh-TW': '要停權的使用者。',
         })
         .setRequired(true)
     )
@@ -35,8 +33,8 @@ export const data = new SlashCommandBuilder()
         .setDescriptionLocalizations({
             'en-US': 'The reason you are banning this user for.',
             'ja': 'このユーザーを追放する理由。',
-            'zh-CN': '您封禁该用户的原因。',
-            'zh-TW': '您封禁此使用者的原因。',
+            'zh-CN': '您停权该用户的原因。',
+            'zh-TW': '您停權此使用者的原因。',
         })
     )
     .addNumberOption(option => option
@@ -53,9 +51,9 @@ export const data = new SlashCommandBuilder()
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been banned. Defaults to false.')
+        .setDescription('Try to inform the user that they have been banned. Defaults to false.')
         .setDescriptionLocalizations({
-            'en-US': 'To inform the user that they have been banned. Defaults to false.',
+            'en-US': 'Try to inform the user that they have been banned. Defaults to false.',
             'ja': 'ユーザーに禁止されたことを通知する。 デフォルトはfalse。',
             'zh-CN': '通知用户已被封禁。默认为 false。',
             'zh-TW': '通知使用者已被封禁。預設為 false。',
@@ -80,7 +78,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const banPermissionError = i18next.t('ban.banPermissionError');
     const invalidUserError = i18next.t('global.invalidUserError');
@@ -157,6 +161,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
+
     const banEmbedTitle = i18next.t('ban.banEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
@@ -229,6 +234,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
     }
     else {
+        bannedNotice += ` ${noReasonMessage}`;
         reason = noReasonMessage;
     }
 
@@ -299,7 +305,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
     if (!user.bot && notice) {
-        await user.send(bannedNotice);
+        await user.send(bannedNotice).catch(() => {});
     }
 
     await interaction.guild.members.ban(user, {

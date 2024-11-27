@@ -64,8 +64,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+    
     const gameMap: { [key: string]: string } = {
         'ttt': i18next.t('challenge.tttName'),
         'rps': i18next.t('challenge.rpsName'),

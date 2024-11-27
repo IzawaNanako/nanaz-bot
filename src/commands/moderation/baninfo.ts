@@ -5,16 +5,14 @@ import BannedMember from '../../models/bannedMember.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('baninfo')
     .setDescription('Get information about a user\'s ban status on this server.')
     .setDescriptionLocalizations({
         'en-US': 'Get information about a user\'s ban status on this server.',
         'ja': 'このサーバにおけるユーザの禁止ステータスに関する情報を取得します。',
-        'zh-CN': '获取用户在本服务器上的封禁状态信息。',
-        'zh-TW': '取得使用者在此伺服器上的封禁狀態資訊。',
+        'zh-CN': '获取用户在本服务器上的停权状态信息。',
+        'zh-TW': '取得使用者在此伺服器上的停權狀態資訊。',
     })
     .addStringOption(option => option
         .setName('username')
@@ -23,7 +21,7 @@ export const data = new SlashCommandBuilder()
             'en-US': 'The username of the user to get information about.',
             'ja': '情報を取得するユーザーのユーザー名。',
             'zh-CN': '要获取信息的用户的用户名。',
-            'zh-TW': '要取得使用者資訊的使用者名稱。',
+            'zh-TW': '要取得資訊的使用者的使用者名稱。',
         })
         .setRequired(true)
     )
@@ -35,7 +33,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const userNeverBannedMessage = i18next.t('banInfo.userNeverBannedMessage');
 
@@ -68,6 +72,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
+
     const neverLiteral = i18next.t('global.neverLiteral');
     const userLiteral = i18next.t('global.userLiteral');
     const usernameLiteral = i18next.t('global.usernameLiteral');

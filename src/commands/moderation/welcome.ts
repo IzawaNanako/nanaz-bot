@@ -6,8 +6,6 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('welcome')
     .setDescription('Configure how the bot welcome new members of this server.')
@@ -160,7 +158,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const manageRolesPermissionError = i18next.t('global.manageRolesPermissionError');
@@ -182,6 +186,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     await i18next.changeLanguage(guild.language);
+    
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

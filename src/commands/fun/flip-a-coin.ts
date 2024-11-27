@@ -31,8 +31,14 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+    
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

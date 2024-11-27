@@ -6,8 +6,6 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('unban')
     .setDescription('Unban selected user that is banned from the server.')
@@ -30,12 +28,12 @@ export const data = new SlashCommandBuilder()
     )
     .addBooleanOption(option => option
         .setName('notice')
-        .setDescription('To inform the user that they have been unbanned. Defaults to true, TRUE!')
+        .setDescription('Try to inform the user that they have been unbanned. Defaults to true, TRUE!')
         .setDescriptionLocalizations({
-            'en-US': 'To inform the user that they have been unbanned. Defaults to true, TRUE!',
+            'en-US': 'Try to inform the user that they have been unbanned. Defaults to true, TRUE!',
             'ja': 'ユーザーに禁止解除を通知する。 デフォルトはTRUE！',
-            'zh-CN': '通知用户他们已被解禁。 默认为true，TRUE！',
-            'zh-TW': '通知使用者他們已被解除封禁。 預設為true，TRUE！',
+            'zh-CN': '通知用户他们已被解除停权。 默认为true，TRUE！',
+            'zh-TW': '通知使用者他們已被解除停權。 預設為true，TRUE！',
         })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
@@ -46,7 +44,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const banManagePermissionError = i18next.t('ban.banManagePermissionError');
     const bannedUserNotFoundError = i18next.t('ban.bannedUserNotFoundError');
@@ -90,6 +94,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     });
     i18next.changeLanguage(guild?.language);
+    
     const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
@@ -128,7 +133,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
     if (!user.bot && notice) {
-        await user.send(unbannedNotice);
+        await user.send(unbannedNotice).catch(() => {});
     }
 
     await bannedMember.update({

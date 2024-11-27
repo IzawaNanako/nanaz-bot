@@ -4,8 +4,9 @@ import { TargetLanguageCode, Translator } from 'deepl-node';
 function mapLanguageCode(language: string) {
     switch (language) {
         case 'zh-CN':
+            return 'zh-HANS';
         case 'zh-TW':
-            return 'zh';
+            return 'zh-HANT';
         case 'es-ES':
         case 'es-419':
             return 'es';
@@ -26,9 +27,10 @@ const translator = new Translator(DeepLAPIKey);
 
 async function translateWithDeepL(message: string, language: string) {
     const supportedLanguages = await translator.getTargetLanguages();
+
     let targetLanguage = mapLanguageCode(language) as TargetLanguageCode;
 
-    if (!supportedLanguages.some(lang => lang.code === language)) {
+    if (!supportedLanguages.some((lang) => lang.code === targetLanguage || targetLanguage === 'zh-HANT' as TargetLanguageCode)) {
         targetLanguage = 'en-US';
     }
 

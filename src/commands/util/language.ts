@@ -4,14 +4,12 @@ import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
-const languageMap: { [key: string]: string } = {
+const languageMap: Record<string, string> = {
     'English (United States)': 'en-US',
     '日本語': 'ja',
     '简体中文 (中国)': 'zh-CN',
     '繁體中文 (臺灣)': 'zh-TW',
 }
-
-i18next.setDefaultNamespace('commands');
 
 export const data = new SlashCommandBuilder()
     .setName('language')
@@ -55,7 +53,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
 
     await i18next.changeLanguage(languageMap[language]);
+    
     const languageAlreadyUsingError = i18next.t('language.languageAlreadyUsingError');
+    const invalidLanguageError = i18next.t('language.invalidLanguageError');
     const userLanguageChangedMessage = i18next.t('language.userLanguageChangedMessage');
     const previousLanguageLiteral = i18next.t('language.previousLanguageLiteral');
     const currentLanguageLiteral = i18next.t('language.currentLanguageLiteral');
@@ -66,6 +66,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const currentLanguageName = i18next.t(`${language}`, {
         ns: 'languages',
     });
+
+    if (!languageMap[language]) {
+        await interaction.reply({
+            content: invalidLanguageError,
+            ephemeral: true,
+        });
+        return;
+    }
 
     if (user.language === languageMap[language]) {
         await interaction.reply({

@@ -21,6 +21,9 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
     if (executeUser) {
         await i18next.changeLanguage(executeUser.language);
     }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
 
     const invalidMessageError = i18next.t('translate.invalidMessageError');
 

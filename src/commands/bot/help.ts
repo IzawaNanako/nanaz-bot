@@ -40,14 +40,20 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+
     const invalidOptionError = i18next.t('global.invalidOptionError');
     const helpMenuTitle = i18next.t('help.helpMenuTitle');
     const helpMenuDescription = i18next.t('help.helpMenuDescription');
     const helpMenuOptionMenuDescription = i18next.t('help.helpMenuOptionMenuDescription');
     const helpMenuOptionSettingsDescription = i18next.t('help.helpMenuOptionSettingsDescription');
-    const helpMenuOptionFormatsDescription = i18next.t('help.helpMenuOptionFormatsDescription');
+    const helpMenuOptionFormattingDescription = i18next.t('help.helpMenuOptionFormattingDescription');
     const helpMenuOptionIdsDescription = i18next.t('help.helpMenuOptionIdsDescription');
     const helpMenuOptionWelcomeMsgDescription = i18next.t('help.helpMenuOptionWelcomeMsgDescription');
     const settingsHelpsTitle = i18next.t('help.settingsHelpsTitle');
@@ -90,8 +96,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: true,
                 },
                 {
-                    name: 'formats',
-                    value: helpMenuOptionFormatsDescription,
+                    name: 'formatting',
+                    value: helpMenuOptionFormattingDescription,
                     inline: true,
                 },
                 {
@@ -120,7 +126,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .setTitle(settingsHelpsTitle)
             .setDescription(settingsHelpsContent);
     }
-    else if (option === 'formats') {
+    else if (option === 'formatting') {
         helpEmbed
             .setColor('#2E4053')
             .setTitle(formattingHelpsTitle)
@@ -158,7 +164,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     const choices = [
         'menu',
         'settings',
-        'formats',
+        'formatting',
         'ids',
         'welcome-msg',
     ];

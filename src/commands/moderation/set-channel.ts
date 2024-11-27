@@ -5,8 +5,6 @@ import sendLog from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('set-channel')
     .setDescription('Set the logs channel or the channel to send bye messages in.')
@@ -109,7 +107,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.user.id,
         }
     });
-    await i18next.changeLanguage(executeUser?.language);
+    if (executeUser) {
+        await i18next.changeLanguage(executeUser.language);
+    }
+    else {
+        await i18next.changeLanguage(interaction.locale);
+    }
+
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
@@ -135,6 +139,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const previousChannel = guild[channelKey];
 
     i18next.changeLanguage(guild.language);
+
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

@@ -4,8 +4,6 @@ import User from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('commands');
-
 export const data = new SlashCommandBuilder()
     .setName('ping')
     .setDescription('Check the current latency of the bot.')
@@ -30,8 +28,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+    
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });

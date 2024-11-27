@@ -4,12 +4,12 @@ import User from '../models/user.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
 import i18next from 'i18next';
 
-const choiceMap: {[key: string]: string} = {
+const choiceMap: Record<string, string> = {
     'rock': '🪨',
     'paper': '📄',
     'scissors': '✂️',
 };
-const botEmojiMap: { [key: string]: string } = {
+const botEmojiMap: Record<string, string> = {
     '🪨': '📄',
     '📄': '✂️',
     '✂️': '🪨',
@@ -31,8 +31,14 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
     const rockButtonLabel = i18next.t('rockPaperScissors.rockButtonLabel');
@@ -347,8 +353,14 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
                 id: interaction.user.id,
             }
         });
-        await i18next.changeLanguage(executeUser?.language);
+        if (executeUser) {
+            await i18next.changeLanguage(executeUser.language);
+        }
+        else {
+            await i18next.changeLanguage(interaction.locale);
+        }
     }
+
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
     const rockButtonLabel = i18next.t('rockPaperScissors.rockButtonLabel');
