@@ -96,18 +96,16 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     const sendSuccessMessage = i18next.t('send.sendSuccessMessage');
 
     if (!interaction.guild) {
-        await interaction.reply({
+        await interaction.editReply({
             content: unknownError,
-            ephemeral: true,
         });
         return;
     }
 
     const message = interaction.options.getString('message', true);
     if (message.trim() === '') {
-        await interaction.reply({
+        await interaction.editReply({
             content: invalidMessageError,
-            ephemeral: true,
         });
         return;
     }
@@ -115,9 +113,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     const languageName = interaction.options.getString('language', true);
     const targetLanguage = Object.keys(languageCodeMap).find(key => languageCodeMap[key] === languageName);
     if (!targetLanguage) {
-        await interaction.reply({
+        await interaction.editReply({
             content: invalidLanguageError,
-            ephemeral: true,
         });
         return;
     }
@@ -125,9 +122,8 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     const translatedText = await translateWithDeepL(message, targetLanguage);
     const channel = interaction.channel;
     if (!channel || !(channel instanceof TextChannel)) {
-        await interaction.reply({
+        await interaction.editReply({
             content: unknownError,
-            ephemeral: true,
         });
         return;
     }
@@ -147,7 +143,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         await webhook.delete();
     }
     catch {
-        await interaction.reply({
+        await interaction.followUp({
             content: `${interaction.user} > ${translatedText}`,
         });
         return;
