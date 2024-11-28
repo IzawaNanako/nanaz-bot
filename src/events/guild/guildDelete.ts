@@ -5,6 +5,7 @@ import BannedMember from '../../models/bannedMember.js';
 
 export const name = 'guildDelete';
 export async function execute(guild: DiscordGuild) {
+    // Deletes all data stored in the database for the guild.
     await Guild.destroy({
         where: {
             id: guild.id,

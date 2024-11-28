@@ -249,6 +249,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
 
     if (duration) {
+        bannedNotice += ` ${banEmbedExpireDateTitle} ${Date.now() + (duration * 86400000)}`;
+
         await bannedMember.update({
             bannedUntil: new Date(Date.now() + (duration * 86400000)),
         });

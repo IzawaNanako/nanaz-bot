@@ -1,6 +1,11 @@
 import { Guild as DiscordGuild, MessageCreateOptions, MessagePayload, PermissionFlagsBits, TextChannel } from 'discord.js';
 import Guild from '../models/guild.js';
 
+/**
+ * Send a log to the log channel of selected guild.
+ * @param guild The guild to send the log to.
+ * @param message The message to send. Format is the same as for the `TextChannel#send` method.
+ */
 async function sendLog(guild: DiscordGuild, message: string | MessagePayload | MessageCreateOptions) {
     const guildData = await Guild.findOne({
         where: {

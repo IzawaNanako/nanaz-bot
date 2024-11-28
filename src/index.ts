@@ -58,6 +58,7 @@ client.commands = new Collection();
 const foldersPath = join('dist/commands');
 const commandFolders = readdirSync(foldersPath);
 
+// Load commands.
 for (const folder of commandFolders) {
 	const commandsPath = join(foldersPath, folder);
 	const commandFiles = readdirSync(commandsPath);
@@ -77,6 +78,7 @@ for (const folder of commandFolders) {
 const eventsPath = join('dist/events');
 const eventFolders = readdirSync(eventsPath);
 
+// Load events.
 for (const folder of eventFolders) {
     const eventsPathFolder = join(eventsPath, folder);
     const eventFiles = readdirSync(eventsPathFolder);

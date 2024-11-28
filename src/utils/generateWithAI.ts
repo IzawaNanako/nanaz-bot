@@ -26,6 +26,12 @@ const safetySettings = [
     }
 ];
 
+/**
+ * Generate a reply to a message with AI.
+ * @param message The input message.
+ * @param isMaster Whether the message is from the Wither or not.
+ * @returns Returns the replied message as string.
+ */
 export async function generateWithAI(message: string, isMaster: boolean = false) {
     const date = new Date();
     const time = date.toLocaleTimeString();

@@ -25,6 +25,12 @@ if (!DeepLAPIKey) {
 
 const translator = new Translator(DeepLAPIKey);
 
+/**
+ * Translate a string using DeepL.
+ * @param message The message to translate.
+ * @param language The language to translate to, e.g. 'en-US'.
+ * @returns Returns the translated string.
+ */
 async function translateWithDeepL(message: string, language: string) {
     const supportedLanguages = await translator.getTargetLanguages();
 

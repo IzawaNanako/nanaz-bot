@@ -18,6 +18,11 @@ const winningCombos = [
     [2, 4, 6],
 ];
 
+/**
+ * Play a game of tic-tac-toe with another human user.
+ * @param interaction The interaction that triggered the command.
+ * @param opponent The opponent of the user that triggered the command.
+ */
 export async function tictactoe(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
     i18next.setDefaultNamespace('games');
     if (interaction.guild) {
@@ -75,6 +80,11 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
     });
 
     const board = Array(9).fill(EMPTY);
+    /**
+     * Generates the board components based on the current state of the game.
+     * @param includeRematchButton Whether to include the rematch button, use when the game is over. Default is false.
+     * @returns Returns the board components.
+     */
     const createBoard = (includeRematchButton = false) => {
         const components = [];
         for (let i = 0; i < 3; i++) {
@@ -97,6 +107,11 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
         return components;
     };
 
+    /**
+     * Checks if the given symbol has won the game.
+     * @param symbol The symbol to check for a win.
+     * @returns Returns true if the symbol has won the game, otherwise returns false.
+     */
     const checkWin = (symbol: string) => {
         return winningCombos.some(combo => combo.every(index => board[index] === symbol));
     };
@@ -109,7 +124,10 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
     let moveCollector: InteractionCollector<StringSelectMenuInteraction<CacheType> | UserSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType> | MentionableSelectMenuInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction<CacheType>>;;
 
-    const startCollector = async () => {
+    /**
+     * Starts the move collector.
+     */
+    async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
             filter: (i: MessageComponentInteraction) => 
                 i.user === currentPlayer,
@@ -283,6 +301,10 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
     startCollector();
 };
 
+/**
+ * Play a game of tic-tac-toe against the bot.
+ * @param interaction The interaction that triggered the command.
+ */
 export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     i18next.setDefaultNamespace('games');
     if (interaction.guild) {
@@ -344,6 +366,11 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     });
 
     const board = new Array(9).fill(EMPTY);
+    /**
+     * Generates the board components based on the current state of the game.
+     * @param includeRematchButton Whether to include the rematch button, use when the game is over. Default is false.
+     * @returns Returns the board components.
+     */
     const createBoard = (includeRematchButton = false) => {
         const components = [];
         for (let i = 0; i < 3; i++) {
@@ -373,11 +400,26 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
     let moveCollector: InteractionCollector<StringSelectMenuInteraction<CacheType> | UserSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType> | MentionableSelectMenuInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction<CacheType>>;
 
+    /**
+     * Checks if the given symbol has won the game.
+     * @param symbol The symbol to check for a win.
+     * @returns Returns true if the symbol has won the game, otherwise returns false.
+     */
     const checkWin = (symbol: string) => {
         return winningCombos.some(combo => combo.every(index => board[index] === symbol));
     };
 
+    /**
+     * Gets the best move for the bot.
+     * @returns The index number of the chosen spot.
+     */
     const botMove = () => {
+        /**
+         * The minimax algorithm, used to get the best move.
+         * @param newBoard What the board looks like currently.
+         * @param isMaximizing Whether the bot is maximizing or minimizing score.
+         * @returns 
+         */
         const minimax = (newBoard: string[], isMaximizing: boolean) => {
             if (checkWin(botSymbol)) {
                 return 1;
@@ -392,6 +434,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
             const availableSpots = newBoard.map((spot, index) => spot === EMPTY ? index : null).filter(index => index !== null) as number[];
 
             if (isMaximizing) {
+                // Maximizing the score of the bot.
                 let bestScore = -Infinity;
                 for (const spot of availableSpots) {
                     newBoard[spot] = botSymbol;
@@ -405,6 +448,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 return bestScore;
             }
             else {
+                // Minimizing the score of the user.
                 let bestScore = Infinity;
                 for (const spot of availableSpots) {
                     newBoard[spot] = playerSymbol;
@@ -433,7 +477,10 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         return bestMove;
     }
 
-    const switchTurn = async () => {
+    /**
+     * Switches the turn to the other player.
+     */
+    async function switchTurn() {
         currentPlayer = currentPlayer === interaction.user ? interaction.client.user : interaction.user;
         
         currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
@@ -450,7 +497,10 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         });
     }
 
-    const startCollector = async () => {
+    /**
+     * Starts the move collector for the user.
+     */
+    async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
             filter: (i: MessageComponentInteraction) => 
                 i.user === interaction.user,
@@ -515,7 +565,10 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         });
     }
 
-    const startBotMove = async () => {
+    /**
+     * Switches the turn to the bot, then makes a move for the bot.
+     */
+    async function startBotMove() {
         board[botMove()] = botSymbol;
 
         if (checkWin(botSymbol)) {
@@ -571,6 +624,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         const corners = [0, 2, 6, 8];
         const firstMove = Math.random();
 
+        // The bot has a set chance to choose a spot for the first move. 3.75% for each edge, 15% for each corner, and 25% for the center.
         if (firstMove < 0.15) {
             board[edges[Math.floor(Math.random() * edges.length)]] = botSymbol;
         }

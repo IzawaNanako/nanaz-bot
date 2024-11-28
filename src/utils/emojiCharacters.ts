@@ -1,3 +1,6 @@
+/**
+ * Emoji characters in case they are not rendered properly.
+ */
 export default {
 	a: '🇦',
     b: '🇧',

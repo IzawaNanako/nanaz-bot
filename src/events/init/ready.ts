@@ -17,6 +17,7 @@ export async function execute(client: Client) {
 
     console.log(`Ready! Logged in as ${client.user.tag}`);
 
+    // Set bot status.
     const activityMap = {
         'playing': ActivityType.Playing,
         'streaming': ActivityType.Streaming,
@@ -92,6 +93,7 @@ export async function execute(client: Client) {
         }
     });
 
+    // Refresh banned users status, then unban them if the ban expired or reschedule the unban.
     for (const bannedMember of bannedMembers) {
         if (!bannedMember.bannedUntil) {
             continue;
@@ -113,6 +115,9 @@ export async function execute(client: Client) {
         const reasonLiteral = i18next.t('ban.reasonLiteral');
         const banExpiredMessage = i18next.t('ban.banExpiredMessage');
 
+        /**
+         * Unbans a user then sends a log if log channel exist.
+         */
         async function unban() {
             const unbanEmbed = new EmbedBuilder()
             .setColor('#FF0000')
@@ -146,6 +151,7 @@ export async function execute(client: Client) {
             });
         }
 
+        // If a ban has expired, unban the banned user.
         if (bannedMember.bannedUntil.getTime() < Date.now()) {
             await unban();
             await bannedMember.update({
@@ -155,6 +161,7 @@ export async function execute(client: Client) {
             continue;
         }
 
+        // If a ban has not expired, schedule the unban.
         schedule(`${bannedMember.bannedUntil}`, async () => {
             if (bannedMember.isBanned === false) {
                 return;
@@ -168,6 +175,7 @@ export async function execute(client: Client) {
         });
     }
 
+    // The pipe sound needs to be played once at bot startup before being able to play correctly.
     try {
         console.log('Caching attack command.');
 

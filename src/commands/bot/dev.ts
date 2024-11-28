@@ -21,10 +21,6 @@ export const data = new SlashCommandBuilder()
                 name: 'status',
                 value: 'status',
             },
-            {
-                name: 'reload-cmd',
-                value: 'reload-cmd',
-            }
         )
     )
     .addStringOption(option => option
@@ -305,43 +301,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             }
         }
     }
-    else if (option === 'reload-cmd') {
-        const commandName = value.toLowerCase();
-        const command = interaction.client.commands.get(commandName);
-
-        if (!command) {
-            await interaction.reply({
-                content: 'Invalid command.',
-                ephemeral: true,
-            });
-            return;
-        }
-
-        try {
-            const newCommand = await import(`../${commandName}.js`);
-
-            if (!newCommand.data || !newCommand.execute) {
-                await interaction.reply({
-                    content: 'The command file is missing a required "data" or "execute" property.',
-                    ephemeral: true,
-                });
-                return;
-            }
-            
-            interaction.client.commands.set(newCommand.data.name, newCommand);
-            await interaction.reply({
-                content: 'Reloaded command.',
-                ephemeral: true,
-            });
-        }
-        catch (error) {
-            await interaction.reply({
-                content: 'Failed to reload command.',
-                ephemeral: true,
-            });
-            console.log(error);
-        }
-    }
     else {
         await interaction.reply({
             content: 'Invalid option.',
@@ -350,6 +309,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 }
 
+/**
+ * Store the bot status in the database.
+ * @param status The status to set.
+ * @param activityType The activity type to set.
+ * @param activityName The activity name to set, or null if not applicable.
+ * @param activityUrl The activity URL to set, or null if not applicable.
+ */
 async function storeStatus(status: string, activityType: string, activityName: string | null, activityUrl: string | null) {
     const bot = await BotSetting.findOne({
         where: {

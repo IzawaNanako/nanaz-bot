@@ -15,6 +15,11 @@ const botEmojiMap: Record<string, string> = {
     '✂️': '🪨',
 };
 
+/**
+ * Play a game of rock-paper-scissors with another human user.
+ * @param interaction The interaction that triggered the command.
+ * @param opponent The opponent of the user that triggered the command.
+ */
 export async function rockpaperscissors(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
     i18next.setDefaultNamespace('games');
     if (interaction.guild) {
@@ -337,6 +342,10 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     });
 };
 
+/**
+ * Play a game of rock-paper-scissors against the bot.
+ * @param interaction The interaction that triggered the command.
+ */
 export async function rockpaperscissorsBot(interaction: ChatInputCommandInteraction) {
     i18next.setDefaultNamespace('games');
     if (interaction.guild) {
@@ -455,6 +464,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
             winner: leftPlayer === interaction.client.user ? leftPlayer : rightPlayer,
         });
 
+        // User has a 5% chance of drawing, otherwise the bot wins.
         if (Math.random() < 0.05) {
             gameEmbed
                 .setDescription(gameEndDrawMessage)

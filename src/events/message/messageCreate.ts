@@ -27,6 +27,7 @@ export async function execute(message: Message, client: Client) {
                 reply = await generateWithAI(message.content);
             }
 
+            // If the reply is too long, split it into multiple messages.
             if (reply.length > 2000) {
                 const replyArray = reply.match(/[\s\S]{1,2000}/g);
                 replyArray?.forEach(async (msg) => {

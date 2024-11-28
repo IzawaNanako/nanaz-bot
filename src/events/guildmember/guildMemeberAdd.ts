@@ -87,7 +87,7 @@ export async function execute(member: Member) {
         for (const role of welcomeRoles) {
             const welcomeRole = await member.guild.roles.fetch(role.id);
             if (welcomeRole) {
-                await member.roles.add(role.id);
+                await member.roles.add(role.id).catch(() => {});
             }
         }
     }

@@ -7,6 +7,9 @@ const supportServerLabel = i18next.t('buttons.supportServerLabel');
 const acceptLabel = i18next.t('buttons.acceptLabel');
 const declineLabel = i18next.t('buttons.declineLabel');
 
+/**
+ * A red button labeled "Rematch".
+ */
 export const rematchButton = new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
         new ButtonBuilder()
@@ -22,6 +25,9 @@ if (!supportServer) {
     process.exit(1);
 }
 
+/**
+ * A button that links to the support server.
+ */
 export const supportButton = new ActionRowBuilder<ButtonBuilder> ()
     .addComponents(
         new ButtonBuilder()
@@ -31,6 +37,9 @@ export const supportButton = new ActionRowBuilder<ButtonBuilder> ()
             .setURL(supportServer)
     );
 
+/**
+ * A green button labeled "Accept" and a red button labeled "Decline" respectively.
+ */
 export const acceptAndDeclineButton = new ActionRowBuilder<ButtonBuilder> ()
     .addComponents(
         new ButtonBuilder()
