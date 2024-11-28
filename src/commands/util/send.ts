@@ -146,7 +146,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
 
         await webhook.send({
             content: translatedText,
-            username: interaction.user.username,
+            username: `${interaction.user.displayName} (${interaction.user.username})`,
             avatarURL: interaction.user.displayAvatarURL(),
         });
 
