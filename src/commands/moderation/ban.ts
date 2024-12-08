@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
-import cron from 'node-cron';
+import schedule from 'node-schedule';
 import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import BannedMember from '../../models/bannedMember.js';
@@ -257,7 +257,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const guildFetched = await interaction.guild.fetch();
 
-        cron.schedule(`${bannedMember.bannedUntil}`, async () => {
+        schedule.scheduleJob(bannedMember.bannedUntil as Date, async () => {
             if (bannedMember.isBanned === false) {
                 return;
             }

@@ -1,6 +1,6 @@
 import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder, ChannelType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
-import cron from 'node-cron';
+import schedule from 'node-schedule';
 import BotSettings from '../../models/botSettings.js';
 import BannedMember from '../../models/bannedMember.js';
 import Guild from '../../models/guild.js';
@@ -163,7 +163,7 @@ export async function execute(client: Client) {
         }
 
         // If a ban has not expired, schedule the unban.
-        cron.schedule(`${bannedMember.bannedUntil}`, async () => {
+        schedule.scheduleJob(bannedMember.bannedUntil, async () => {
             if (bannedMember.isBanned === false) {
                 return;
             }
@@ -189,7 +189,7 @@ export async function execute(client: Client) {
             const date = new Date(reminder.when);
             if (reminder.once) {
                 if (reminder.dm) {
-                    cron.schedule(date.toISOString(), async () => {
+                    schedule.scheduleJob(date, async () => {
                         if (reminder.disabled) {
                             await reminder.destroy();
                             return;
@@ -203,7 +203,7 @@ export async function execute(client: Client) {
                     });
                 }
                 else {
-                    cron.schedule(date.toISOString(), async () => {
+                    schedule.scheduleJob(date, async () => {
                         if (reminder.disabled) {
                             await reminder.destroy();
                             return;
@@ -228,10 +228,10 @@ export async function execute(client: Client) {
                 const cronTime = `${seconds} ${minutes} ${hours} * * *`;
         
                 if (reminder.dm) {
-                    const job = cron.schedule(cronTime, async () => {
+                    const job = schedule.scheduleJob(cronTime, async () => {
                         if (reminder.disabled) {
                             await reminder.destroy();
-                            job.stop();
+                            job.cancel();
                             return;
                         }
         
@@ -241,7 +241,7 @@ export async function execute(client: Client) {
             
                         if (Date.now() >= date.getTime()) {
                             await reminder.destroy();
-                            job.stop();
+                            job.cancel();
                         }
                     });
                 }
@@ -251,10 +251,10 @@ export async function execute(client: Client) {
                         return;
                     }
         
-                    const job = cron.schedule(cronTime, async () => {
+                    const job = schedule.scheduleJob(cronTime, async () => {
                         if (!reminderChannel || !reminderChannel.isSendable()) {
                             await reminder.destroy();
-                            job.stop();
+                            job.cancel();
                             return;
                         }
         
@@ -264,7 +264,7 @@ export async function execute(client: Client) {
             
                         if (Date.now() >= date.getTime()) {
                             await reminder.destroy();
-                            job.stop();
+                            job.cancel();
                         }
                     });
                 }

@@ -38,7 +38,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     });
 
     for (const reminder of reminders) {
-        reminder.set({
+        await reminder.update({
             disabled: true,
         });
     }

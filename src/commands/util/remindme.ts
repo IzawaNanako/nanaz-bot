@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import cron from 'node-cron';
+import schedule from 'node-schedule';
 import Guild from '../../models/guild.js';
 import User from '../../models/user.js';
 import Reminder from '../../models/reminder.js';
@@ -14,9 +14,9 @@ export const data = new SlashCommandBuilder()
         .setDescription('The reminder you want to set. You should set dm to true if the reminder is private to you.')
         .setRequired(true)
     )
-    .addStringOption(option => option
+    .addIntegerOption(option => option
         .setName('when')
-        .setDescription('The time the bot should remind you or remind you until. In Unix Timestamp: "/help unix-time".')
+        .setDescription('The time the bot should remind you or remind you until. In unix timestamp: "/help unix-time".')
         .setRequired(true)
     )
     .addBooleanOption(option => option
@@ -52,10 +52,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const reminder = interaction.options.getString('reminder', true);
     const once = interaction.options.getBoolean('once') ?? true;
-    const when = interaction.options.getString('when', true);
+    const when = interaction.options.getInteger('when', true);
     const dm = interaction.options.getBoolean('dm') ?? true;
-    const date = new Date(when);
-    if (isNaN(date.getTime())) {
+    const date = new Date(when * 1000);
+    if (isNaN(date.getTime()) || Date.now() >= date.getTime()) {
         await interaction.reply({
             // TODO: I18N this
             content: 'Invalid time.',
@@ -76,7 +76,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     if (once) {
         if (dm) {
-            cron.schedule(date.toISOString(), async () => {
+            schedule.scheduleJob(date, async () => {
                 if (remindData.disabled) {
                     await remindData.destroy();
                     return;
@@ -96,7 +96,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
         }
         else {
-            cron.schedule(date.toISOString(), async () => {
+            schedule.scheduleJob(date, async () => {
                 if (remindData.disabled) {
                     await remindData.destroy();
                     return;
@@ -124,21 +124,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const minutes = date.getMinutes();
         const hours = date.getHours();
         const cronTime = `${seconds} ${minutes} ${hours} * * *`;
-        if (!cron.validate(cronTime)) {
-            await interaction.reply({
-                // TODO: I18N this
-                content: 'Invalid time.',
-                ephemeral: true,
-            });
-            await remindData.destroy();
-            return;
-        }
 
         if (dm) {
-            const job = cron.schedule(cronTime, async () => {
+            const job = schedule.scheduleJob(cronTime, async () => {
                 if (remindData.disabled) {
                     await remindData.destroy();
-                    job.stop();
+                    job.cancel();
                     return;
                 }
 
@@ -148,7 +139,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     
                 if (Date.now() >= date.getTime()) {
                     await remindData.destroy();
-                    job.stop();
+                    job.cancel();
                 }
             });
 
@@ -169,10 +160,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 return;
             }
 
-            const job = cron.schedule(cronTime, async () => {
+            const job = schedule.scheduleJob(cronTime, async () => {
                 if (!interaction.channel || !interaction.channel.isSendable() || remindData.disabled) {
                     await remindData.destroy();
-                    job.stop();
+                    job.cancel();
                     return;
                 }
 
@@ -182,7 +173,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     
                 if (Date.now() >= date.getTime()) {
                     await remindData.destroy();
-                    job.stop();
+                    job.cancel();
                 }
             });
 
