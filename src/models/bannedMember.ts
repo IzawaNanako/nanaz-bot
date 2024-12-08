@@ -59,7 +59,7 @@ const BannedMember = sequelize.define<BannedMemberInstance>('bannedMember', {
     guildId: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
 });
 
 Guild.hasMany(BannedMember, {

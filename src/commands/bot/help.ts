@@ -115,6 +115,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: true,
                 },
                 {
+                    name: 'unix-time',
+                    //TODO I18N this
+                    value: 'Learn what a unix timestamp is and how to use it.',
+                    inline: true,
+                },
+                {
                     name: '\u200B',
                     value: '\u200B',
                 }
@@ -145,6 +151,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .setTitle(welcomeMsgHelpsTitle)
             .setDescription(welcomeMsgHelpsContent);
     }
+    else if (option === 'unix-time') {
+        helpEmbed
+            .setColor('#2E4053')
+            //TODO I18N this
+            .setTitle('Unix Timestamp')
+            //TODO Add unix converter in saduwub.com
+            //TODO I18N this
+            .setDescription('A Unix timestamp is a number that represents a date and time. It\'s the number of seconds since January 1, 1970, 00:00:00 UTC.\n\nExample of use: "1643723400 = February 12, 2022, 14:30:00 UTC".\n\nYou can go to https://www.epochconverter.com/ to convert a date and time to a Unix timestamp.');
+    }
     else {
         await interaction.reply({
             content: invalidOptionError,
@@ -167,6 +182,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         'formatting',
         'ids',
         'welcome-msg',
+        'unix-time',
     ];
 
     let filtered;

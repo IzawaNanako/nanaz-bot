@@ -1,12 +1,12 @@
 {
     "name": "uwubot",
-    "version": "1.3.2",
+    "version": "1.4.0",
     "description": "not so cool idk maybe cute?",
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
+        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" && node -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
         "start": "node .",
         "deploy-global": "node dist/deploy-commands-global.js",
         "deploy-guild": "node dist/deploy-commands-guild.js",

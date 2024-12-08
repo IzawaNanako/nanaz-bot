@@ -22,7 +22,7 @@ const User = sequelize.define<UserInstance>('user', {
         type: DataTypes.STRING,
         defaultValue: 'en-US',
         allowNull: false,
-    }
+    },
 });
 
 export default User;

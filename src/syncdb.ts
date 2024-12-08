@@ -5,6 +5,7 @@ import BannedMember from './models/bannedMember.js';
 import User from './models/user.js';
 import WelcomeRole from './models/welcomeRole.js';
 import BotSettings from './models/botSettings.js';
+import Reminder from './models/reminder.js';
 
 await Guild.sync({
     alter: false,
@@ -61,6 +62,16 @@ await BotSettings.sync({
 })
 .then(() => {
     console.log('BotSettings Database synced.');
+})
+.catch((error) => {
+    console.log(error);
+})
+
+await Reminder.sync({
+    alter: false,
+})
+.then(() => {
+    console.log('Reminder Database synced.');
 })
 .catch((error) => {
     console.log(error);

@@ -43,7 +43,7 @@ const Guild = sequelize.define<GuildInstance>('guild', {
         type: DataTypes.STRING,
         defaultValue: 'en-US',
         allowNull: false,
-    }
+    },
 });
 
 export default Guild;

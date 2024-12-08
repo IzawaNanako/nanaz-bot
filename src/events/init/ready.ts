@@ -1,9 +1,10 @@
 import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder, ChannelType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
-import { schedule } from 'node-cron';
+import cron from 'node-cron';
 import BotSettings from '../../models/botSettings.js';
 import BannedMember from '../../models/bannedMember.js';
 import Guild from '../../models/guild.js';
+import Reminder from '../../models/reminder.js';
 import sendLog from '../../utils/sendLog.js';
 import i18next from 'i18next';
 
@@ -162,7 +163,7 @@ export async function execute(client: Client) {
         }
 
         // If a ban has not expired, schedule the unban.
-        schedule(`${bannedMember.bannedUntil}`, async () => {
+        cron.schedule(`${bannedMember.bannedUntil}`, async () => {
             if (bannedMember.isBanned === false) {
                 return;
             }
@@ -173,6 +174,102 @@ export async function execute(client: Client) {
                 bannedUntil: null,
             });
         });
+    }
+
+    // Delete all reminders that have expired, and reschedule any that have not.
+    const reminders = await Reminder.findAll();
+
+    for (const reminder of reminders) {
+        if (Date.now() >= reminder.when.getTime()) {
+            await reminder.destroy();
+        }
+        else {
+            const reminderUser = await client.users.fetch(reminder.userId);
+            const reminderChannel = await client.channels.fetch(reminder.channelId ?? '');
+            const date = new Date(reminder.when);
+            if (reminder.once) {
+                if (reminder.dm) {
+                    cron.schedule(date.toISOString(), async () => {
+                        if (reminder.disabled) {
+                            await reminder.destroy();
+                            return;
+                        }
+        
+                        await reminder.destroy();
+                    
+                        await reminderUser.send({
+                            content: `${reminderUser}\n${reminder.content}`,
+                        });
+                    });
+                }
+                else {
+                    cron.schedule(date.toISOString(), async () => {
+                        if (reminder.disabled) {
+                            await reminder.destroy();
+                            return;
+                        }
+        
+                        await reminder.destroy();
+        
+                        if (!reminderChannel || !reminderChannel.isSendable()) {
+                            return;
+                        }
+        
+                        await reminderChannel.send({
+                            content: `${reminderUser}\n${reminder}`,
+                        });
+                    });
+                }
+            }
+            else {
+                const seconds = date.getSeconds();
+                const minutes = date.getMinutes();
+                const hours = date.getHours();
+                const cronTime = `${seconds} ${minutes} ${hours} * * *`;
+        
+                if (reminder.dm) {
+                    const job = cron.schedule(cronTime, async () => {
+                        if (reminder.disabled) {
+                            await reminder.destroy();
+                            job.stop();
+                            return;
+                        }
+        
+                        await reminderUser.send({
+                            content: `${reminderUser}\n${reminder}`,
+                        });
+            
+                        if (Date.now() >= date.getTime()) {
+                            await reminder.destroy();
+                            job.stop();
+                        }
+                    });
+                }
+                else {
+                    if (!reminderChannel || !reminderChannel.isSendable()) {
+                        await reminder.destroy();
+                        return;
+                    }
+        
+                    const job = cron.schedule(cronTime, async () => {
+                        if (!reminderChannel || !reminderChannel.isSendable()) {
+                            await reminder.destroy();
+                            job.stop();
+                            return;
+                        }
+        
+                        await reminderChannel.send({
+                            content: `${reminderUser}\n${reminder}`,
+                        });
+            
+                        if (Date.now() >= date.getTime()) {
+                            await reminder.destroy();
+                            job.stop();
+                        }
+                    });
+                }
+            }
+        }
     }
 
     // The pipe sound needs to be played once at bot startup before being able to play correctly.

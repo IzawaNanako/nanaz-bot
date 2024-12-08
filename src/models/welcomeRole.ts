@@ -22,7 +22,7 @@ const WelcomeRole = sequelize.define<WelcomeRoleInstance>('welcomeRole', {
     guildId: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
 });
 
 Guild.hasMany(WelcomeRole, {

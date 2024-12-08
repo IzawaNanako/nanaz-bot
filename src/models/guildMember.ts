@@ -28,7 +28,7 @@ const GuildMember = sequelize.define<GuildMemberInstance>('guildMember', {
     guildId: {
         type: DataTypes.STRING,
         allowNull: false,
-    }
+    },
 });
 
 Guild.hasMany(GuildMember, {
