@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
+import { sequelize } from '../utils/database.js';
 
 interface BotSettingsAttributes {
     id: string;
@@ -42,4 +42,4 @@ const BotSettings = sequelize.define<BotSettingsInstance>('botSettings', {
     },
 });
 
-export default BotSettings;
+export { BotSettings };

@@ -1,7 +1,7 @@
-import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
-import sendLog from '../../utils/sendLog.js';
+import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType } from 'discord.js';
+import { Guild } from '../../models/guild.js';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { sendLog } from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
@@ -99,20 +99,11 @@ export const data = new SlashCommandBuilder()
         )
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setContexts(0);
+    .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
+    await setPrivateInteractionLanguage(interaction);
+
     const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
 
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
@@ -129,6 +120,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     };
 
     await interaction.deferReply();
+
     const channel = interaction.options.getChannel('channel');
     const [guild] = await Guild.findOrCreate({
         where: {

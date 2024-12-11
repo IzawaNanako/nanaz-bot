@@ -1,11 +1,11 @@
 import 'dotenv/config.js';
-import Guild from './models/guild.js';
-import GuildMember from './models/guildMember.js';
-import BannedMember from './models/bannedMember.js';
-import User from './models/user.js';
-import WelcomeRole from './models/welcomeRole.js';
-import BotSettings from './models/botSettings.js';
-import Reminder from './models/reminder.js';
+import { Guild } from './models/guild.js';
+import { GuildMember } from './models/guildMember.js';
+import { BannedMember } from './models/bannedMember.js';
+import { User } from './models/user.js';
+import { WelcomeRole } from './models/welcomeRole.js';
+import { BotSettings } from './models/botSettings.js';
+import { Reminder } from './models/reminder.js';
 
 await Guild.sync({
     alter: false,

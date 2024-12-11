@@ -1,6 +1,6 @@
 import { ContextMenuCommandBuilder, MessageContextMenuCommandInteraction, ContextMenuCommandType, ApplicationCommandType } from 'discord.js'
-import User from '../../models/user.js';
-import translateWithDeepL from '../../utils/translateWithDeepL.js';
+import { User } from '../../models/user.js';
+import { translateWithDeepL } from '../../utils/translateWithDeepL.js';
 import i18next from 'i18next';
 
 export const data = new ContextMenuCommandBuilder()

@@ -1,5 +1,5 @@
 import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, UserContextMenuCommandInteraction } from 'discord.js';
-import User from '../../models/user.js';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
@@ -13,17 +13,7 @@ export const data = new ContextMenuCommandBuilder()
     })
     .setType(ApplicationCommandType.User as ContextMenuCommandType);
 export async function execute(interaction: UserContextMenuCommandInteraction) {
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+    await setPrivateInteractionLanguage(interaction);
 
     const user = interaction.targetUser;
     const userFetched = await user.fetch();

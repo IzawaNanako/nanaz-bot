@@ -1,54 +1,91 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { Reminder } from '../../models/reminder.js';
 import schedule from 'node-schedule';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
-import Reminder from '../../models/reminder.js';
 import i18next from 'i18next';
 
-// TODO: I18N command data
 export const data = new SlashCommandBuilder()
     .setName('remindme')
     .setDescription('Sets a reminder for you to do something.')
+    .setDescriptionLocalizations({
+        'en-US': 'Sets a reminder for you to do something.',
+        'ja': 'あなたに何かをするためのリマインドを設定する。',
+        'zh-CN': '为您设置一个提醒。',
+        'zh-TW': '為您設定一個提醒。',
+    })
     .addStringOption(option => option
-        .setName('reminder')
-        .setDescription('The reminder you want to set. You should set dm to true if the reminder is private to you.')
+        .setName('content')
+        .setNameLocalizations({
+            'en-US': 'content',
+            'ja': '内容',
+            'zh-CN': '内容',
+            'zh-TW': '內容',
+        })
+        .setDescription('The reminder you want to set. You should set "dm" to true if the reminder is private to you.')
+        .setDescriptionLocalizations({
+            'en-US': 'The reminder you want to set. You should set "dm" to true if the reminder is private to you.',
+            'ja': 'リマインドを設定します。リマインドがあなたにしか見えない場合は"dm"をtrueにしてください。',
+            'zh-CN': '设置提醒。如果提醒只对您可见,请将“dm”设置为true。',
+            'zh-TW': '設定提醒。如果提醒只對您可見,請將“dm”設為true。',
+        })
         .setRequired(true)
     )
     .addIntegerOption(option => option
         .setName('when')
+        .setNameLocalizations({
+            'en-US': 'when',
+            'ja': '何時',
+            'zh-CN': '何时',
+            'zh-TW': '何時',
+        })
         .setDescription('The time the bot should remind you or remind you until. In unix timestamp: "/help unix-time".')
+        .setDescriptionLocalizations({
+            'en-US': 'The time the bot should remind you or remind you until. In unix timestamp: "/help unix-time".',
+            'ja': 'ボットがあなたにリマインドするか、あなたにリマインドするまでの時間を決めます。 Unixタイムスタンプ："/help unix-time"。',
+            'zh-CN': '机器人应该提醒您或提醒您直到什么时候。Unix时间戳："/help unix-time"。',
+            'zh-TW': '機器人應該提醒您或提醒您直到什麼時候。Unix時間戳："/help unix-time"。',
+        })
         .setRequired(true)
     )
     .addBooleanOption(option => option
         .setName('once')
+        .setNameLocalizations({
+            'en-US': 'once',
+            'ja': '一度',
+            'zh-CN': '一次',
+            'zh-TW': '一次',
+        })
         .setDescription('Whether the reminder is a one-time reminder (true) or a everyday reminder (false). Defaults to true.')
+        .setDescriptionLocalizations({
+            'en-US': 'Whether the reminder is a one-time reminder (true) or a everyday reminder (false). Defaults to true.',
+            'ja': 'リマインドは一度のリマインドか、毎日のリマインドかを決めます。 デフォルトはtrue。',
+            'zh-CN': '提醒是否为一次性提醒(true)还是每日提醒(false)。 默认为true。',
+            'zh-TW': '提醒是否為一次性提醒(true)還是每日提醒(false)。 預設為true。',
+        })
     )
     .addBooleanOption(option => option
         .setName('dm')
+        .setNameLocalizations({
+            'en-US': 'dm',
+            'ja': 'dm',
+            'zh-CN': 'dm',
+            'zh-TW': 'dm',
+        })
         .setDescription('Whether the bot should DM you (true) or remind you in this channel (false). Defaults to true.')
+        .setDescriptionLocalizations({
+            'en-US': 'Whether the bot should DM you (true) or remind you in this channel (false). Defaults to true.',
+            'ja': 'ボットがあなたにDMするか、このチャンネルにリマインドするかを決めます。 デフォルトはtrue。',
+            'zh-CN': '是否让机器人DM您(true)还是在此频道提醒您(false)。 默认为true。',
+            'zh-TW': '是否讓機器人DM您(true)還是在此頻道提醒您(false)。 預設為true。',
+        })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+    await setInteractionLanguage(interaction);
+
+    const unknownError = i18next.t('global.unknownError');
+    const invalidTimeError = i18next.t('remindme.invalidTimeError');
+    const reminderInDMSuccessMessage = i18next.t('remindme.reminderInDMSuccessMessage');
+    const reminderInGuildSuccessMessage = i18next.t('remindme.reminderInGuildSuccessMessage');
 
     const reminder = interaction.options.getString('reminder', true);
     const once = interaction.options.getBoolean('once') ?? true;
@@ -57,8 +94,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const date = new Date(when * 1000);
     if (isNaN(date.getTime()) || Date.now() >= date.getTime()) {
         await interaction.reply({
-            // TODO: I18N this
-            content: 'Invalid time.',
+            content: invalidTimeError,
             ephemeral: true,
         });
         return;
@@ -90,8 +126,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             await interaction.reply({
-                // TODO: I18N this
-                content: 'Reminder set! Make sure you allow the bot to send you DMs!',
+                content: reminderInDMSuccessMessage,
                 ephemeral: true,
             });
         }
@@ -114,8 +149,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             await interaction.reply({
-                // TODO: I18N this
-                content: 'Reminder set!',
+                content: reminderInGuildSuccessMessage,
             });
         }
     }
@@ -144,16 +178,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             await interaction.reply({
-                // TODO: I18N this
-                content: 'Reminder set! Make sure you allow the bot to send you DMs!',
+                content: reminderInDMSuccessMessage,
                 ephemeral: true,
             });
         }
         else {
             if (!interaction.channel || !interaction.channel.isSendable()) {
                 await interaction.reply({
-                    // TODO: I18N this
-                    content: 'Unknown error.',
+                    content: unknownError,
                     ephemeral: true,
                 });
                 await remindData.destroy();
@@ -178,8 +210,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
 
             await interaction.reply({
-                // TODO: I18N this
-                content: 'Reminder set!',
+                content: reminderInGuildSuccessMessage,
             });
         }
     }

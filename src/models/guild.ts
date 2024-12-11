@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
+import { sequelize } from '../utils/database.js';
 
 interface GuildAttributes {
     id: string;
@@ -46,4 +46,4 @@ const Guild = sequelize.define<GuildInstance>('guild', {
     },
 });
 
-export default Guild;
+export { Guild };

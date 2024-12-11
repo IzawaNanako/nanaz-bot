@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, TextChannel, AutocompleteInteraction } from 'discord.js'
-import User from '../../models/user.js';
-import translateWithDeepL from '../../utils/translateWithDeepL.js';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { translateWithDeepL } from '../../utils/translateWithDeepL.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
@@ -78,17 +78,9 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     await interaction.deferReply({
         ephemeral: true,
     });
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+
+    await setPrivateInteractionLanguage(interaction);
+
     languageCodes.forEach(code => {
         languageCodeMap[code] = i18next.t(`${code}`, {
             ns: 'languages',
@@ -168,18 +160,10 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     });
 }
 export async function autocomplete(interaction: AutocompleteInteraction) {
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
     i18next.setDefaultNamespace('languages');
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+
+    await setPrivateInteractionLanguage(interaction);
+
     languageCodes.forEach(code => {
         languageCodeMap[code] = i18next.t(`${code}`);
     });

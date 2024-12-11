@@ -1,6 +1,5 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, User as DiscordUser, ButtonInteraction, InteractionCollector, CacheType, ChannelSelectMenuInteraction, MentionableSelectMenuInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from 'discord.js';
-import Guild from '../models/guild.js';
-import User from '../models/user.js';
+import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
 import i18next from 'i18next';
 
@@ -25,27 +24,8 @@ const winningCombos = [
  */
 export async function tictactoe(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
     i18next.setDefaultNamespace('games');
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+
+    await setInteractionLanguage(interaction);
 
     const tttTitle = i18next.t('ticTacToe.tttTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
@@ -307,27 +287,8 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
  */
 export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     i18next.setDefaultNamespace('games');
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+
+    await setInteractionLanguage(interaction);
 
     let currentPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const leftPlayer = currentPlayer;

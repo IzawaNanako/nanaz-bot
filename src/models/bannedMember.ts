@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
-import Guild from './guild.js';
+import { sequelize } from '../utils/database.js';
+import { Guild } from './guild.js';
 
 interface BannedMemberAttributes {
     id: string;
@@ -69,4 +69,4 @@ BannedMember.belongsTo(Guild, {
     foreignKey: 'guildId',
 });
 
-export default BannedMember;
+export { BannedMember };

@@ -1,6 +1,5 @@
 import { EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, User as DiscordUser, ActionRowBuilder, MessageComponentInteraction } from 'discord.js';
-import Guild from '../models/guild.js';
-import User from '../models/user.js';
+import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
 import i18next from 'i18next';
 
@@ -22,27 +21,8 @@ const botEmojiMap: Record<string, string> = {
  */
 export async function rockpaperscissors(interaction: ChatInputCommandInteraction, opponent: DiscordUser) {
     i18next.setDefaultNamespace('games');
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+
+    await setInteractionLanguage(interaction);
 
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
@@ -348,27 +328,8 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
  */
 export async function rockpaperscissorsBot(interaction: ChatInputCommandInteraction) {
     i18next.setDefaultNamespace('games');
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+
+    await setInteractionLanguage(interaction);
 
     const rpsTitle = i18next.t('rockPaperScissors.rpsTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');

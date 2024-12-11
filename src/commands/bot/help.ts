@@ -1,6 +1,5 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, AutocompleteInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
+import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js'
 import i18next from 'i18next';
@@ -26,27 +25,7 @@ export const data = new SlashCommandBuilder()
         .setAutocomplete(true)
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+    await setInteractionLanguage(interaction);
 
     const invalidOptionError = i18next.t('global.invalidOptionError');
     const helpMenuTitle = i18next.t('help.helpMenuTitle');
@@ -56,15 +35,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const helpMenuOptionFormattingDescription = i18next.t('help.helpMenuOptionFormattingDescription');
     const helpMenuOptionIdsDescription = i18next.t('help.helpMenuOptionIdsDescription');
     const helpMenuOptionWelcomeMsgDescription = i18next.t('help.helpMenuOptionWelcomeMsgDescription');
+    const helpMenuOptionUnixTimeDescription = i18next.t('help.helpMenuOptionUnixTimeDescription');
     const settingsHelpsTitle = i18next.t('help.settingsHelpsTitle');
     const formattingHelpsTitle = i18next.t('help.formattingHelpsTitle');
     const idsHelpsTitle = i18next.t('help.idsHelpsTitle');
     const welcomeMsgHelpsTitle = i18next.t('help.welcomeMsgHelpsTitle');
+    const unixTimeHelpsTitle = i18next.t('help.unixTimeHelpsTitle');
     const helpEmbedFooter = i18next.t('help.helpEmbedFooter');
     const settingsHelpsContent = i18next.t('help.settingsHelpsContent');
     const formattingHelpsContent = i18next.t('help.formattingHelpsContent');
     const idsHelpsContent = i18next.t('help.idsHelpsContent');
     const welcomeMsgHelpsContent = i18next.t('help.welcomeMsgHelpsContent');
+    const unixTimeHelpsContent = i18next.t('help.unixTimeHelpsContent');
     
     let option = interaction.options.get('option')?.value as string;
 
@@ -116,8 +98,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 },
                 {
                     name: 'unix-time',
-                    //TODO I18N this
-                    value: 'Learn what a unix timestamp is and how to use it.',
+                    value: helpMenuOptionUnixTimeDescription,
                     inline: true,
                 },
                 {
@@ -154,11 +135,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     else if (option === 'unix-time') {
         helpEmbed
             .setColor('#2E4053')
-            //TODO I18N this
-            .setTitle('Unix Timestamp')
-            //TODO Add unix converter in saduwub.com
-            //TODO I18N this
-            .setDescription('A Unix timestamp is a number that represents a date and time. It\'s the number of seconds since January 1, 1970, 00:00:00 UTC.\n\nExample of use: "1643723400 = February 12, 2022, 14:30:00 UTC".\n\nYou can go to https://www.epochconverter.com/ to convert a date and time to a Unix timestamp.');
+            .setTitle(unixTimeHelpsTitle)
+            .setDescription(unixTimeHelpsContent);
     }
     else {
         await interaction.reply({

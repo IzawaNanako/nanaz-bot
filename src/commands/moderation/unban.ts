@@ -1,8 +1,7 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
-import BannedMember from '../../models/bannedMember.js';
-import sendLog from '../../utils/sendLog.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType } from 'discord.js';
+import { BannedMember } from '../../models/bannedMember.js';
+import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { sendLog } from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
@@ -37,19 +36,9 @@ export const data = new SlashCommandBuilder()
         })
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
-    .setContexts(0);
+    .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+    await setPrivateInteractionLanguage(interaction);
 
     const unknownError = i18next.t('global.unknownError');
     const banManagePermissionError = i18next.t('ban.banManagePermissionError');
@@ -88,12 +77,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
 
-    const guild = await Guild.findOne({
-        where: {
-            id: interaction.guild.id,
-        }
-    });
-    i18next.changeLanguage(guild?.language);
+    await setPublicInteractionLanguage(interaction);
     
     const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');

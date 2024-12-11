@@ -1,8 +1,11 @@
-import { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandType, UserContextMenuCommandInteraction } from 'discord.js';
-import User from '../../models/user.js';
+import { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandType, UserContextMenuCommandInteraction, InteractionContextType } from 'discord.js';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+/**
+ * Mapping of badge names to their corresponding emoji.
+ */
 const badgeMap: { [key: string]: string } = {
     'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
     'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
@@ -28,19 +31,9 @@ export const data = new ContextMenuCommandBuilder()
         'zh-TW': '使用者資訊',
     })
     .setType(ApplicationCommandType.User as ContextMenuCommandType)
-    .setContexts(0);
+    .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: UserContextMenuCommandInteraction) {
-    const executeUser = await User.findOne({
-        where: {
-            id: interaction.user.id,
-        }
-    });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+    await setPrivateInteractionLanguage(interaction);
 
     const unknownErrorMessage = i18next.t('global.unknownErrorMessage');
     const noneLiteral = i18next.t('global.noneLiteral');

@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
-import User from './user.js';
+import { sequelize } from '../utils/database.js';
+import { User } from './user.js';
 
 interface ReminderAttributes {
     content: string;
@@ -58,4 +58,4 @@ Reminder.belongsTo(User, {
     foreignKey: 'userId',
 });
 
-export default Reminder;
+export { Reminder };

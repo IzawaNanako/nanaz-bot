@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
-import Guild from './guild.js';
+import { sequelize } from '../utils/database.js';
+import { Guild } from './guild.js';
 
 interface GuildMemberAttributes {
     id: string;
@@ -38,4 +38,4 @@ GuildMember.belongsTo(Guild, {
     foreignKey: 'guildId',
 });
 
-export default GuildMember;
+export { GuildMember };

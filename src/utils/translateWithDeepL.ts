@@ -1,6 +1,11 @@
 import 'dotenv/config.js';
 import { TargetLanguageCode, Translator } from 'deepl-node';
 
+/**
+ * Map a possibly unsupported language code to a supported one.
+ * @param language The language to map.
+ * @returns Mapped language code.
+ */
 function mapLanguageCode(language: string) {
     switch (language) {
         case 'zh-CN':
@@ -31,7 +36,7 @@ const translator = new Translator(DeepLAPIKey);
  * @param language The language to translate to, e.g. 'en-US'.
  * @returns Returns the translated string.
  */
-async function translateWithDeepL(message: string, language: string) {
+export async function translateWithDeepL(message: string, language: string) {
     const supportedLanguages = await translator.getTargetLanguages();
 
     let targetLanguage = mapLanguageCode(language) as TargetLanguageCode;
@@ -44,5 +49,3 @@ async function translateWithDeepL(message: string, language: string) {
 
     return result.text;
 };
-
-export default translateWithDeepL;

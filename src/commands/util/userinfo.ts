@@ -1,9 +1,11 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
+import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+/**
+ * Mapping of badge names to their corresponding emoji.
+ */
 const badgeMap: { [key: string]: string } = {
     'HypeSquadOnlineHouse1': '<:HypeSquadBravery:1295711346931007530>',
     'HypeSquadOnlineHouse2': '<:HypeSquadBrilliance:1295711381622095904>',
@@ -40,27 +42,7 @@ export const data = new SlashCommandBuilder()
         })
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+    await setInteractionLanguage(interaction);
     
     const requestedByAuthor = i18next.t('global.userInfoRequestedByAuthor', {
         userDisplayName: interaction.user.displayName,

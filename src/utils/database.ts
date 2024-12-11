@@ -9,10 +9,11 @@ if (!database || !user || !password) {
     process.exit(1);
 }
 
-const sequelize = new Sequelize(database, user, password, {
+/**
+ * The database connection.
+ */
+export const sequelize = new Sequelize(database, user, password, {
     dialect: 'postgres',
     host: 'localhost',
     logging: false,
 });
-
-export default sequelize;

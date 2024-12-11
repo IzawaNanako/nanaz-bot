@@ -1,5 +1,5 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel } from 'discord.js';
-import BotSetting from '../../models/botSettings.js';
+import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel, InteractionContextType } from 'discord.js';
+import { BotSettings } from '../../models/botSettings.js';
 
 export const data = new SlashCommandBuilder()
     .setName('dev')
@@ -28,7 +28,7 @@ export const data = new SlashCommandBuilder()
         .setDescription('The value to set, if one is needed.')
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-    .setContexts(0);
+    .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
     if (interaction.user.id !== process.env.OWNER_ID) {
         await interaction.reply({
@@ -317,7 +317,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
  * @param activityUrl The activity URL to set, or null if not applicable.
  */
 async function storeStatus(status: string, activityType: string, activityName: string | null, activityUrl: string | null) {
-    const bot = await BotSetting.findOne({
+    const bot = await BotSettings.findOne({
         where: {
             id: 'Nanaz',
         },

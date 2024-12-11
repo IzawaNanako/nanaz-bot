@@ -1,7 +1,7 @@
 import { EmbedBuilder, GuildMember as Member, PermissionFlagsBits, TextChannel } from 'discord.js';
-import Guild from '../../models/guild.js';
-import GuildMember from '../../models/guildMember.js';
-import BannedMember from '../../models/bannedMember.js';
+import { Guild } from '../../models/guild.js';
+import { GuildMember } from '../../models/guildMember.js';
+import { BannedMember } from '../../models/bannedMember.js';
 import i18next from 'i18next';
 
 export const name = 'guildMemberRemove';

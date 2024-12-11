@@ -1,12 +1,9 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, MessageComponentInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
+import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton } from '../../utils/buttons.js';
 import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
 import { rockpaperscissors, rockpaperscissorsBot } from '../../games/rockpaperscissors.js';
 import i18next from 'i18next';
-
-i18next.setDefaultNamespace('commands');
 
 export const data = new SlashCommandBuilder()
     .setName('challenge')
@@ -50,27 +47,7 @@ export const data = new SlashCommandBuilder()
         .setRequired(true)
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+    await setInteractionLanguage(interaction);
     
     const gameMap: { [key: string]: string } = {
         'ttt': i18next.t('challenge.tttName'),
@@ -80,6 +57,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const invalidGameError = i18next.t('challenge.invalidGameError');
     const invalidUserError = i18next.t('global.invalidUserError');
     const challengeOtherBotError = i18next.t('challenge.challengeOtherBotError');
+
     try {
         if (interaction.channel instanceof TextChannel === false) {
             await interaction.reply({

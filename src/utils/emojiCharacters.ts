@@ -1,7 +1,7 @@
 /**
- * Emoji characters in case they are not rendered properly.
+ * Emoji characters in case they are not rendered properly on Discord.
  */
-export default {
+export const emojiCharacters = {
 	a: '🇦',
     b: '🇧',
     c: '🇨',

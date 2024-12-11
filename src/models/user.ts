@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../utils/database.js';
+import { sequelize } from '../utils/database.js';
 
 interface UserAttributes {
     id: string;
@@ -25,4 +25,4 @@ const User = sequelize.define<UserInstance>('user', {
     },
 });
 
-export default User;
+export { User };

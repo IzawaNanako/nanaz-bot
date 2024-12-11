@@ -5,7 +5,7 @@ if (!geminiAPIKey) {
     throw new Error('Gemini API key not found.');
 }
 
-const MODEL_NAME = 'gemini-1.5-flash';
+const modelName = process.env.MODEL_NAME;
 const genAI = new GoogleGenerativeAI(geminiAPIKey);
 const safetySettings = [
     {
@@ -33,6 +33,10 @@ const safetySettings = [
  * @returns Returns the replied message as string.
  */
 export async function generateWithAI(message: string, isMaster: boolean = false) {
+    if (!modelName) {
+        throw new Error('AI model name not found.');
+    }
+
     const date = new Date();
     const time = date.toLocaleTimeString();
     const whoSpeaking = isMaster ? 'Wither' : 'Visitor';
@@ -45,7 +49,7 @@ export async function generateWithAI(message: string, isMaster: boolean = false)
         .trim();
 
     const model = genAI.getGenerativeModel({
-        model: MODEL_NAME,
+        model: modelName,
         safetySettings: safetySettings,
     });
 

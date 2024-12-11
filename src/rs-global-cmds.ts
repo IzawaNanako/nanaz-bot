@@ -4,16 +4,21 @@ import { REST, Routes } from 'discord.js';
 const clientId = process.env.CLIENT_ID;
 const token = process.env.TOKEN;
 
+if (!clientId || !token) {
+    console.error('Client ID or token not found.');
+    process.exit(1);
+}
+
 async function deleteGlobalCommands() {
     try {
         if (!clientId || !token) {
             console.error('Client ID or token not found.');
             process.exit(1);
         }
-
+        
         const rest = new REST().setToken(token);
 
-        rest.put(Routes.applicationCommands(clientId), {
+        await rest.put(Routes.applicationCommands(clientId), {
             body: [],
         });
 

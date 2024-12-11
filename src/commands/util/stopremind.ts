@@ -1,41 +1,36 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import Guild from '../../models/guild.js';
-import User from '../../models/user.js';
-import Reminder from '../../models/reminder.js';
+import { Reminder } from '../../models/reminder.js';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import i18next from 'i18next';
 
-// TODO: I18N command data
 export const data = new SlashCommandBuilder()
     .setName('stopremind')
-    .setDescription('Stop all your reminders.');
+    .setDescription('Stop all your reminders.')
+    .setDescriptionLocalizations({
+        'en-US': 'Stop all your reminders.',
+        'ja': 'あなたのすべてのリマインドを止める。',
+        'zh-CN': '停止您的所有提醒。',
+        'zh-TW': '停止您的所有提醒。',
+    });
 export async function execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.guild) {
-        const guild = await Guild.findOne({
-            where: {
-                id: interaction.guild.id,
-            }
-        });
-        await i18next.changeLanguage(guild?.language);
-    }
-    else {
-        const executeUser = await User.findOne({
-            where: {
-                id: interaction.user.id,
-            }
-        });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
-    }
+    await setPrivateInteractionLanguage(interaction);
+
+    const noActiveRemindersError = i18next.t('stopRemind.noActiveRemindersError');
+    const stopRemindSuccessMessage = i18next.t('stopRemind.stopRemindSuccessMessage');
 
     const reminders = await Reminder.findAll({
         where: {
             userId: interaction.user.id,
         }
     });
+
+    if (reminders.length === 0 || reminders.every(reminder => reminder.disabled)) {
+        await interaction.reply({
+            content: noActiveRemindersError,
+            ephemeral: true,
+        });
+        return;
+    }
 
     for (const reminder of reminders) {
         await reminder.update({
@@ -44,8 +39,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
 
     await interaction.reply({
-        //TODO I18N this
-        content: 'All your reminders have been stopped.',
+        content: stopRemindSuccessMessage,
         ephemeral: true,
     });
 }

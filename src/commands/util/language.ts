@@ -1,5 +1,5 @@
 import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import User from '../../models/user.js';
+import { User } from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';

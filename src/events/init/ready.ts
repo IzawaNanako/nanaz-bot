@@ -1,11 +1,11 @@
 import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder, ChannelType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
+import { BotSettings } from '../../models/botSettings.js';
+import { BannedMember } from '../../models/bannedMember.js';
+import { Guild } from '../../models/guild.js';
+import { Reminder } from '../../models/reminder.js';
+import { sendLog } from '../../utils/sendLog.js';
 import schedule from 'node-schedule';
-import BotSettings from '../../models/botSettings.js';
-import BannedMember from '../../models/bannedMember.js';
-import Guild from '../../models/guild.js';
-import Reminder from '../../models/reminder.js';
-import sendLog from '../../utils/sendLog.js';
 import i18next from 'i18next';
 
 export const name = Events.ClientReady;
@@ -216,7 +216,7 @@ export async function execute(client: Client) {
                         }
         
                         await reminderChannel.send({
-                            content: `${reminderUser}\n${reminder}`,
+                            content: `${reminderUser}\n${reminder.content}`,
                         });
                     });
                 }
@@ -236,7 +236,7 @@ export async function execute(client: Client) {
                         }
         
                         await reminderUser.send({
-                            content: `${reminderUser}\n${reminder}`,
+                            content: `${reminderUser}\n${reminder.content}`,
                         });
             
                         if (Date.now() >= date.getTime()) {
@@ -259,7 +259,7 @@ export async function execute(client: Client) {
                         }
         
                         await reminderChannel.send({
-                            content: `${reminderUser}\n${reminder}`,
+                            content: `${reminderUser}\n${reminder.content}`,
                         });
             
                         if (Date.now() >= date.getTime()) {
