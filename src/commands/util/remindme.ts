@@ -91,7 +91,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const once = interaction.options.getBoolean('once') ?? true;
     const when = interaction.options.getInteger('when', true);
     const dm = interaction.options.getBoolean('dm') ?? true;
-    const date = new Date(when * 1000);
+    const date = new Date(when.toString().length === 10 ? when * 1000 : when);
     if (isNaN(date.getTime()) || Date.now() >= date.getTime()) {
         await interaction.reply({
             content: invalidTimeError,
