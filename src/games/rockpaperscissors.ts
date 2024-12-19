@@ -1,4 +1,4 @@
-import { EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, User as DiscordUser, ActionRowBuilder, MessageComponentInteraction } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, User as DiscordUser, ActionRowBuilder, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
 import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
 import i18next from 'i18next';
@@ -92,20 +92,20 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     let rightPlayerEmoji = '';
 
     const choiceCollector = gameMessage.createMessageComponentCollector({
-        filter: (i: MessageComponentInteraction) =>
-            (i.user === interaction.user && !userChosen) || (i.user === opponent && !opponentChosen),
+        filter: (buttonInteraction: MessageComponentInteraction) =>
+            (buttonInteraction.user === interaction.user && !userChosen) || (buttonInteraction.user === opponent && !opponentChosen),
         time: 30000,
     });
 
-    choiceCollector.on('collect', async (i: MessageComponentInteraction) => {
-        await i.deferUpdate();
-        if ((i.user === interaction.user && opponent !== interaction.user) || (i.user === interaction.user && opponentChosen)) {
-            userChoice = i.customId;
+    choiceCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+        await buttonInteraction.deferUpdate();
+        if ((buttonInteraction.user === interaction.user && opponent !== interaction.user) || (buttonInteraction.user === interaction.user && opponentChosen)) {
+            userChoice = buttonInteraction.customId;
             userChoiceEmoji = choiceMap[userChoice];
             userChosen = true;
         }
-        else if (i.user === opponent) {
-            opponentChoice = i.customId;
+        else if (buttonInteraction.user === opponent) {
+            opponentChoice = buttonInteraction.customId;
             opponentChoiceEmoji = choiceMap[opponentChoice];
             opponentChosen = true;
         }
@@ -219,12 +219,12 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             });
 
             const rematchCollector = gameMessage.createMessageComponentCollector({
-                filter: (i: MessageComponentInteraction) => i.user === interaction.user || i.user === opponent,
+                filter: (buttonInteraction: MessageComponentInteraction) => buttonInteraction.user === interaction.user || buttonInteraction.user === opponent,
                 time: 30000,
             });
 
-            rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                await i.deferUpdate();
+            rematchCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                await buttonInteraction.deferUpdate();
                 resettingCollector = true;
                 rematchCollector.stop();
                 resettingCollector = false;
@@ -243,8 +243,8 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                     })
                     .setTimestamp();
 
-                const rematchRequester = i.user;
-                const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
+                const rematchRequester = buttonInteraction.user;
+                const rematchAccepter = buttonInteraction.user === interaction.user ? opponent : interaction.user;
 
                 const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
                     rematchRequester: rematchRequester,
@@ -268,18 +268,18 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 });
 
                 const acceptCollector = gameMessage.createMessageComponentCollector({
-                    filter: (i: MessageComponentInteraction) =>
-                        i.user === rematchAccepter,
+                    filter: (buttonInteraction: MessageComponentInteraction) =>
+                        buttonInteraction.user === rematchAccepter,
                     time: 30000,
                 });
 
-                acceptCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    await i.deferUpdate();
+                acceptCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                    await buttonInteraction.deferUpdate();
                     resettingCollector = true;
                     acceptCollector.stop();
                     resettingCollector = false;
                     
-                    if (i.customId === 'accept') {
+                    if (buttonInteraction.customId === 'accept') {
                         await rockpaperscissors(interaction, opponent);
                         return;
                     }
@@ -395,18 +395,18 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     let rightPlayerEmoji = '';
 
     const choiceCollector = gameMessage.createMessageComponentCollector({
-        filter: (i: MessageComponentInteraction) =>
-            i.user === interaction.user,
+        filter: (buttonInteraction: MessageComponentInteraction) =>
+            buttonInteraction.user === interaction.user,
         time: 30000,
     });
 
-    choiceCollector.on('collect', async (i: MessageComponentInteraction) => {
-        await i.deferUpdate();
+    choiceCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+        await buttonInteraction.deferUpdate();
         resettingCollector = true;
         choiceCollector.stop();
         resettingCollector = false;
 
-        userChoice = i.customId;
+        userChoice = buttonInteraction.customId;
         userChoiceEmoji = choiceMap[userChoice];
         leftPlayerEmoji = leftPlayer === interaction.user ? userChoiceEmoji : botEmojiMap[userChoiceEmoji];
         rightPlayerEmoji = leftPlayer === interaction.user ? botEmojiMap[userChoiceEmoji] : userChoiceEmoji;
@@ -500,13 +500,13 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         });
 
         const rematchCollector = gameMessage.createMessageComponentCollector({
-            filter: (i: MessageComponentInteraction) =>
-                i.user === interaction.user,
+            filter: (buttonInteraction: MessageComponentInteraction) =>
+                buttonInteraction.user === interaction.user,
             time: 30000,
         });
 
-        rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-            await i.deferUpdate();
+        rematchCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+            await buttonInteraction.deferUpdate();
             resettingCollector = true;
             rematchCollector.stop();
             resettingCollector = false;

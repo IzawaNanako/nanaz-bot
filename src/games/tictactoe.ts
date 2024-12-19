@@ -102,21 +102,21 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
         components: createBoard(),
     });
 
-    let moveCollector: InteractionCollector<StringSelectMenuInteraction<CacheType> | UserSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType> | MentionableSelectMenuInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction<CacheType>>;;
+    let moveCollector: InteractionCollector<StringSelectMenuInteraction<CacheType> | UserSelectMenuInteraction<CacheType> | RoleSelectMenuInteraction<CacheType> | MentionableSelectMenuInteraction<CacheType> | ChannelSelectMenuInteraction<CacheType> | ButtonInteraction<CacheType>>;
 
     /**
      * Starts the move collector.
      */
     async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
-            filter: (i: MessageComponentInteraction) => 
-                i.user === currentPlayer,
+            filter: (buttonInteraction: MessageComponentInteraction) => 
+                buttonInteraction.user === currentPlayer,
             time: 30000,
         });
 
-        moveCollector.on('collect', async (i: MessageComponentInteraction) => {
-            await i.deferUpdate();
-            const index = parseInt(i.customId);
+        moveCollector.on('collect', async (buttonInteraction: MessageComponentInteraction) => {
+            await buttonInteraction.deferUpdate();
+            const index = parseInt(buttonInteraction.customId);
             if (!board.includes(EMPTY) || gameEnded) {
                 return;
             }
@@ -150,12 +150,12 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
             if (gameEnded) {
                 const rematchCollector = gameMessage.createMessageComponentCollector({
-                    filter: (i: MessageComponentInteraction) => i.user === interaction.user || i.user === opponent,
+                    filter: (buttonInteraction: MessageComponentInteraction) => buttonInteraction.user === interaction.user || buttonInteraction.user === opponent,
                     time: 30000,
                 });
     
-                rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    await i.deferUpdate();
+                rematchCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                    await buttonInteraction.deferUpdate();
                     resettingCollector = true;
                     rematchCollector.stop();
                     resettingCollector = false;
@@ -175,8 +175,8 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                         .setTimestamp();
                     
                     const gameEndResultContent = gameMessage.content;
-                    const rematchRequester = i.user;
-                    const rematchAccepter = i.user === interaction.user ? opponent : interaction.user;
+                    const rematchRequester = buttonInteraction.user;
+                    const rematchAccepter = buttonInteraction.user === interaction.user ? opponent : interaction.user;
 
                     const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
                         rematchRequester: rematchRequester,
@@ -200,18 +200,18 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     });
     
                     const acceptCollector = gameMessage.createMessageComponentCollector({
-                        filter: (i: MessageComponentInteraction) =>
-                            i.user === rematchAccepter,
+                        filter: (buttonInteraction: MessageComponentInteraction) =>
+                            buttonInteraction.user === rematchAccepter,
                         time: 30000,
                     });
     
-                    acceptCollector.on('collect', async (i: MessageComponentInteraction) => {
-                        await i.deferUpdate();
+                    acceptCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                        await buttonInteraction.deferUpdate();
                         resettingCollector = true;
                         acceptCollector.stop();
                         resettingCollector = false;
                         
-                        if (i.customId === 'accept') {
+                        if (buttonInteraction.customId === 'accept') {
                             await tictactoe(interaction, opponent);
                             return;
                         }
@@ -463,18 +463,18 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
      */
     async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
-            filter: (i: MessageComponentInteraction) => 
-                i.user === interaction.user,
+            filter: (buttonInteraction: MessageComponentInteraction) => 
+                buttonInteraction.user === interaction.user,
             time: 30000,
         });
 
-        moveCollector.on('collect', async (i: MessageComponentInteraction) => {
-            await i.deferUpdate();
+        moveCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+            await buttonInteraction.deferUpdate();
             resettingCollector = true;
             moveCollector.stop();
             resettingCollector = false;
 
-            const index = parseInt(i.customId);
+            const index = parseInt(buttonInteraction.customId);
             board[index] = playerSymbol;
 
             if (!board.includes(EMPTY)) {
@@ -487,13 +487,13 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
             if (gameEnded) {
                 const rematchCollector = gameMessage.createMessageComponentCollector({
-                    filter: (i: MessageComponentInteraction) =>
-                        i.user === interaction.user,
+                    filter: (buttonInteraction: MessageComponentInteraction) =>
+                        buttonInteraction.user === interaction.user,
                     time: 30000,
                 });
         
-                rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                    await i.deferUpdate();
+                rematchCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                    await buttonInteraction.deferUpdate();
                     resettingCollector = true;
                     rematchCollector.stop();
                     resettingCollector = false;
@@ -549,13 +549,13 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
         if (gameEnded) {
             const rematchCollector = gameMessage.createMessageComponentCollector({
-                filter: (i: MessageComponentInteraction) =>
-                    i.user === interaction.user,
+                filter: (buttonInteraction: MessageComponentInteraction) =>
+                    buttonInteraction.user === interaction.user,
                 time: 30000,
             });
     
-            rematchCollector.on('collect', async (i: MessageComponentInteraction) => {
-                await i.deferUpdate();
+            rematchCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
+                await buttonInteraction.deferUpdate();
                 resettingCollector = true;
                 rematchCollector.stop();
                 resettingCollector = false;

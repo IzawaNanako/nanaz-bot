@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, MessageComponentInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton } from '../../utils/buttons.js';
 import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
@@ -128,10 +128,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
             let received = false;
 
-            acceptCollector.on('collect', async (i: MessageComponentInteraction) => {
+            acceptCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
                 received = true;
                 acceptCollector.stop();
-                if (i.customId === 'decline') {
+                if (buttonInteraction.customId === 'decline') {
                     letterEmbed
                         .setDescription(challengeDeclinedMessage);
                     await challengeLetter.edit({

@@ -59,8 +59,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         'competing': ActivityType.Competing,
         'custom': ActivityType.Custom,
     }
-    const option = interaction.options.get('option', true).value;
-    const value = interaction.options.get('value')?.value as string;
+    const option = interaction.options.getString('option', true);
+    const value = interaction.options.getString('value');
 
     if (option === 'stop') {
         await interaction.reply({

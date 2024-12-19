@@ -17,8 +17,8 @@ export const data = new SlashCommandBuilder()
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 export const execute = async (interaction: ChatInputCommandInteraction) => {
     try {
-        const serverId = interaction.options.get('server-id', true).value as string;
-        const channelId = interaction.options.get('channel-id', true).value as string;
+        const serverId = interaction.options.getString('server-id', true);
+        const channelId = interaction.options.getString('channel-id', true);
         const server = await interaction.client.guilds.fetch(serverId);
         const channel = await server.channels.fetch(channelId);
 
