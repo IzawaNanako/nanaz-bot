@@ -185,7 +185,6 @@ export async function execute(client: Client) {
         }
         else {
             const reminderUser = await client.users.fetch(reminder.userId);
-            const reminderChannel = await client.channels.fetch(reminder.channelId ?? '');
             const date = new Date(reminder.when);
             if (reminder.once) {
                 if (reminder.dm) {
@@ -203,6 +202,10 @@ export async function execute(client: Client) {
                     });
                 }
                 else {
+                    if (!reminder.channelId) {
+                        continue;
+                    }
+                    const reminderChannel = await client.channels.fetch(reminder.channelId);
                     schedule.scheduleJob(date, async () => {
                         if (reminder.disabled) {
                             await reminder.destroy();
@@ -246,6 +249,10 @@ export async function execute(client: Client) {
                     });
                 }
                 else {
+                    if (!reminder.channelId) {
+                        continue;
+                    }
+                    const reminderChannel = await client.channels.fetch(reminder.channelId);
                     if (!reminderChannel || !reminderChannel.isSendable()) {
                         await reminder.destroy();
                         return;
