@@ -87,7 +87,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const reminderInDMSuccessMessage = i18next.t('remindme.reminderInDMSuccessMessage');
     const reminderInGuildSuccessMessage = i18next.t('remindme.reminderInGuildSuccessMessage');
 
-    const reminder = interaction.options.getString('reminder', true);
+    const reminder = interaction.options.getString('content', true);
     const once = interaction.options.getBoolean('once') ?? true;
     const when = interaction.options.getInteger('when', true);
     const dm = interaction.options.getBoolean('dm') ?? true;
