@@ -9,13 +9,8 @@ if (!clientId || !token) {
     process.exit(1);
 }
 
-async function deleteGlobalCommands() {
-    try {
-        if (!clientId || !token) {
-            console.error('Client ID or token not found.');
-            process.exit(1);
-        }
-        
+async function deleteGlobalCommands(clientId: string, token: string) {
+    try { 
         const rest = new REST().setToken(token);
 
         await rest.put(Routes.applicationCommands(clientId), {
@@ -31,4 +26,4 @@ async function deleteGlobalCommands() {
     }
 }
 
-await deleteGlobalCommands();
+await deleteGlobalCommands(clientId, token);

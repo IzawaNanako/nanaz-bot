@@ -34,7 +34,7 @@ if (!clientId || !token) {
     throw new Error('Client ID or token not found.');
 }
 
-const commands = [];
+const commands = [] as ApplicationCommand[];
 const foldersPath = join('dist/commands');
 const commandFolders = readdirSync(foldersPath);
 
@@ -57,11 +57,11 @@ for (const folder of commandFolders) {
 	}
 }
 
-const rest = new REST().setToken(token);
-
-(async () => {
+async function reloadGlobalCommands(clientId: string, token: string) {
 	try {
-		console.log(`Started refreshing ${commands.length} application commands.`);
+		console.log(`Started reloading ${commands.length} application commands.`);
+
+        const rest = new REST().setToken(token);
 
 		const data = await rest.put(
 			Routes.applicationCommands(clientId),
@@ -77,4 +77,6 @@ const rest = new REST().setToken(token);
 		console.error(error);
         process.exit(1);
 	}
-})();
+}
+
+await reloadGlobalCommands(clientId, token);

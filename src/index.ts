@@ -2,7 +2,8 @@ import 'dotenv/config.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
-import { Client, Collection, GatewayIntentBits, Partials } from 'discord.js';
+import { ActivityType, Client, Collection, GatewayIntentBits, Partials, PresenceData, PresenceStatusData } from 'discord.js';
+import { BotSettings } from './models/botSettings.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
@@ -35,6 +36,83 @@ catch (error) {
     process.exit(1);
 }
 
+const activityMap: Record<string, ActivityType> = {
+    'playing': ActivityType.Playing,
+    'streaming': ActivityType.Streaming,
+    'listening': ActivityType.Listening,
+    'watching': ActivityType.Watching,
+    'competing': ActivityType.Competing,
+    'custom': ActivityType.Custom,
+}
+const [bot] = await BotSettings.findOrCreate({
+    where: {
+        id: process.env.CLIENT_ID,
+    }
+});
+
+let botPresenceData: PresenceData | undefined = undefined;
+
+if (!bot.status || !bot.activityType) {
+    console.error('Bot status or activity type not found. Attempting to ignore activity settings.');
+}
+
+const status = bot.status as PresenceStatusData;
+
+/**
+ * Sets the bot's presence data based on the stored bot settings.
+ */
+function setBotPresenceData() {
+    if (bot.activityType === 'none') {
+        botPresenceData = {
+            activities: [],
+            status: status,
+        }
+        return;
+    }
+    else if (!bot.activityName) {
+        console.error('Bot activity name not found. Attempting to ignore activity settings.');
+        return;
+    }
+    
+    const activityType = activityMap[bot.activityType];
+    
+    if (activityType === ActivityType.Custom) {
+        botPresenceData = {
+            activities: [{
+                name: 'custom',
+                type: activityType,
+                state: bot.activityName,
+            }],
+            status: status,
+        }
+    }
+    else if (activityType === ActivityType.Streaming) {
+        if (!bot.activityUrl) {
+            console.error('Stream URL not found. Attempting to ignore activity settings.');
+            return;
+        }
+        botPresenceData = {
+            activities: [{
+                name: bot.activityName,
+                type: activityType,
+                url: bot.activityUrl,
+            }],
+            status: status,
+        }
+    }
+    else {
+        botPresenceData = {
+            activities: [{
+                name: bot.activityName,
+                type: activityType,
+            }],
+            status: status,
+        }
+    }
+}
+
+setBotPresenceData();
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -52,8 +130,10 @@ const client = new Client({
         Partials.Channel,
         Partials.Reaction, 
         Partials.GuildMember,
-    ], 
+    ],
+    presence: botPresenceData,
 });
+
 client.commands = new Collection();
 const foldersPath = join('dist/commands');
 const commandFolders = readdirSync(foldersPath);

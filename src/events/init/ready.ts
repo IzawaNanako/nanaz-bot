@@ -1,6 +1,5 @@
-import { Events, Client, PresenceStatusData, ActivityType, EmbedBuilder, ChannelType } from 'discord.js';
+import { Events, Client, EmbedBuilder, ChannelType } from 'discord.js';
 import { createAudioPlayer, createAudioResource, DiscordGatewayAdapterCreator, joinVoiceChannel, NoSubscriberBehavior, StreamType, VoiceConnectionStatus } from '@discordjs/voice';
-import { BotSettings } from '../../models/botSettings.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import { Guild } from '../../models/guild.js';
 import { Reminder } from '../../models/reminder.js';
@@ -17,76 +16,6 @@ export async function execute(client: Client) {
     }
 
     console.log(`Ready! Logged in as ${client.user.tag}`);
-
-    // Set bot status.
-    const activityMap: Record<string, ActivityType> = {
-        'playing': ActivityType.Playing,
-        'streaming': ActivityType.Streaming,
-        'listening': ActivityType.Listening,
-        'watching': ActivityType.Watching,
-        'competing': ActivityType.Competing,
-        'custom': ActivityType.Custom,
-    }
-    const [bot] = await BotSettings.findOrCreate({
-        where: {
-            id: process.env.CLIENT_ID,
-        }
-    });
-
-    if (!bot.status || !bot.activityType) {
-        console.error('Bot status or activity type not found.');
-        process.exit(1);
-    }
-
-    const status = bot.status as PresenceStatusData;
-
-    if (bot.activityType === 'none') {
-        client.user.setPresence({
-            activities: [],
-            status: status,
-        })
-        return;
-    }
-    else if (!bot.activityName) {
-        console.error('Bot activity name not found.');
-        process.exit(1);
-    }
-
-    const activityType = activityMap[bot.activityType];
-    
-    if (activityType === ActivityType.Custom) {
-        client.user.setPresence({
-            activities: [{
-                name: 'custom',
-                type: activityType,
-                state: bot.activityName,
-            }],
-            status: status,
-        });
-    }
-    else if (activityType === ActivityType.Streaming) {
-        if (!bot.activityUrl) {
-            console.error('Stream URL not found. Ignoring activity settings.');
-            return;
-        }
-        client.user.setPresence({
-            activities: [{
-                name: bot.activityName,
-                type: activityType,
-                url: bot.activityUrl,
-            }],
-            status: status,
-        });
-    }
-    else {
-        client.user.setPresence({
-            activities: [{
-                name: bot.activityName,
-                type: activityType,
-            }],
-            status: status,
-        });
-    }
 
     const bannedMembers = await BannedMember.findAll({
         where: {

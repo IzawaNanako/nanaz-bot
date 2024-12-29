@@ -56,16 +56,11 @@ for (const folder of commandFolders) {
 	}
 }
 
-const rest = new REST().setToken(token);
-
-async function refreshCommands() {
-    if (!clientId || !guildId || !token) {
-        console.error('Client ID or guild ID or token not found.');
-        process.exit(1);
-    }
-
+async function reloadGuildCommands(clientId: string, guildId: string, token: string) {
 	try {
-		console.log(`Started refreshing ${commands.length} application commands.`);
+		console.log(`Started reloading ${commands.length} application commands.`);
+
+        const rest = new REST().setToken(token);
 
 		const data = await rest.put(
             Routes.applicationGuildCommands(clientId, guildId),
@@ -83,4 +78,4 @@ async function refreshCommands() {
 	}
 }
 
-await refreshCommands();
+await reloadGuildCommands(clientId, guildId, token);

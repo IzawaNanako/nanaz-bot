@@ -1,21 +1,21 @@
 import 'dotenv/config.js';
 import { REST, Routes, ApplicationCommand } from 'discord.js';
 
-async function deleteGuildCommands() {
-    const clientId = process.env.CLIENT_ID;
-    const guildId = process.env.GUILD_ID;
-    const token = process.env.TOKEN;
+const clientId = process.env.CLIENT_ID;
+const guildId = process.env.GUILD_ID;
+const token = process.env.TOKEN;
 
-    if (!clientId || !guildId || !token) {
-        console.error('Client ID or guild ID or token not found.');
-        process.exit(1);
-    }
+if (!clientId || !guildId || !token) {
+    console.error('Client ID or guild ID or token not found.');
+    process.exit(1);
+}
 
-    const rest = new REST().setToken(token);
-    const commands = await rest.get(Routes.applicationGuildCommands(clientId, guildId));
-    const commandsArray = commands as ApplicationCommand[];
-
+async function deleteGuildCommands(clientId: string, guildId: string, token: string) {
     try {
+        const rest = new REST().setToken(token);
+        const commands = await rest.get(Routes.applicationGuildCommands(clientId, guildId));
+        const commandsArray = commands as ApplicationCommand[];
+
         const deletePromises = commandsArray
             .filter(command => command.name !== 'dev' && command.name !== 'attack')
             .map(command => {
@@ -33,4 +33,4 @@ async function deleteGuildCommands() {
     }
 }
 
-await deleteGuildCommands();
+await deleteGuildCommands(clientId, guildId, token);
