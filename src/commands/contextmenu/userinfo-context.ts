@@ -3,6 +3,8 @@ import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguag
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
 
+i18next.setDefaultNamespace('general');
+
 /**
  * Mapping of badge names to their corresponding emoji.
  */
@@ -39,22 +41,22 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     const noneLiteral = i18next.t('global.noneLiteral');
     const unknownLiteral = i18next.t('global.unknownLiteral');
     const fetchedByFooter = i18next.t('global.fetchedByFooter');
-    const usernameLiteral = i18next.t('userInfo.usernameLiteral');
-    const userIdLiteral = i18next.t('userInfo.userIdLiteral');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
+    const userIdLiteral = i18next.t('global.userIdLiteral');
     const badgesLiteral = i18next.t('userInfo.badgesLiteral');
     const statusLiteral = i18next.t('userInfo.statusLiteral');
     const rolesLiteral = i18next.t('userInfo.rolesLiteral');
     const joinedServerAtLiteral = i18next.t('userInfo.joinedServerAtLiteral');
     const createdAtLiteral = i18next.t('userInfo.createdAtLiteral');
     const offlineLiteral = i18next.t('userInfo.offlineLiteral');
-    const dndLiteral = i18next.t('userInfo.dnd_Literal');
+    const dndLiteral = i18next.t('userInfo.dndLiteral');
     const idleLiteral = i18next.t('userInfo.idleLiteral');
     const onlineLiteral = i18next.t('userInfo.onlineLiteral');
-    const userInfoRandomTextOne = i18next.t('userInfo.randomTextOne');
-    const userInfoRandomTextTwo = i18next.t('userInfo.randomTextTwo');
-    const userInfoRandomTextThree = i18next.t('userInfo.randomTextThree');
-    const userInfoRandomTextFour = i18next.t('userInfo.randomTextFour');
-    const userInfoRandomTextFive = i18next.t('userInfo.randomTextFive');
+    const userInfoRandomTextOne = i18next.t('userInfo.userInfoRandomTextOne');
+    const userInfoRandomTextTwo = i18next.t('userInfo.userInfoRandomTextTwo');
+    const userInfoRandomTextThree = i18next.t('userInfo.userInfoRandomTextThree');
+    const userInfoRandomTextFour = i18next.t('userInfo.userInfoRandomTextFour');
+    const userInfoRandomTextFive = i18next.t('userInfo.userInfoRandomTextFive');
     const userInfoEmbedTitle = i18next.t('userInfo.userInfoEmbedTitle', {
         userDisplayName: interaction.targetUser.displayName,
     });
