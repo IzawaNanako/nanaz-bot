@@ -8,7 +8,7 @@ import { BotSettings } from './models/botSettings.js';
 import { Reminder } from './models/reminder.js';
 
 await Guild.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('Guild Database synced.');
@@ -18,7 +18,7 @@ await Guild.sync({
 });
 
 await GuildMember.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('GuildMember Database synced.');
@@ -28,7 +28,7 @@ await GuildMember.sync({
 });
 
 await BannedMember.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('BannedMember Database synced.');
@@ -38,7 +38,7 @@ await BannedMember.sync({
 });
 
 await User.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('User Database synced.');
@@ -48,7 +48,7 @@ await User.sync({
 });
 
 await WelcomeRole.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('WelcomeRole Database synced.');
@@ -58,7 +58,7 @@ await WelcomeRole.sync({
 })
 
 await BotSettings.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('BotSettings Database synced.');
@@ -68,7 +68,7 @@ await BotSettings.sync({
 })
 
 await Reminder.sync({
-    alter: false,
+    alter: true,
 })
 .then(() => {
     console.log('Reminder Database synced.');

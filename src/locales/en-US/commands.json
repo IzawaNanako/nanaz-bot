@@ -146,11 +146,11 @@
         "userNeverBannedMessage": "This user has never been banned from this server.",
         "banInformationLiteral": "Ban Information",
         "userIsBannedMessage": "This user is currently banned from this server.",
-        "userIsNotBannedMessage": "This user is not currently banned from this server.",
-        "baninfoEmbedFooter": "Check Server Settings -> Bans or /baninfo for more information.",
-        "baninfoEmbedBannedAtTitle": "Banned At",
-        "baninfoEmbedExpireDateTitle": "Expires At",
-        "baninfoEmbedTotalBansTitle": "Total Bans"
+        "userIsNotBannedMessage": "This user currently is not banned from this server.",
+        "banInfoEmbedFooter": "Check Server Settings -> Bans or /baninfo for more information.",
+        "banInfoEmbedBannedAtTitle": "Banned At",
+        "banInfoEmbedExpireDateTitle": "Expires At",
+        "banInfoEmbedTotalBansTitle": "Total Bans"
     },
     "welcome": {
         "welcomeMessageAlreadyDisabledError": "The welcome message feature is already disabled!",

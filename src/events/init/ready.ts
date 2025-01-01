@@ -30,7 +30,7 @@ export async function execute(client: Client) {
         }
 
         const guild = await client.guilds.fetch(bannedMember.guildId);
-        const memberFetched = await guild.members.fetch(bannedMember.id);
+        const userFetched = await client.users.fetch(bannedMember.id);
         const guildData = await Guild.findOne({
             where: {
                 id: guild.id,
@@ -55,7 +55,7 @@ export async function execute(client: Client) {
             .addFields([
                 {
                     name: userLiteral,
-                    value: `${memberFetched}`,
+                    value: `${userFetched}`,
                     inline: true,
                 },
                 {
@@ -75,7 +75,7 @@ export async function execute(client: Client) {
                 iconURL: clientUser.avatarURL() ?? undefined,
             });
     
-            await guild.members.unban(memberFetched);
+            await guild.members.unban(userFetched);
             await sendLog(guild, {
                 embeds: [unbanEmbed],
             });

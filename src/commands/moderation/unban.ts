@@ -41,8 +41,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     await setPrivateInteractionLanguage(interaction);
 
     const unknownError = i18next.t('global.unknownError');
-    const banManagePermissionError = i18next.t('ban.banManagePermissionError');
-    const bannedUserNotFoundError = i18next.t('ban.bannedUserNotFoundError');
+    const banManagePermissionError = i18next.t('unban.banManagePermissionError');
+    const bannedUserNotFoundError = i18next.t('unban.bannedUserNotFoundError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({

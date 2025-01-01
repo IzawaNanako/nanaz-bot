@@ -49,11 +49,11 @@ const BannedMember = sequelize.define<BannedMemberInstance>('bannedMember', {
         allowNull: true,
     },
     bannedAt: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: true,
     },
     bannedUntil: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
         allowNull: true,
     },
     guildId: {

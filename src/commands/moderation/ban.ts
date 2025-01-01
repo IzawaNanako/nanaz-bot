@@ -152,7 +152,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const banEmbedFooter = i18next.t('ban.banEmbedFooter');
     const banEmbedExpireDateTitle = i18next.t('ban.banEmbedExpireDateTitle');
-    const neverLiteral = i18next.t('ban.neverLiteral');
+    const neverLiteral = i18next.t('global.neverLiteral');
     const noReasonMessage = i18next.t('ban.noReasonMessage');
     const banNotice = i18next.t('ban:banNotice', {
         issuer: interaction.user,
