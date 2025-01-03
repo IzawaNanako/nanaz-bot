@@ -39,9 +39,10 @@ export async function execute(client: Client) {
         const clientUser = await guild.members.fetch(client.user.id);
 
         i18next.changeLanguage(guildData?.language);
-        const unbanEmbedTitle = i18next.t('ban.unbanEmbedTitle');
-        const unbanEmbedFooter = i18next.t('ban.unbanEmbedFooter');
-        const userLiteral = i18next.t('ban.userLiteral');
+        const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
+        const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
+        const userLiteral = i18next.t('global.userLiteral');
+        const usernameLiteral = i18next.t('global.usernameLiteral');
         const reasonLiteral = i18next.t('ban.reasonLiteral');
         const banExpiredMessage = i18next.t('ban.banExpiredMessage');
 
@@ -59,9 +60,13 @@ export async function execute(client: Client) {
                     inline: true,
                 },
                 {
+                    name: usernameLiteral,
+                    value: `${userFetched.username}`,
+                    inline: true,
+                },
+                {
                     name: '\u200B',
                     value: '\u200B',
-                    inline: true,
                 },
                 {
                     name: reasonLiteral,

@@ -114,6 +114,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const kickEmbedTitle = i18next.t('kick.kickEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const kickEmbedFooter = i18next.t('kick.kickEmbedFooter');
@@ -150,6 +151,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
+                name: usernameLiteral,
+                value: `${user.username}`,
+                inline: true,
+            },
+            {
+                name: '\u200B',
+                value: '\u200B',
+            },
+            {
                 name: issuerLiteral,
                 value: `${interaction.user}`,
                 inline: true,
@@ -170,6 +180,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .addFields({
                 name: reasonLiteral,
                 value: reason,
+                inline: true,
             });
     }
 

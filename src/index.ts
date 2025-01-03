@@ -180,10 +180,10 @@ await client.login(token);
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 process.on('unhandledRejection', (error: any) => {
     if (error.code !== 10008) {
-        console.error('Unhandled promise rejection: ', error);
+        console.error(`<${new Date()}> Unhandled Promise Rejection: `, error);
     }
 });
 
 process.on('uncaughtException', error => {
-    console.error('Uncaught exception: ', error);
+    console.error(`<${new Date()}> Uncaught Exception: `, error);
 });

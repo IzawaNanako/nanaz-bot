@@ -148,6 +148,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const banEmbedTitle = i18next.t('ban.banEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
     const reasonLiteral = i18next.t('global.reasonLiteral');
     const banEmbedFooter = i18next.t('ban.banEmbedFooter');
@@ -190,13 +191,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
-                name: issuerLiteral,
-                value: `${interaction.user}`,
+                name: usernameLiteral,
+                value: `${user.username}`,
                 inline: true,
             },
             {
                 name: '\u200B',
                 value: '\u200B',
+            },
+            {
+                name: issuerLiteral,
+                value: `${interaction.user}`,
+                inline: true,
             },
         ])
         .setImage('https://i.imgur.com/ioBFfq3.gif')
@@ -256,9 +262,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                         inline: true,
                     },
                     {
+                        name: usernameLiteral,
+                        value: `${user.username}`,
+                        inline: true,
+                    },
+                    {
                         name: '\u200B',
                         value: '\u200B',
-                        inline: true,
                     },
                     {
                         name: reasonLiteral,

@@ -81,6 +81,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     
     const unbanEmbedTitle = i18next.t('unban.unbanEmbedTitle');
     const userLiteral = i18next.t('global.userLiteral');
+    const usernameLiteral = i18next.t('global.usernameLiteral');
     const issuerLiteral = i18next.t('global.issuerLiteral');
     const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
     const unbannedNotice = i18next.t('unban.unbanNotice', {
@@ -100,9 +101,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             },
             {
+                name: usernameLiteral,
+                value: `${user.username}`,
+            },
+            {
                 name: '\u200B',
                 value: '\u200B',
-                inline: true,
             },
             {
                 name: issuerLiteral,
