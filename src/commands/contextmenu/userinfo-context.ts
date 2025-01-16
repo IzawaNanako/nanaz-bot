@@ -94,10 +94,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
         status = unknownLiteral;
     }
 
-    if (status === 'offline') {
-        status = offlineLiteral;
-    }
-    else if (status === 'dnd') {
+    if (status === 'dnd') {
         status = dndLiteral;
     }
     else if (status === 'idle') {
@@ -105,6 +102,9 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     }
     else if (status === 'online') {
         status = onlineLiteral;
+    }
+    else {
+        status = offlineLiteral;
     }
 
     const infoTextNum = Math.floor(Math.random() * 5);
