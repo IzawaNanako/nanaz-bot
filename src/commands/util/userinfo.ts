@@ -44,7 +44,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: ChatInputCommandInteraction) {
     await setInteractionLanguage(interaction);
     
-    const requestedByAuthor = i18next.t('global.userInfoRequestedByAuthor', {
+    const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });
     const unknownError = i18next.t('global.unknownError');
@@ -71,7 +71,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user') || interaction.user;
 
     const userInfoEmbeddTitle = i18next.t('userInfo.userInfoEmbedTitle', {
-        userDisplayName: user,
+        userDisplayName: user.displayName,
     });
 
     const createdAtTimestamp = Math.floor(user.createdAt.getTime() / 1000);
@@ -119,10 +119,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         status = unknownLiteral;
     }
 
-    if (status === 'offline') {
-        status = offlineLiteral;
-    }
-    else if (status === 'dnd') {
+    if (status === 'dnd') {
         status = dndLiteral;
     }
     else if (status === 'idle') {
@@ -130,6 +127,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     }
     else if (status === 'online') {
         status = onlineLiteral;
+    }
+    else {
+        status = offlineLiteral;
     }
 
     const infoTextNum = Math.floor(Math.random() * 5);

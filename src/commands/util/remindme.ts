@@ -4,6 +4,8 @@ import { Reminder } from '../../models/reminder.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 
+//TODO Migrate to a /reminder command that can show all reminders as a list and better timestamp input.
+
 export const data = new SlashCommandBuilder()
     .setName('remindme')
     .setDescription('Sets a reminder for you to do something.')

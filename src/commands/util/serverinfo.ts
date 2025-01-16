@@ -24,7 +24,7 @@ export const data = new SlashCommandBuilder()
     );
 export async function execute(interaction: ChatInputCommandInteraction) {
     await setInteractionLanguage(interaction);
-    
+
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
     });
@@ -50,9 +50,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const serverId = interaction.options.getString('server-id') || interaction.guild?.id;
     let server;
     if (serverId) {
-        server = await interaction.client.guilds.fetch(serverId);
+        try {
+            server = await interaction.client.guilds.fetch(serverId);
+        }
+        catch {
+            await interaction.reply({
+                content: invalidServerError,
+                ephemeral: true,
+            });
+            return;
+        }
     }
-    if (!server) {
+    else {
         await interaction.reply({
             content: invalidServerError,
             ephemeral: true,
