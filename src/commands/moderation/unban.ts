@@ -103,6 +103,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             {
                 name: usernameLiteral,
                 value: `${user.username}`,
+                inline: true,
             },
             {
                 name: '\u200B',
