@@ -14,6 +14,8 @@ const botEmojiMap: Record<string, string> = {
     '✂️': '🪨',
 };
 
+//FIXME Translation for the winning messages (in player vs bot, player vs player not tested) are not showing.
+
 /**
  * Play a game of rock-paper-scissors with another human user.
  * @param interaction The interaction that triggered the command.
@@ -99,6 +101,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
 
     choiceCollector.on('collect', async (buttonInteraction: ButtonInteraction) => {
         await buttonInteraction.deferUpdate();
+
         if ((buttonInteraction.user === interaction.user && opponent !== interaction.user) || (buttonInteraction.user === interaction.user && opponentChosen)) {
             userChoice = buttonInteraction.customId;
             userChoiceEmoji = choiceMap[userChoice];

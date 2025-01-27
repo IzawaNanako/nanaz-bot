@@ -17,6 +17,8 @@ const winningCombos = [
     [2, 4, 6],
 ];
 
+//FIXME Translation for turn messages on second turn or above before the win message are not showing.
+
 /**
  * Play a game of tic-tac-toe with another human user.
  * @param interaction The interaction that triggered the command.
@@ -116,6 +118,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
         moveCollector.on('collect', async (buttonInteraction: MessageComponentInteraction) => {
             await buttonInteraction.deferUpdate();
+
             const index = parseInt(buttonInteraction.customId);
             if (!board.includes(EMPTY) || gameEnded) {
                 return;

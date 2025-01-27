@@ -6,6 +6,8 @@ import { supportButton } from '../../utils/buttons.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 
+//FIXME The "Never" literal has different translation in different contexts, need to seperate from global.
+
 export const data = new SlashCommandBuilder()
     .setName('ban')
     .setDescription('Ban selected member from the server.')
