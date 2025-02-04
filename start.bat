@@ -1,2 +1,2 @@
 node ./dist/.
-cmd /k
+pause
