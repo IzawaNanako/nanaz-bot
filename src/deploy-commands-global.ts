@@ -45,10 +45,10 @@ for (const folder of commandFolders) {
 		const filePath = join(commandsPath, file);
         const filePathURL = pathToFileURL(`./${filePath}`);
 		const command = await import(`${filePathURL}`);
-		if ('data' in command && 'execute' in command && command.data.name !== 'dev' && command.data.name !== 'attack') {
+		if ('data' in command && 'execute' in command && command.data.name !== 'dev') {
 			commands.push(command.data.toJSON());
 		}
-        else if (command.data.name === 'dev' || command.data.name === 'attack') {
+        else if (command.data.name === 'dev') {
             continue;
         }
         else {

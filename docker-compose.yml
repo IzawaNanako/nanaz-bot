@@ -1,0 +1,34 @@
+services:
+  nanazdb:
+    image: postgres:17.4
+    restart: always
+    environment:
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  uwubot:
+    build: .
+    depends_on:
+      - nanazdb
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - nanazdb
+
+volumes:
+  pgdata:

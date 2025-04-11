@@ -17,14 +17,14 @@ async function deleteGuildCommands(clientId: string, guildId: string, token: str
         const commandsArray = commands as ApplicationCommand[];
 
         const deletePromises = commandsArray
-            .filter(command => command.name !== 'dev' && command.name !== 'attack')
+            .filter(command => command.name !== 'dev')
             .map(command => {
                 return rest.delete(Routes.applicationGuildCommand(clientId, guildId, command.id));
             }
         );
         await Promise.all(deletePromises);
 
-        console.log('Successfully deleted all guild commands. (Exceptions made for "dev" and "attack" commands)');
+        console.log('Successfully deleted all guild commands. (Exceptions made for the "dev" command)');
         process.exit(0);
     }
     catch (error) {

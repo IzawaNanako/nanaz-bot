@@ -14,6 +14,6 @@ if (!database || !user || !password) {
  */
 export const sequelize = new Sequelize(database, user, password, {
     dialect: 'postgres',
-    host: 'localhost',
+    host: 'nanazdb',
     logging: false,
 });

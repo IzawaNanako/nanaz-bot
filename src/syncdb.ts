@@ -7,74 +7,30 @@ import { WelcomeRole } from './models/welcomeRole.js';
 import { BotSettings } from './models/botSettings.js';
 import { Reminder } from './models/reminder.js';
 
-await Guild.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('Guild Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-});
+const models = [
+    Guild,
+    GuildMember,
+    BannedMember,
+    User,
+    WelcomeRole,
+    BotSettings,
+    Reminder,
+];
 
-await GuildMember.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('GuildMember Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-});
+try {
+    console.log('⏳ Syncing database...');
 
-await BannedMember.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('BannedMember Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-});
+    for (const model of models) {
+        await model.sync({
+            alter: true
+        });
+        console.log(`✅ Synced: ${model.name}`);
+    }
 
-await User.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('User Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-});
-
-await WelcomeRole.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('WelcomeRole Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-})
-
-await BotSettings.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('BotSettings Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-})
-
-await Reminder.sync({
-    alter: true,
-})
-.then(() => {
-    console.log('Reminder Database synced.');
-})
-.catch((error) => {
-    console.log(error);
-})
-
-process.exit(0);
+    console.log('🎉 All models synced.');
+    process.exit(0);
+} 
+catch (error) {
+    console.error('❌ Failed to sync DB:', error);
+    process.exit(1);
+}
