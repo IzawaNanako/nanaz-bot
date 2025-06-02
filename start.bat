@@ -1,2 +1,3 @@
-docker compose up --build
+@echo off
+docker compose up -d --build
 pause
