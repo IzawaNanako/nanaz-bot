@@ -1,6 +1,7 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { Reminder } from '../../models/reminder.js';
+import { User } from '../../models/user.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 
@@ -86,6 +87,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const unknownError = i18next.t('global.unknownError');
     const invalidTimeError = i18next.t('remindme.invalidTimeError');
+    const reminderTooLongError = i18next.t('remindme.reminderTooLongError');
     const reminderInDMSuccessMessage = i18next.t('remindme.reminderInDMSuccessMessage');
     const reminderInGuildSuccessMessage = i18next.t('remindme.reminderInGuildSuccessMessage');
 
@@ -97,10 +99,24 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (isNaN(date.getTime()) || Date.now() >= date.getTime()) {
         await interaction.reply({
             content: invalidTimeError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
+
+    if (reminder.length > 2000) {
+        await interaction.reply({
+            content: reminderTooLongError,
+            flags: MessageFlags.Ephemeral,
+        });
+        return;
+    }
+
+   await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        },
+    });
 
     const remindData = await Reminder.create({
         content: reminder,
@@ -129,7 +145,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             await interaction.reply({
                 content: reminderInDMSuccessMessage,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
         else {
@@ -181,14 +197,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             await interaction.reply({
                 content: reminderInDMSuccessMessage,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
         }
         else {
             if (!interaction.channel || !interaction.channel.isSendable()) {
                 await interaction.reply({
                     content: unknownError,
-                    ephemeral: true,
+                    flags: MessageFlags.Ephemeral,
                 });
                 await remindData.destroy();
                 return;

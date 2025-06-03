@@ -215,6 +215,7 @@
     },
     "remindme": {
         "invalidTimeError": "Invalid time.",
+        "reminderTooLongError": "The reminder message is too long, it must be less than 2000 characters.",
         "reminderInDMSuccessMessage": "Reminder set! Make sure you allow me to send you DMs!",
         "reminderInGuildSuccessMessage": "Reminder set!"
     },

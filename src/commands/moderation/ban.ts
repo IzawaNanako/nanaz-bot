@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
@@ -85,7 +85,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -93,7 +93,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
         await interaction.reply({
             content: banPermissionError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -105,7 +105,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!user) {
         await interaction.reply({
             content: invalidUserError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -113,7 +113,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!member) {
         await interaction.reply({
             content: invalidUserError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -121,7 +121,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (user.id === interaction.user.id) {
         await interaction.reply({
             content: banningThemselvesError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -133,7 +133,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     .setColor('#FF0000')
                     .setDescription(failedToBanError),
             ],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }

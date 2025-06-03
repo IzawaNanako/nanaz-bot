@@ -1,4 +1,4 @@
-import { ContextMenuCommandBuilder, MessageContextMenuCommandInteraction, ContextMenuCommandType, ApplicationCommandType } from 'discord.js'
+import { ContextMenuCommandBuilder, MessageContextMenuCommandInteraction, ContextMenuCommandType, ApplicationCommandType, MessageFlags } from 'discord.js'
 import { User } from '../../models/user.js';
 import { translateWithDeepL } from '../../utils/translateWithDeepL.js';
 import i18next from 'i18next';
@@ -31,7 +31,7 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
     if (message.trim() === '') {
         await interaction.reply({
             content: invalidMessageError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -48,6 +48,6 @@ export const execute = async (interaction: MessageContextMenuCommandInteraction)
 
     await interaction.reply({
         content: translatedToMessage,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 };

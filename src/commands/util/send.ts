@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, TextChannel, AutocompleteInteraction } from 'discord.js'
+import { SlashCommandBuilder, ChatInputCommandInteraction, TextChannel, AutocompleteInteraction, MessageFlags } from 'discord.js'
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { translateWithDeepL } from '../../utils/translateWithDeepL.js';
 import Fuse from 'fuse.js';
@@ -76,7 +76,7 @@ export const data = new SlashCommandBuilder()
     .setContexts(0);
 export const execute = async (interaction: ChatInputCommandInteraction) => {
     await interaction.deferReply({
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 
     await setPrivateInteractionLanguage(interaction);

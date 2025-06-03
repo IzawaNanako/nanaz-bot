@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
 import { GuildMember } from '../../models/guildMember.js';
 import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
@@ -59,7 +59,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -67,7 +67,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.KickMembers)) {
         await interaction.reply({
             content: kickPermissionError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -75,7 +75,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!user) {
         await interaction.reply({
             content: invalidUserError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -93,7 +93,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (user.id === interaction.user.id) {
         await interaction.reply({
             content: kickingThemselvesError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -105,7 +105,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     .setColor('#FF0000')
                     .setDescription(failedToKickError),
             ],
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }

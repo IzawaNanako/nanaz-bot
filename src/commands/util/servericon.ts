@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -41,7 +41,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!serverID) {
         await interaction.reply({
             content: invalidServerIdError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -61,7 +61,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!serverIcon) {
         await interaction.reply({
             content: invalidServerIconError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }

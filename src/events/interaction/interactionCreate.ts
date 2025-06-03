@@ -1,4 +1,4 @@
-import { Events, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
+import { Events, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, MessageFlags } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import i18next from 'i18next';
 
@@ -29,13 +29,13 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
             if (interaction.replied || interaction.deferred) {
                 await interaction.followUp({
                     content: commandUnknownError,
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral,
                 });
             }
             else {
                 await interaction.reply({
                     content: commandUnknownError,
-                    ephemeral: true
+                    flags: MessageFlags.Ephemeral,
                 });
             }
         }

@@ -1,4 +1,4 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { User } from '../../models/user.js';
 import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js';
@@ -70,7 +70,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!languageMap[language]) {
         await interaction.reply({
             content: invalidLanguageError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -78,7 +78,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (user.language === languageMap[language]) {
         await interaction.reply({
             content: languageAlreadyUsingError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -110,7 +110,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply({
         embeds: [actionEmbed],
         components: [supportButton],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 export async function autocomplete(interaction: AutocompleteInteraction) {

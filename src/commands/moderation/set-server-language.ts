@@ -1,4 +1,4 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, InteractionContextType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, InteractionContextType, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { Guild } from '../../models/guild.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
@@ -58,7 +58,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild) {
         await interaction.reply({
             content: unknownError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     };
@@ -67,7 +67,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!languageMap[language]) {
         await interaction.reply({
             content: invalidLanguageError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     };
@@ -81,7 +81,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (languageMap[language] === guild.language) {
         await interaction.reply({
             content: serverLanguageAlreadyUsingError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     };

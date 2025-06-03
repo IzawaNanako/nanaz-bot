@@ -1,4 +1,4 @@
-import { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandType, UserContextMenuCommandInteraction, InteractionContextType } from 'discord.js';
+import { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandType, UserContextMenuCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -66,7 +66,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     if (!user.flags) {
         await interaction.reply({
             content: unknownErrorMessage,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -183,6 +183,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [userInfoEmbed],
         components: [supportButton],
-        ephemeral: true
+        flags: MessageFlags.Ephemeral,
     });
 }

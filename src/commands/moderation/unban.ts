@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
@@ -47,7 +47,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -55,7 +55,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.BanMembers)) {
         await interaction.reply({
             content: banManagePermissionError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -72,7 +72,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!bannedMember) {
         await interaction.reply({
             content: bannedUserNotFoundError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }

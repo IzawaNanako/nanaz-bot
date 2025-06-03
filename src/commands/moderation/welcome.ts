@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, ChannelType, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, ChannelType, InteractionContextType, MessageFlags } from 'discord.js';
 import { Guild } from '../../models/guild.js';
 import { WelcomeRole } from '../../models/welcomeRole.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
@@ -165,7 +165,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
             content: unknownError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -203,7 +203,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.SendMessages)) {
             await interaction.reply({
                 content: sendMessagePermissionError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -211,7 +211,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (channel && !interaction.guild.members.me.permissionsIn(channel.id).has(PermissionFlagsBits.ViewChannel)) {
             await interaction.reply({
                 content: viewChannelPermissionError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -320,7 +320,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!interaction.guild.members.me.permissions.has(PermissionFlagsBits.ManageRoles)) {
             await interaction.reply({
                 content: manageRolesPermissionError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }

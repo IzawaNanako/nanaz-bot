@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction, MessageFlags } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton } from '../../utils/buttons.js';
 import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
@@ -62,7 +62,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (interaction.channel instanceof TextChannel === false) {
             await interaction.reply({
                 content: notTextChannelError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -70,7 +70,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!game) {
             await interaction.reply({
                 content: invalidGameError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -78,14 +78,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!opponent) {
             await interaction.reply({
                 content: invalidUserError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
         else if (opponent.bot && opponent !== interaction.client.user) {
             await interaction.reply({
                 content: challengeOtherBotError,
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }

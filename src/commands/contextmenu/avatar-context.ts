@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, UserContextMenuCommandInteraction } from 'discord.js';
+import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, MessageFlags, UserContextMenuCommandInteraction } from 'discord.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -55,6 +55,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [avatarEmbed],
         components: [supportButton],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

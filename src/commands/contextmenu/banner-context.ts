@@ -1,4 +1,4 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, UserContextMenuCommandInteraction } from 'discord.js';
+import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, MessageFlags, UserContextMenuCommandInteraction } from 'discord.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -30,7 +30,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     if (!userFetched.bannerURL()) {
         await interaction.reply({
             content: userNoBannerError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -51,6 +51,6 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     await interaction.reply({
         embeds: [bannerEmbed],
         components: [supportButton],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }

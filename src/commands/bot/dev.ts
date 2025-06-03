@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel, InteractionContextType, MessageFlags } from 'discord.js';
 import { BotSettings } from '../../models/botSettings.js';
 
 export const data = new SlashCommandBuilder()
@@ -21,6 +21,10 @@ export const data = new SlashCommandBuilder()
                 name: 'status',
                 value: 'status',
             },
+            {
+                name: 'test',
+                value: 'test',
+            }
         )
     )
     .addStringOption(option => option
@@ -33,14 +37,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (interaction.user.id !== process.env.OWNER_ID) {
         await interaction.reply({
             content: 'You do not have the permission to use this command.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
     if (!interaction.channel) {
         await interaction.reply({
             content: 'Something went wrong...',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -72,7 +76,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (!value) {
             await interaction.reply({
                 content: 'Please provide a name.',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -85,7 +89,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         catch (error) {
             await interaction.reply({
                 content: 'Failed to set username.',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             console.log(error);
         }
@@ -94,7 +98,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         if (value) {
             await interaction.reply({
                 content: 'Invalid format, keep value field empty for this option.',
-                ephemeral: true,
+                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -301,10 +305,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             }
         }
     }
+    else if (option === 'test') {
+        await interaction.reply({
+            content: 'This is a test command.',
+            flags: MessageFlags.Ephemeral,
+        });
+        console.log('Test command executed by: ', interaction.user.displayName);
+    }
     else {
         await interaction.reply({
             content: 'Invalid option.',
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

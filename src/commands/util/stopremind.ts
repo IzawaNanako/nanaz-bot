@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { Reminder } from '../../models/reminder.js';
 import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import i18next from 'i18next';
@@ -27,7 +27,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (reminders.length === 0 || reminders.every(reminder => reminder.disabled)) {
         await interaction.reply({
             content: noActiveRemindersError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -40,6 +40,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.reply({
         content: stopRemindSuccessMessage,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
