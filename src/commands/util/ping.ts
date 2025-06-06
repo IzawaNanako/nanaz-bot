@@ -21,7 +21,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const pingingMessage = i18next.t('ping.pingingMessage');
     const pingFinishedMessage = i18next.t('ping.pingFinishedMessage');
     const botLatencyLiteral = i18next.t('ping.botLatencyLiteral');
-    const apiLatencyLiteral = i18next.t('ping.apiLatencyLiteral');
     const pingedByFooter = i18next.t('ping.pingedByFooter');
 
     const pingEmbed = new EmbedBuilder()
@@ -38,26 +37,23 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     const msg = await interaction.reply({
         embeds: [pingEmbed],
-        fetchReply: true,
+        withResponse: true,
     });
+
+    const ping = Math.floor((msg.resource?.message?.createdTimestamp ?? 0) - interaction.createdTimestamp);
 
     await interaction.editReply({
         embeds: [
             pingEmbed
-                .setColor(Math.floor(msg.createdTimestamp - interaction.createdTimestamp) < 200 ? '#00FF00' : Math.floor(msg.createdTimestamp - interaction.createdTimestamp) < 400 ? '#FFFF00' : '#FF0000')
+                .setColor(ping < 200 ? '#00FF00' : ping < 400 ? '#FFFF00' : '#FF0000')
                 .setTitle(pingFinishedMessage)
                 .addFields([
                     {
                         name: botLatencyLiteral,
-                        value: `${Math.floor(msg.createdTimestamp - interaction.createdTimestamp)}ms`,
-                        inline: true,
-                    },
-                    {
-                        name: apiLatencyLiteral,
-                        value: `${interaction.client.ws.ping}ms`,
+                        value: `${ping}ms`,
                         inline: true,
                     }
-                ])
+                ]),
         ],
         components: [supportButton],
     });

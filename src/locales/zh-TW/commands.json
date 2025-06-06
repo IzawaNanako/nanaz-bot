@@ -64,7 +64,6 @@
         "pingingMessage": "獲取延遲中...",
         "pingFinishedMessage": "已獲取延遲！",
         "botLatencyLiteral": "機器人延遲",
-        "apiLatencyLiteral": "應用程式延遲",
         "pingedByFooter": "由Nanaz獲取"
     },
     "serverIcon": {

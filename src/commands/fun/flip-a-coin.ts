@@ -34,7 +34,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         .setTitle(coinEmbedTitle)
         .setFooter({
             text: coinEmbedFooter,
-            iconURL: interaction.client.user.avatarURL() ?? undefined
+            iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
         .setTimestamp()
 
@@ -69,7 +69,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
     
             const retryCollector = message.createMessageComponentCollector({
                 filter: (i) => i.user.id === interaction.user.id,
-                time: 30000
+                time: 30000,
             });
     
             retryCollector.on('collect', async (i) => {

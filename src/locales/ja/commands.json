@@ -64,7 +64,6 @@
         "pingingMessage": "遅れている...",
         "pingFinishedMessage": "遅れている！",
         "botLatencyLiteral": "ボットの遅延",
-        "apiLatencyLiteral": "APIの遅延",
         "pingedByFooter": "Pinged by Nanaz"
     },
     "serverIcon": {

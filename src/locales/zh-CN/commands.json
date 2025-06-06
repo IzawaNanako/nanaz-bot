@@ -64,7 +64,6 @@
         "pingingMessage": "Pinging...",
         "pingFinishedMessage": "Pong!",
         "botLatencyLiteral": "Bot Latency",
-        "apiLatencyLiteral": "API Latency",
         "pingedByFooter": "Pinged by Nanaz"
     },
     "serverIcon": {
