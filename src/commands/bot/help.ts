@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, AutocompleteInteraction } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, AutocompleteInteraction, MessageFlags } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { supportButton } from '../../utils/buttons.js';
 import Fuse from 'fuse.js'
@@ -141,7 +141,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     else {
         await interaction.reply({
             content: invalidOptionError,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
         return;
     }
@@ -149,7 +149,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     await interaction.reply({
         embeds: [helpEmbed],
         components: [supportButton],
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 export async function autocomplete(interaction: AutocompleteInteraction) {
