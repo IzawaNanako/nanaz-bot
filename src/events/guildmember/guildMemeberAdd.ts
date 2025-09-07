@@ -44,9 +44,11 @@ export async function execute(member: Member) {
     });
 
     let welcomeChannel;
+    if (guild.welcomeChannelId) {
+        welcomeChannel = await member.guild.channels.fetch(guild.welcomeChannelId) as TextChannel;
+    }
     
     if (guild.welcomeChannelId && welcomeChannel && member.guild.members.me && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.SendMessages) && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.ViewChannel)) {
-        welcomeChannel = await member.guild.channels.fetch(guild.welcomeChannelId) as TextChannel;
         const welcomeMessage = guild.welcomeMessage;
 
         const welcomeEmbed = new EmbedBuilder()
@@ -57,7 +59,6 @@ export async function execute(member: Member) {
             })
             .setTitle(welcomeEmbedTitle)
             .setThumbnail(member.guild.iconURL())
-            .setDescription(`${welcomeMessage}`)
             .setFooter({
                 text: welcomeEmbedFooter,
                 iconURL: member.client.user.avatarURL() ?? undefined,
@@ -71,12 +72,15 @@ export async function execute(member: Member) {
             guildMember.isKicked = false;
             await guildMember.save();
         }
-
-        if (bannedMember?.isBanned && bannedMember?.totalBans > 0) {
+        else if (bannedMember?.isBanned && bannedMember?.totalBans > 0) {
             welcomeEmbed
                 .setDescription(welcomeEmbedWasBanned);
         }
-
+        else {
+            welcomeEmbed
+                .setDescription(welcomeMessage)
+        }
+        
         await welcomeChannel.send({
             content: `${member.user}`,
             embeds: [welcomeEmbed],
