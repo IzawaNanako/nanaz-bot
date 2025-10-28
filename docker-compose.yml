@@ -1,23 +1,46 @@
 services:
   nanazdb:
-    image: postgres:17.4
+    image: postgres
+    container_name: nanazdb
     restart: always
     environment:
       POSTGRES_DB: ${DATABASE}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+    command: ["postgres", "-c", "listen_addresses=*"]
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DATABASE}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   uwubot:
     build: .
+    container_name: uwubot
     depends_on:
-      - nanazdb
+      nanazdb:
+        condition: service_healthy
     env_file:
       - .env
     restart: unless-stopped
-    
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - nanazdb
+
 volumes:
   pgdata:

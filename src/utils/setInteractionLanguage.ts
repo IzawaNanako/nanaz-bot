@@ -9,12 +9,12 @@ import i18next from 'i18next';
  */
 export async function setInteractionLanguage(interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | AutocompleteInteraction) {
     if (interaction.guild) {
-        const guild = await Guild.findOne({
+        const [guild] = await Guild.findOrCreate({
             where: {
                 id: interaction.guild.id,
             }
         });
-        await i18next.changeLanguage(guild?.language);
+        await i18next.changeLanguage(guild.language);
     }
     else {
         const executeUser = await User.findOne({

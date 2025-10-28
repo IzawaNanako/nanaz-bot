@@ -117,6 +117,7 @@
         "kickRandomTextFive": "I'm sorry. I'm sorry. I'm sorry."
     },
     "ban": {
+        "neverLiteral": "Never",
         "banPermissionError": "I don't have permission to ban members in this server!",
         "banningThemselvesError": "Bruh.",
         "failedToBanError": "I can't seem to ban that user.\nNote that their highest role cannot be higher than mine.",
@@ -212,14 +213,17 @@
     "send": {
         "sendSuccessMessage": "Message sent successfully."
     },
-    "remindme": {
+    "reminder": {
+        "reminderContentLiteral": "Reminder Content",
         "invalidTimeError": "Invalid time.",
-        "reminderTooLongError": "The reminder message is too long, it must be less than 2000 characters.",
+        "reminderTooLongError": "The reminder message is too long, it must be less than 100 characters.",
+        "reminderOnCooldownError": "Please wait a bit before setting another reminder!",
         "reminderInDMSuccessMessage": "Reminder set! Make sure you allow me to send you DMs!",
-        "reminderInGuildSuccessMessage": "Reminder set!"
-    },
-    "stopremind": {
+        "reminderInGuildSuccessMessage": "Reminder set!",
+        "reminderEmbedTitle": "Reminders",
+        "reminderEmbedDescription": "Your active reminders are shown here.",
         "noActiveRemindersError": "You don't have any active reminders.",
+        "reminderNotExistError": "Reminder with the given ID does not exist.",
         "stopRemindSuccessMessage": "All your reminders have been stopped."
     }
 }

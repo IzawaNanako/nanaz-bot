@@ -3,6 +3,7 @@ import { sequelize } from '../utils/database.js';
 import { User } from './user.js';
 
 interface ReminderAttributes {
+    id: number;
     content: string;
     userId: string;
     when: Date;
@@ -20,6 +21,10 @@ interface ReminderInstance
         }
 
 const Reminder = sequelize.define<ReminderInstance>('reminder', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+    },
     content: {
         type: DataTypes.STRING,
         allowNull: false,
