@@ -31,7 +31,7 @@ const BannedMember = sequelize.define<BannedMemberInstance>('bannedMember', {
         allowNull: false,
     },
     totalBans: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
     },

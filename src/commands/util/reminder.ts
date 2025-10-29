@@ -108,11 +108,26 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     if (subcommand === 'create') {
         const unknownError = i18next.t('global.unknownError');
+        const reminderLimitError = i18next.t('reminder.reminderLimitError');
         const invalidTimeError = i18next.t('reminder.invalidTimeError');
         const reminderTooLongError = i18next.t('reminder.reminderTooLongError');
         const reminderOnCooldownError = i18next.t('reminder.reminderOnCooldownError');
+        const reminderNoChannelError = i18next.t('reminder.reminderNoChannelError');
         const reminderInDMSuccessMessage = i18next.t('reminder.reminderInDMSuccessMessage');
         const reminderInGuildSuccessMessage = i18next.t('reminder.reminderInGuildSuccessMessage');
+
+        const reminders = await Reminder.findAll({
+            where: {
+                userId: interaction.user.id,
+            }
+        });
+        if (reminders.length >= 8) {
+            await interaction.reply({
+                content: reminderLimitError,
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
 
         const content = interaction.options.getString('content', true);
         const when = interaction.options.getInteger('when', true);
@@ -156,6 +171,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
+        if (!interaction.channel && !dm) {
+            await interaction.reply({
+                content: reminderNoChannelError,
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
+
         const remindData = await Reminder.create({
             id: id,
             content: content,
@@ -178,7 +201,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     await remindData.destroy();
 
                     await interaction.user.send({
-                        content: `${interaction.user}\n${content}`,
+                        content: `<@${interaction.user.id}>\n${content}`,
                     });
                 });
 
@@ -201,7 +224,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
 
                     await interaction.channel.send({
-                        content: `${interaction.user}\n${content}`,
+                        content: `<@${interaction.user.id}>\n${content}`,
                     });
                 });
 
@@ -225,7 +248,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
 
                     await interaction.user.send({
-                        content: `${interaction.user}\n${content}`,
+                        content: `<@${interaction.user.id}>\n${content}`,
                     });
         
                     if (Date.now() >= date.getTime()) {
@@ -257,7 +280,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
 
                     await interaction.channel.send({
-                        content: `${interaction.user}\n${content}`,
+                        content: `<@${interaction.user.id}>\n${content}`,
                     });
         
                     if (Date.now() >= date.getTime()) {
@@ -273,9 +296,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
     }
     else if (subcommand === 'list') {
-        const requestedByAuthor = i18next.t('global.requestedByAuthor', {
-            userDisplayName: interaction.user.displayName,
-        });
         const noActiveRemindersError = i18next.t('reminder.noActiveRemindersError');
         const fetchedByFooter = i18next.t('global.fetchedByFooter');
         const reminderContentLiteral = i18next.t('reminder.reminderContentLiteral');
@@ -298,9 +318,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const remindersEmbed = new EmbedBuilder()
             .setColor('#FFFF00')
-            .setAuthor({
-                name: requestedByAuthor,
-            })
             .setTitle(reminderEmbedTitle)
             .setDescription(reminderEmbedDescription)
             .addFields(

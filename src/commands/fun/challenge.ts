@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction, MessageFlags } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction, MessageFlags, InteractionContextType } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton } from '../../utils/buttons.js';
 import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
@@ -45,7 +45,8 @@ export const data = new SlashCommandBuilder()
             'zh-TW': '您要挑戰的使用者。 您也可以挑戰我！',
         })
         .setRequired(true)
-    );
+    )
+    .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
     await setInteractionLanguage(interaction);
     
@@ -92,16 +93,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         const challengeLetterLiteral = i18next.t('challenge.challengeLetterLiteral');
         const challengeLetterMessage = i18next.t('challenge.challengeLetterMessage', {
-            challenger: interaction.user,
+            challenger: interaction.user.id,
             game: gameMap[game],
         });
         const deliveredByFooter = i18next.t('challenge.deliveredByFooter');
         const challengeDeclinedMessage = i18next.t('challenge.challengeDeclinedMessage', {
-            challenger: interaction.user,
-            challenged: opponent,
+            challenger: interaction.user.id,
+            challenged: opponent.id,
         });
         const challengeNotRespondedMessage = i18next.t('challenge.challengeNotRespondedMessage', {
-            challenged: opponent,
+            challenged: opponent.id,
         });
         const challengeThemselvesMessage = i18next.t('challenge.challengeThemselvesMessage');
         const challengeCurrentBotMessage = i18next.t('challenge.challengeCurrentBotMessage');
@@ -117,7 +118,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 })
                 .setTimestamp();
             const challengeLetter = await interaction.reply({
-                content: `${opponent}`,
+                content: `<@${opponent.id}>`,
                 embeds: [letterEmbed],
                 components: [acceptAndDeclineButton],
             });

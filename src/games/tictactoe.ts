@@ -17,8 +17,6 @@ const winningCombos = [
     [2, 4, 6],
 ];
 
-//FIXME Translation for turn messages on second turn or above before the win message are not showing.
-
 /**
  * Play a game of tic-tac-toe with another human user.
  * @param interaction The interaction that triggered the command.
@@ -42,21 +40,21 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
     let resettingCollector = false;
 
     let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
-        currentPlayer: currentPlayer,
+        currentPlayer: currentPlayer.id,
     });
     const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
     });
@@ -111,8 +109,9 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
      */
     async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
-            filter: (buttonInteraction: MessageComponentInteraction) => 
-                buttonInteraction.user === currentPlayer,
+            filter: (buttonInteraction: MessageComponentInteraction) => (
+                buttonInteraction.user === currentPlayer
+            ),
             time: 30000,
         });
 
@@ -131,11 +130,12 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 moveCollector.stop();
 
                 const gameEndWinMessage = i18next.t('ticTacToe.gameEndWinMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerSymbol: leftPlayerSymbol,
                     rightPlayerSymbol: rightPlayerSymbol,
-                    winner: currentPlayer,
+                    winner: currentPlayer.id,
                 });
 
                 await gameMessage.edit({
@@ -153,7 +153,9 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
             if (gameEnded) {
                 const rematchCollector = gameMessage.createMessageComponentCollector({
-                    filter: (buttonInteraction: MessageComponentInteraction) => buttonInteraction.user === interaction.user || buttonInteraction.user === opponent,
+                    filter: (buttonInteraction: MessageComponentInteraction) => (
+                        buttonInteraction.user === interaction.user || buttonInteraction.user === opponent
+                    ),
                     time: 30000,
                 });
     
@@ -182,15 +184,18 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     const rematchAccepter = buttonInteraction.user === interaction.user ? opponent : interaction.user;
 
                     const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
-                        rematchRequester: rematchRequester,
+                        ns: 'games',
+                        rematchRequester: rematchRequester.id,
                     });
                     const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
-                        rematchRequester: rematchRequester,
-                        rematchAccepter: rematchAccepter,
+                        ns: 'games',
+                        rematchRequester: rematchRequester.id,
+                        rematchAccepter: rematchAccepter.id,
                     });
                     const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
-                        rematchRequester: rematchRequester,
-                        rematchAccepter: rematchAccepter,
+                        ns: 'games',
+                        rematchRequester: rematchRequester.id,
+                        rematchAccepter: rematchAccepter.id,
                     });
     
                     await gameMessage.edit({
@@ -203,8 +208,9 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     });
     
                     const acceptCollector = gameMessage.createMessageComponentCollector({
-                        filter: (buttonInteraction: MessageComponentInteraction) =>
-                            buttonInteraction.user === rematchAccepter,
+                        filter: (buttonInteraction: MessageComponentInteraction) => (
+                            buttonInteraction.user === rematchAccepter
+                        ),
                         time: 30000,
                     });
     
@@ -251,11 +257,12 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                 currentPlayer = currentPlayer === interaction.user ? opponent : interaction.user;
 
                 currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerSymbol: leftPlayerSymbol,
                     rightPlayerSymbol: rightPlayerSymbol,
-                    currentPlayer: currentPlayer,
+                    currentPlayer: currentPlayer.id,
                 });
 
                 await gameMessage.edit({
@@ -304,27 +311,27 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     let resettingCollector = false;
 
     let currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
-        currentPlayer: currentPlayer,
+        currentPlayer: currentPlayer.id,
     });
     const gameEndDrawMessage = i18next.t('ticTacToe.gameEndDrawMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndInactivityMessage = i18next.t('ticTacToe.gameEndInactivityMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
     });
     const gameEndBotWinMessage = i18next.t('ticTacToe.gameEndBotWinMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
         leftPlayerSymbol: leftPlayerSymbol,
         rightPlayerSymbol: rightPlayerSymbol,
     });
@@ -448,11 +455,12 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
         currentPlayer = currentPlayer === interaction.user ? interaction.client.user : interaction.user;
         
         currentTurnMessage = i18next.t('ticTacToe.currentTurnMessage', {
-            leftPlayer: leftPlayer,
-            rightPlayer: rightPlayer,
+            ns: 'games',
+            leftPlayer: leftPlayer.id,
+            rightPlayer: rightPlayer.id,
             leftPlayerSymbol: leftPlayerSymbol,
             rightPlayerSymbol: rightPlayerSymbol,
-            currentPlayer: currentPlayer,
+            currentPlayer: currentPlayer.id,
         });
 
         await gameMessage.edit({
@@ -466,8 +474,9 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
      */
     async function startCollector() {
         moveCollector = gameMessage.createMessageComponentCollector({
-            filter: (buttonInteraction: MessageComponentInteraction) => 
-                buttonInteraction.user === interaction.user,
+            filter: (buttonInteraction: MessageComponentInteraction) => (
+                buttonInteraction.user === interaction.user
+            ),
             time: 30000,
         });
 
@@ -490,8 +499,9 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
             if (gameEnded) {
                 const rematchCollector = gameMessage.createMessageComponentCollector({
-                    filter: (buttonInteraction: MessageComponentInteraction) =>
-                        buttonInteraction.user === interaction.user,
+                    filter: (buttonInteraction: MessageComponentInteraction) => (
+                        buttonInteraction.user === interaction.user
+                    ),
                     time: 30000,
                 });
         
@@ -552,8 +562,9 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
         if (gameEnded) {
             const rematchCollector = gameMessage.createMessageComponentCollector({
-                filter: (buttonInteraction: MessageComponentInteraction) =>
-                    buttonInteraction.user === interaction.user,
+                filter: (buttonInteraction: MessageComponentInteraction) => (
+                    buttonInteraction.user === interaction.user
+                ),
                 time: 30000,
             });
     

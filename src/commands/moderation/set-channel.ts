@@ -191,7 +191,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: previousChannel ? newChannelLiteral : currentChannelLiteral,
-                value: channel ? `${channel}` : disabledLiteral,
+                value: channel ? `<#${channel.id}>` : disabledLiteral,
                 inline: true,
             }
         ])

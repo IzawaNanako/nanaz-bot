@@ -20,6 +20,7 @@ services:
 
   uwubot:
     build: .
+    image: uwubot
     container_name: uwubot
     depends_on:
       nanazdb:

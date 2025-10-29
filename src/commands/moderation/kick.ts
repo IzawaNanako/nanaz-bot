@@ -147,7 +147,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .addFields([
             {
                 name: userLiteral,
-                value: `${member.user}`,
+                value: `<@${member.user.id}>`,
                 inline: true,
             },
             {
@@ -161,7 +161,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: issuerLiteral,
-                value: `${interaction.user}`,
+                value: `<@${interaction.user.id}>`,
                 inline: true,
             },
         ])

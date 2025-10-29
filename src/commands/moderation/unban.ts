@@ -85,7 +85,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const issuerLiteral = i18next.t('global.issuerLiteral');
     const unbanEmbedFooter = i18next.t('unban.unbanEmbedFooter');
     const unbannedNotice = i18next.t('unban.unbanNotice', {
-        issuer: interaction.user,
+        issuer: interaction.user.id,
         serverName: interaction.guild.name,
     });
 
@@ -111,7 +111,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: issuerLiteral,
-                value: `${interaction.user}`,
+                value: `<@${interaction.user.id}>`,
                 inline: true,
             },
         ])

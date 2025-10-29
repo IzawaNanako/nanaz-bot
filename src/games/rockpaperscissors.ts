@@ -14,8 +14,6 @@ const botEmojiMap: Record<string, string> = {
     '✂️': '🪨',
 };
 
-//FIXME Translation for the winning messages (in player vs bot, player vs player not tested) are not showing.
-
 /**
  * Play a game of rock-paper-scissors with another human user.
  * @param interaction The interaction that triggered the command.
@@ -42,12 +40,12 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const rightPlayer = leftPlayer === interaction.user ? opponent : interaction.user;
 
     const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
     });
     const gameEndInactivityMessage = i18next.t('rockPaperScissors.gameEndInactivityMessage', {
-        left_player: leftPlayer,
-        right_player: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
     });
 
     const gameEmbed = new EmbedBuilder()
@@ -123,8 +121,9 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
 
             if (userChoice === opponentChoice) {
                 const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerEmoji: leftPlayerEmoji,
                     rightPlayerEmoji: rightPlayerEmoji,
                 });
@@ -163,11 +162,12 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'rock' && opponentChoice === 'scissors') || (userChoice === 'scissors' && opponentChoice === 'rock')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerEmoji: leftPlayerEmoji,
                     rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'rock' ? interaction.user : opponent,
+                    winner: userChoice === 'rock' ? interaction.user.id : opponent.id,
                 });
                 gameEmbed
                     .setDescription(gameEndWinMessage)
@@ -181,11 +181,12 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'scissors' && opponentChoice === 'paper') || (userChoice === 'paper' && opponentChoice === 'scissors')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerEmoji: leftPlayerEmoji,
                     rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'scissors' ? interaction.user : opponent,
+                    winner: userChoice === 'scissors' ? interaction.user.id : opponent.id,
                 });
                 gameEmbed
                     .setDescription(gameEndWinMessage)
@@ -199,11 +200,12 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             }
             else if ((userChoice === 'paper' && opponentChoice === 'rock') || (userChoice === 'rock' && opponentChoice === 'paper')) {
                 const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    leftPlayer: leftPlayer,
-                    rightPlayer: rightPlayer,
+                    ns: 'games',
+                    leftPlayer: leftPlayer.id,
+                    rightPlayer: rightPlayer.id,
                     leftPlayerEmoji: leftPlayerEmoji,
                     rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'paper' ? interaction.user : opponent,
+                    winner: userChoice === 'paper' ? interaction.user.id : opponent.id,
                 });
                 gameEmbed
                     .setDescription(gameEndWinMessage)
@@ -222,7 +224,9 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
             });
 
             const rematchCollector = gameMessage.createMessageComponentCollector({
-                filter: (buttonInteraction: MessageComponentInteraction) => buttonInteraction.user === interaction.user || buttonInteraction.user === opponent,
+                filter: (buttonInteraction: MessageComponentInteraction) => (
+                    buttonInteraction.user === interaction.user || buttonInteraction.user === opponent
+                ),
                 time: 30000,
             });
 
@@ -250,19 +254,22 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 const rematchAccepter = buttonInteraction.user === interaction.user ? opponent : interaction.user;
 
                 const rematchRequestMessage = i18next.t('global.rematchRequestMessage', {
-                    rematchRequester: rematchRequester,
+                    ns: 'games',
+                    rematchRequester: rematchRequester.id,
                 });
                 const rematchRequestDeclinedMessage = i18next.t('global.rematchRequestDeclinedMessage', {
-                    rematchRequester: rematchRequester,
-                    rematchAccepter: rematchAccepter,
+                    ns: 'games',
+                    rematchRequester: rematchRequester.id,
+                    rematchAccepter: rematchAccepter.id,
                 });
                 const rematchRequestIgnoredMessage = i18next.t('global.rematchRequestIgnoredMessage', {
-                    rematchRequester: rematchRequester,
-                    rematchAccepter: rematchAccepter,
+                    ns: 'games',
+                    rematchRequester: rematchRequester.id,
+                    rematchAccepter: rematchAccepter.id,
                 });
 
                 await gameMessage.edit({
-                    content: `${rematchAccepter}`,
+                    content: `<@${rematchAccepter.id}>`,
                     embeds: [
                         rematchEmbed
                             .setDescription(rematchRequestMessage)
@@ -271,8 +278,9 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 });
 
                 const acceptCollector = gameMessage.createMessageComponentCollector({
-                    filter: (buttonInteraction: MessageComponentInteraction) =>
-                        buttonInteraction.user === rematchAccepter,
+                    filter: (buttonInteraction: MessageComponentInteraction) => (
+                        buttonInteraction.user === rematchAccepter
+                    ),
                     time: 30000,
                 });
 
@@ -350,12 +358,12 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     const rightPlayer = leftPlayer === interaction.user ? interaction.client.user : interaction.user;
 
     const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
     });
     const gameEndInactivityMessage = i18next.t('rockPaperScissors.gameEndInactivityMessage', {
-        leftPlayer: leftPlayer,
-        rightPlayer: rightPlayer,
+        leftPlayer: leftPlayer.id,
+        rightPlayer: rightPlayer.id,
     });
 
     const gameEmbed = new EmbedBuilder()
@@ -398,8 +406,9 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     let rightPlayerEmoji = '';
 
     const choiceCollector = gameMessage.createMessageComponentCollector({
-        filter: (buttonInteraction: MessageComponentInteraction) =>
-            buttonInteraction.user === interaction.user,
+        filter: (buttonInteraction: MessageComponentInteraction) => (
+            buttonInteraction.user === interaction.user
+        ),
         time: 30000,
     });
 
@@ -415,17 +424,19 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         rightPlayerEmoji = leftPlayer === interaction.user ? botEmojiMap[userChoiceEmoji] : userChoiceEmoji;
 
         const gameEndDrawMessage = i18next.t('rockPaperScissors.gameEndDrawMessage', {
-            leftPlayer: leftPlayer,
-            rightPlayer: rightPlayer,
+            ns: 'games',
+            leftPlayer: leftPlayer.id,
+            rightPlayer: rightPlayer.id,
             leftPlayerEmoji: leftPlayerEmoji,
             rightPlayerEmoji: rightPlayerEmoji,
         });
         const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-            leftPlayer: leftPlayer,
-            rightPlayer: rightPlayer,
+            ns: 'games',
+            leftPlayer: leftPlayer.id,
+            rightPlayer: rightPlayer.id,
             leftPlayerEmoji: leftPlayerEmoji,
             rightPlayerEmoji: rightPlayerEmoji,
-            winner: leftPlayer === interaction.client.user ? leftPlayer : rightPlayer,
+            winner: leftPlayer === interaction.client.user ? leftPlayer.id : rightPlayer.id,
         });
 
         // User has a 5% chance of drawing, otherwise the bot wins.
@@ -503,8 +514,9 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
         });
 
         const rematchCollector = gameMessage.createMessageComponentCollector({
-            filter: (buttonInteraction: MessageComponentInteraction) =>
-                buttonInteraction.user === interaction.user,
+            filter: (buttonInteraction: MessageComponentInteraction) => (
+                buttonInteraction.user === interaction.user
+            ),
             time: 30000,
         });
 

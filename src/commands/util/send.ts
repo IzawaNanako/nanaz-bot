@@ -118,7 +118,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         });
 
         await interaction.followUp({
-            content: `${interaction.user} > ${translatedText}`,
+            content: `<@${interaction.user.id}> > ${translatedText}`,
         });
         return;
     }
@@ -150,7 +150,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         });
 
         await interaction.followUp({
-            content: `${interaction.user} > ${translatedText}`,
+            content: `<@${interaction.user.id}> > ${translatedText}`,
         });
         return;
     }

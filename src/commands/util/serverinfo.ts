@@ -97,7 +97,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: serverOwnerLiteral,
-                value: `${owner.user}`,
+                value: `<@${owner.user.id}>`,
                 inline: true,
             },
             {

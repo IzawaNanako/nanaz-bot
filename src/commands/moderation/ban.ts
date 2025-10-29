@@ -156,7 +156,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const neverLiteral = i18next.t('ban.neverLiteral');
     const noReasonMessage = i18next.t('ban.noReasonMessage');
     const banNotice = i18next.t('ban:banNotice', {
-        issuer: interaction.user,
+        issuer: interaction.user.id,
         serverName: interaction.guild.name,
     });
     const banNoticeReason = i18next.t('ban.banNoticeReason', {
@@ -187,7 +187,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .addFields([
             {
                 name: userLiteral,
-                value: `${user}`,
+                value: `<@${user}>`,
                 inline: true,
             },
             {
@@ -201,7 +201,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             },
             {
                 name: issuerLiteral,
-                value: `${interaction.user}`,
+                value: `<@${interaction.user.id}>`,
                 inline: true,
             },
         ])
@@ -258,7 +258,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 .addFields([
                     {
                         name: userLiteral,
-                        value: `${user}`,
+                        value: `<@${user}>`,
                         inline: true,
                     },
                     {

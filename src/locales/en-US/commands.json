@@ -215,9 +215,11 @@
     },
     "reminder": {
         "reminderContentLiteral": "Reminder Content",
+        "reminderLimitError": "You can only setup up to 8 reminders!",
         "invalidTimeError": "Invalid time.",
         "reminderTooLongError": "The reminder message is too long, it must be less than 100 characters.",
         "reminderOnCooldownError": "Please wait a bit before setting another reminder!",
+        "reminderNoChannelError": "Please set the \"dm\" option to true if you are sending this command in dm!",
         "reminderInDMSuccessMessage": "Reminder set! Make sure you allow me to send you DMs!",
         "reminderInGuildSuccessMessage": "Reminder set!",
         "reminderEmbedTitle": "Reminders",
