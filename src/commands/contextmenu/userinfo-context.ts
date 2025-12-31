@@ -79,7 +79,9 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
     let status;
 
     if (guildMember) {
-        roles = guildMember.roles.cache.map((role) => `<@&${role.id}>`).join(`, `);
+        roles = guildMember.roles.cache
+            .map(role => role.name === '@everyone' ? role.name.replace('@', '') : `<@&${role.id}>`)
+            .join(', ');
         status = guildMember.presence?.status;
         if (guildMember.joinedAt) {
             joinedAt = `<t:${Math.floor(guildMember.joinedAt.getTime() / 1000)}>`;

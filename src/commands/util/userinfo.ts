@@ -105,9 +105,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     if (guildMember) {
         roles = guildMember.roles.cache
-            .filter((role) => role.id !== '@everyone')
-            .map((role) => `<@&${role.id}>`)
-            .join(`, `);
+            .map(role => role.name === '@everyone' ? role.name.replace('@', '') : `<@&${role.id}>`)
+            .join(', ');
         status = guildMember.presence?.status;
         if (guildMember.joinedAt) {
             joinedAt = `<t:${Math.floor(guildMember.joinedAt.getTime() / 1000)}>`;

@@ -6,6 +6,7 @@ import { User } from './models/user.js';
 import { WelcomeRole } from './models/welcomeRole.js';
 import { BotSettings } from './models/botSettings.js';
 import { Reminder } from './models/reminder.js';
+import { CommandPermission } from './models/commandPermisson.js';
 
 const models = [
     Guild,
@@ -15,6 +16,7 @@ const models = [
     WelcomeRole,
     BotSettings,
     Reminder,
+    CommandPermission,
 ];
 
 try {
