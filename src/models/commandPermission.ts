@@ -7,7 +7,6 @@ interface CommandPermissionAttributes {
     guildId: string;
     commandName: string;
     isEnabled: boolean;
-    requiredRoleId: string | null;
 }
 
 interface CommandPermissionInstance
@@ -35,19 +34,15 @@ const CommandPermission = sequelize.define<CommandPermissionInstance>('commandPe
         type: DataTypes.BOOLEAN,
         defaultValue: true,
         allowNull: false,
-    },
-    requiredRoleId: {
-        type: DataTypes.STRING,
-        allowNull: true,
     }
 });
 
 Guild.hasMany(CommandPermission, {
     foreignKey: 'guildId',
-    as: 'permissions',
+    as: 'permissions'
 });
 CommandPermission.belongsTo(Guild, {
-    foreignKey: 'guildId',
+    foreignKey: 'guildId'
 });
 
 export { CommandPermission };

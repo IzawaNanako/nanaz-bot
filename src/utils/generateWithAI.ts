@@ -29,7 +29,7 @@ const safetySettings = [
 
 const [stats] = await GlobalStats.findOrCreate({
     where: {
-        id: process.env.CLIENT_ID,
+        id: 1,
     }
 });
 

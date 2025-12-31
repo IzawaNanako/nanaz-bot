@@ -1,4 +1,5 @@
 import { Events, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, MessageFlags } from 'discord.js';
+import { CommandPermission } from '../../models/commandPermission.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import i18next from 'i18next';
 
@@ -9,6 +10,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
     await setInteractionLanguage(interaction);
 
     const commandUnknownError = i18next.t('interactionCreate.commandUnknownError');
+    const commandDisabled = i18next.t('interactionCreate.commandDisabled');
 
     if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isContextMenuCommand()) {
         return;
@@ -22,6 +24,23 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
 
     if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
         try {
+            if (interaction.guildId) {
+                const perm = await CommandPermission.findOne({
+                    where: {
+                        guildId: interaction.guildId,
+                        commandName: interaction.commandName
+                    }
+                });
+
+                if (perm && !perm.isEnabled) {
+                    await interaction.reply({ 
+                        content: commandDisabled, 
+                        flags: MessageFlags.Ephemeral,
+                    });
+                    return;
+                }
+            }
+
             await command.execute(interaction);
         }
         catch (error) {

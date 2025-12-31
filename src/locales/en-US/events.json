@@ -13,6 +13,6 @@
     },
     "interactionCreate": {
         "commandUnknownError": "There was an error while executing this command!",
-        "commandNoPermissionError": "You do not have the permission to use this command in this channel!"
+        "commandDisabled": "This command has been disabled by the server administrators."
     }
 }

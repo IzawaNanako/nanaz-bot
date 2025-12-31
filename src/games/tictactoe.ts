@@ -1,7 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, User as DiscordUser, ButtonInteraction, InteractionCollector, CacheType, ChannelSelectMenuInteraction, MentionableSelectMenuInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from 'discord.js';
+import { User } from '../models/user.js';
 import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
-import { User } from '../models/user.js';
 import i18next from 'i18next';
 
 const EMPTY = '\u200b';

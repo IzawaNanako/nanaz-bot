@@ -52,7 +52,7 @@ const [bot] = await BotSettings.findOrCreate({
 });
 await GlobalStats.findOrCreate({
     where: {
-        id: process.env.CLIENT_ID,
+        id: 1,
     }
 });
 

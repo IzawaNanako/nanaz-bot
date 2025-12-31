@@ -1,6 +1,6 @@
 import 'dotenv/config.js';
-import { TargetLanguageCode, Translator } from 'deepl-node';
 import { GlobalStats } from '../models/globalStats.js';
+import { TargetLanguageCode, Translator } from 'deepl-node';
 
 /**
  * Map a possibly unsupported language code to a supported one.
@@ -33,7 +33,7 @@ const translator = new Translator(DeepLAPIKey);
 
 const [stats] = await GlobalStats.findOrCreate({
     where: {
-        id: process.env.CLIENT_ID,
+        id: 1,
     }
 });
 

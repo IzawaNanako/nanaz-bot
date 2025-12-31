@@ -2,7 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '../utils/database.js';
 
 interface GlobalStatsAttributes {
-    id: string;
+    id: number;
     totalTranslations: number;
     totalReplies: number;
 }
@@ -16,7 +16,7 @@ interface GlobalStatsInstance
 
 const GlobalStats = sequelize.define<GlobalStatsInstance>('globalStats', {
     id: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         primaryKey: true,
     },
     totalTranslations: {
