@@ -2,6 +2,7 @@ import { Events, Client, EmbedBuilder } from 'discord.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import { Guild } from '../../models/guild.js';
 import { Reminder } from '../../models/reminder.js';
+import { User } from '../../models/user.js';
 import { sendLog } from '../../utils/sendLog.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
@@ -15,6 +16,49 @@ export async function execute(client: Client) {
     }
 
     console.log(`Ready! Logged in as ${client.user.tag}`);
+
+    const guilds = client.guilds.cache;
+
+    for (const [id, guild] of guilds) {
+        try {
+            const guildData = await Guild.findOne({
+                where: {
+                    id: guild.id,
+                }
+            });
+
+            if (!guildData) {
+                await Guild.create({
+                    id: guild.id,
+                    name: guild.name,
+                    language: 'en-us',
+                });
+            }
+
+            if (guildData?.name !== guild.name) {
+                guildData?.update({
+                    name: guild.name,
+                });
+            }
+
+            const members = await guild.members.fetch();
+            
+            for (const [memberId, member] of members) {
+                if (member.user.bot) {
+                    continue;
+                }
+
+                await User.findOrCreate({
+                    where: {
+                        id: memberId,
+                    }
+                });
+            }
+        }
+        catch (error) {
+            console.error(`Failed to sync guild ${guild.name} (${id}):`, error);
+        }
+    }
 
     const bannedMembers = await BannedMember.findAll({
         where: {

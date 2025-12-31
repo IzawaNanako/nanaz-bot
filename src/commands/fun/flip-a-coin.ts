@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { User } from '../../models/user.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
@@ -36,7 +37,13 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
             text: coinEmbedFooter,
             iconURL: interaction.client.user.avatarURL() ?? undefined,
         })
-        .setTimestamp()
+        .setTimestamp();
+
+    const [user] = await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        }
+    });
 
     /**
      * Flips a coin and displays the result.
@@ -59,12 +66,20 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
             if (result === 'heads') {
                 coinEmbed
                     .setDescription(headsMessage)
-                    .setImage('https://i.imgur.com/8Me5KsQ.png')
+                    .setImage('https://i.imgur.com/8Me5KsQ.png');
+                
+                user.update({
+                    coinFlipWins: user.coinFlipWins + 1,
+                });
             }
             else {
                 coinEmbed
                     .setDescription(tailsMessage)
-                    .setImage('https://i.imgur.com/w6uXDlO.png')
+                    .setImage('https://i.imgur.com/w6uXDlO.png');
+
+                user.update({
+                    coinFlipLosses: user.coinFlipLosses + 1,
+                })
             }
     
             const retryCollector = message.createMessageComponentCollector({

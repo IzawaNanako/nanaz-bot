@@ -1,20 +1,33 @@
-import { EmbedBuilder, GuildMember as Member, PermissionFlagsBits, TextChannel } from 'discord.js';
+import { Events, EmbedBuilder, GuildMember as Member, PermissionFlagsBits, TextChannel } from 'discord.js';
 import { Guild } from '../../models/guild.js';
+import { User } from '../../models/user.js';
 import { GuildMember } from '../../models/guildMember.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import { WelcomeRole } from '../../models/welcomeRole.js';
 import i18next from 'i18next';
 
-export const name = 'guildMemberAdd';
+export const name = Events.GuildMemberAdd;
 export async function execute(member: Member) {
-    const guild = await Guild.findOne({
+    if (member.user.bot) {
+        return;
+    }
+
+    try {
+        await User.findOrCreate({
+            where: {
+                id: member.id
+            }
+        });
+    }
+    catch (error) {
+        console.error(`Error registering user ${member.id}:`, error);
+    }
+
+    const [guild] = await Guild.findOrCreate({
         where: {
             id: member.guild.id,
         }
     });
-    if (!guild) {
-        return;
-    }
 
     i18next.setDefaultNamespace('events');
     await i18next.changeLanguage(guild.language);
@@ -25,7 +38,7 @@ export async function execute(member: Member) {
     const welcomeEmbedWasKicked = i18next.t('guildMemberAdd.welcomeEmbedWasKicked');
     const welcomeEmbedWasBanned = i18next.t('guildMemberAdd.welcomeEmbedWasBanned');
 
-    const guildMember = await GuildMember.findOne({
+    const [guildMember] = await GuildMember.findOrCreate({
         where: {
             id: member.user.id,
             guildId: member.guild.id,

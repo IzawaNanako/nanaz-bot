@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
+import { GlobalStats } from '../models/globalStats.js';
 
 const geminiAPIKey = process.env.GEMINI_API_KEY;
 if (!geminiAPIKey) {
@@ -25,6 +26,12 @@ const safetySettings = [
         threshold: HarmBlockThreshold.BLOCK_NONE,
     }
 ];
+
+const [stats] = await GlobalStats.findOrCreate({
+    where: {
+        id: process.env.CLIENT_ID,
+    }
+});
 
 /**
  * Generate a reply to a message with AI.
@@ -60,11 +67,9 @@ export async function generateWithAI(message: string, isMaster: boolean = false)
         maxOutputTokens: 2048,
     };
 
-    const parts = [
-        {
+    const parts = [{
             text: `rule: ${rule}, preset: ${preset}, facts: ${facts}, input: ${userMessage}`,
-        }
-    ];
+    }];
 
     const result = await model.generateContent({
         contents: [{
@@ -75,6 +80,10 @@ export async function generateWithAI(message: string, isMaster: boolean = false)
     });
 
     const reply = result.response.text();
+    
+    stats.update({
+        totalReplies: stats.totalReplies + 1,
+    });
 
     return reply;
 };

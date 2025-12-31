@@ -1,5 +1,6 @@
 import 'dotenv/config.js';
 import { TargetLanguageCode, Translator } from 'deepl-node';
+import { GlobalStats } from '../models/globalStats.js';
 
 /**
  * Map a possibly unsupported language code to a supported one.
@@ -30,6 +31,12 @@ if (!DeepLAPIKey) {
 
 const translator = new Translator(DeepLAPIKey);
 
+const [stats] = await GlobalStats.findOrCreate({
+    where: {
+        id: process.env.CLIENT_ID,
+    }
+});
+
 /**
  * Translate a string using DeepL.
  * @param message The message to translate.
@@ -46,6 +53,10 @@ export async function translateWithDeepL(message: string, language: string) {
     }
 
     const result = await translator.translateText(message, null, targetLanguage);
+
+    stats.update({
+        totalTranslations: stats.totalTranslations + 1,
+    });
 
     return result.text;
 };

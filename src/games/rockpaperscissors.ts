@@ -1,6 +1,7 @@
 import { EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, User as DiscordUser, ActionRowBuilder, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
 import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
+import { User } from '../models/user.js';
 import i18next from 'i18next';
 
 const choiceMap: Record<string, string> = {
@@ -35,6 +36,17 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const rockVersusScissorsResult = i18next.t('rockPaperScissors.rockVersusScissorsResult');
     const scissorsVersusPaperResult = i18next.t('rockPaperScissors.scissorsVersusPaperResult');
     const paperVersusRockResult = i18next.t('rockPaperScissors.paperVersusRockResult');
+
+    const [userData] = await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    const [opponentData] = await User.findOrCreate({
+        where: {
+            id: opponent.id,
+        }
+    });
 
     const leftPlayer = Math.random() < 0.5 ? interaction.user : opponent;
     const rightPlayer = leftPlayer === interaction.user ? opponent : interaction.user;
@@ -90,6 +102,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     let resettingCollector = false;
     let leftPlayerEmoji = '';
     let rightPlayerEmoji = '';
+    let winner = '';
 
     const choiceCollector = gameMessage.createMessageComponentCollector({
         filter: (buttonInteraction: MessageComponentInteraction) =>
@@ -129,6 +142,14 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                 });
                 gameEmbed
                     .setDescription(gameEndDrawMessage);
+
+                userData.update({
+                    rpsDraws: userData.rpsDraws + 1,
+                });
+                opponentData.update({
+                    rpsDraws: opponentData.rpsDraws + 1,
+                });
+
                 if (userChoice === 'rock') {
                     gameEmbed
                         .addFields([
@@ -160,62 +181,85 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                         .setImage('https://i.imgur.com/pD7JrnS.png')
                 }
             }
-            else if ((userChoice === 'rock' && opponentChoice === 'scissors') || (userChoice === 'scissors' && opponentChoice === 'rock')) {
-                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    ns: 'games',
-                    leftPlayer: leftPlayer.id,
-                    rightPlayer: rightPlayer.id,
-                    leftPlayerEmoji: leftPlayerEmoji,
-                    rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'rock' ? interaction.user.id : opponent.id,
-                });
-                gameEmbed
-                    .setDescription(gameEndWinMessage)
-                    .addFields([
-                        {
-                            name: '\u200b',
-                            value: rockVersusScissorsResult,
-                        }
-                    ])
-                    .setImage('https://i.imgur.com/AIF5JpE.png');
-            }
-            else if ((userChoice === 'scissors' && opponentChoice === 'paper') || (userChoice === 'paper' && opponentChoice === 'scissors')) {
-                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    ns: 'games',
-                    leftPlayer: leftPlayer.id,
-                    rightPlayer: rightPlayer.id,
-                    leftPlayerEmoji: leftPlayerEmoji,
-                    rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'scissors' ? interaction.user.id : opponent.id,
-                });
-                gameEmbed
-                    .setDescription(gameEndWinMessage)
-                    .addFields([
-                        {
-                            name: '\u200b',
-                            value: scissorsVersusPaperResult,
-                        }
-                    ])
-                    .setImage('https://i.imgur.com/CUi7LYq.png');
-            }
-            else if ((userChoice === 'paper' && opponentChoice === 'rock') || (userChoice === 'rock' && opponentChoice === 'paper')) {
-                const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
-                    ns: 'games',
-                    leftPlayer: leftPlayer.id,
-                    rightPlayer: rightPlayer.id,
-                    leftPlayerEmoji: leftPlayerEmoji,
-                    rightPlayerEmoji: rightPlayerEmoji,
-                    winner: userChoice === 'paper' ? interaction.user.id : opponent.id,
-                });
-                gameEmbed
-                    .setDescription(gameEndWinMessage)
-                    .addFields([
-                        {
-                            name: '\u200b',
-                            value: paperVersusRockResult,
-                        }
-                    ])
-                    .setImage('https://i.imgur.com/fPMYgBK.png');
+            else {
+                if ((userChoice === 'rock' && opponentChoice === 'scissors') || (userChoice === 'scissors' && opponentChoice === 'rock')) {
+                    winner = userChoice === 'rock' ? interaction.user.id : opponent.id;
+                    const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
+                        ns: 'games',
+                        leftPlayer: leftPlayer.id,
+                        rightPlayer: rightPlayer.id,
+                        leftPlayerEmoji: leftPlayerEmoji,
+                        rightPlayerEmoji: rightPlayerEmoji,
+                        winner: winner,
+                    });
+                    gameEmbed
+                        .setDescription(gameEndWinMessage)
+                        .addFields([
+                            {
+                                name: '\u200b',
+                                value: rockVersusScissorsResult,
+                            }
+                        ])
+                        .setImage('https://i.imgur.com/AIF5JpE.png');
+                }
+                else if ((userChoice === 'scissors' && opponentChoice === 'paper') || (userChoice === 'paper' && opponentChoice === 'scissors')) {
+                    winner = userChoice === 'scissors' ? interaction.user.id : opponent.id;
+                    const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
+                        ns: 'games',
+                        leftPlayer: leftPlayer.id,
+                        rightPlayer: rightPlayer.id,
+                        leftPlayerEmoji: leftPlayerEmoji,
+                        rightPlayerEmoji: rightPlayerEmoji,
+                        winner: winner,
+                    });
+                    gameEmbed
+                        .setDescription(gameEndWinMessage)
+                        .addFields([
+                            {
+                                name: '\u200b',
+                                value: scissorsVersusPaperResult,
+                            }
+                        ])
+                        .setImage('https://i.imgur.com/CUi7LYq.png');
+                }
+                else if ((userChoice === 'paper' && opponentChoice === 'rock') || (userChoice === 'rock' && opponentChoice === 'paper')) {
+                    winner = userChoice === 'paper' ? interaction.user.id : opponent.id;
+
+                    const gameEndWinMessage = i18next.t('rockPaperScissors.gameEndWinMessage', {
+                        ns: 'games',
+                        leftPlayer: leftPlayer.id,
+                        rightPlayer: rightPlayer.id,
+                        leftPlayerEmoji: leftPlayerEmoji,
+                        rightPlayerEmoji: rightPlayerEmoji,
+                        winner: winner,
+                    });
+                    gameEmbed
+                        .setDescription(gameEndWinMessage)
+                        .addFields([
+                            {
+                                name: '\u200b',
+                                value: paperVersusRockResult,
+                            }
+                        ])
+                        .setImage('https://i.imgur.com/fPMYgBK.png');
+                }
+
+                if (winner === interaction.user.id) {
+                    userData.update({
+                        rpsWins: userData.rpsWins + 1,
+                    });
+                    opponentData.update({
+                        rpsLosses: opponentData.rpsLosses + 1,
+                    });
+                }
+                else {
+                    userData.update({
+                        rpsLosses: userData.rpsLosses + 1,
+                    });
+                    opponentData.update({
+                        rpsWins: opponentData.rpsWins + 1,
+                    });
+                }
             }
 
             await gameMessage.edit({
@@ -354,6 +398,12 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     const scissorsVersusPaperResult = i18next.t('rockPaperScissors.scissorsVersusPaperResult');
     const paperVersusRockResult = i18next.t('rockPaperScissors.paperVersusRockResult');
 
+    const [userData] = await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        } 
+    });
+
     const leftPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const rightPlayer = leftPlayer === interaction.user ? interaction.client.user : interaction.user;
 
@@ -473,39 +523,49 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
                         ])
                         .setImage('https://i.imgur.com/pD7JrnS.png')
                 }
-        }
-        else if (userChoice === 'rock') {
-            gameEmbed
-                .setDescription(gameEndWinMessage)
-                .addFields([
-                    {
-                        name: '\u200b',
-                        value: paperVersusRockResult,
-                    }
-                ])
-                .setImage('https://i.imgur.com/fPMYgBK.png');
-        }
-        else if (userChoice === 'paper') {
-            gameEmbed
-                .setDescription(gameEndWinMessage)
-                .addFields([
-                    {
-                        name: '\u200b',
-                        value: scissorsVersusPaperResult,
-                    }
-                ])
-                .setImage('https://i.imgur.com/CUi7LYq.png');
+
+            userData.update({
+                rpsWins: userData.rpsWins + 1,
+            });
         }
         else {
-            gameEmbed
-                .setDescription(gameEndWinMessage)
-                .addFields([
-                    {
-                        name: '\u200b',
-                        value: rockVersusScissorsResult,
-                    }
-                ])
-                .setImage('https://i.imgur.com/AIF5JpE.png');
+            if (userChoice === 'rock') {
+                gameEmbed
+                    .setDescription(gameEndWinMessage)
+                    .addFields([
+                        {
+                            name: '\u200b',
+                            value: paperVersusRockResult,
+                        }
+                    ])
+                    .setImage('https://i.imgur.com/fPMYgBK.png');
+            }
+            else if (userChoice === 'paper') {
+                gameEmbed
+                    .setDescription(gameEndWinMessage)
+                    .addFields([
+                        {
+                            name: '\u200b',
+                            value: scissorsVersusPaperResult,
+                        }
+                    ])
+                    .setImage('https://i.imgur.com/CUi7LYq.png');
+            }
+            else {
+                gameEmbed
+                    .setDescription(gameEndWinMessage)
+                    .addFields([
+                        {
+                            name: '\u200b',
+                            value: rockVersusScissorsResult,
+                        }
+                    ])
+                    .setImage('https://i.imgur.com/AIF5JpE.png');
+            }
+
+            userData.update({
+                rpsLosses: userData.rpsLosses + 1,
+            });
         }
 
         await gameMessage.edit({

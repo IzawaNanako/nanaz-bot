@@ -4,6 +4,7 @@ import { join } from 'path';
 import { pathToFileURL } from 'url';
 import { ActivityType, Client, Collection, GatewayIntentBits, Partials, PresenceData, PresenceStatusData } from 'discord.js';
 import { BotSettings } from './models/botSettings.js';
+import { GlobalStats } from './models/globalStats.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
@@ -45,6 +46,11 @@ const activityMap: Record<string, ActivityType> = {
     'custom': ActivityType.Custom,
 }
 const [bot] = await BotSettings.findOrCreate({
+    where: {
+        id: process.env.CLIENT_ID,
+    }
+});
+await GlobalStats.findOrCreate({
     where: {
         id: process.env.CLIENT_ID,
     }

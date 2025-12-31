@@ -1,21 +1,21 @@
-import { EmbedBuilder, GuildMember as Member, PermissionFlagsBits, TextChannel } from 'discord.js';
+import { Events, EmbedBuilder, GuildMember as Member, PermissionFlagsBits, TextChannel } from 'discord.js';
 import { Guild } from '../../models/guild.js';
 import { GuildMember } from '../../models/guildMember.js';
 import { BannedMember } from '../../models/bannedMember.js';
 import i18next from 'i18next';
 
-export const name = 'guildMemberRemove';
+export const name = Events.GuildMemberRemove;
 export async function execute(member: Member) {
     if (member === member.guild.members.me) {
         return;
     }
     
-    const guild = await Guild.findOne({
+    const [guild] = await Guild.findOrCreate({
         where: {
             id: member.guild.id,
         }
     });
-    if (!guild || !guild.byeChannelId || (member.guild.members.me && (!member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.SendMessages) || !member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.ViewChannel)))) {
+    if (!guild.byeChannelId || (member.guild.members.me && (!member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.SendMessages) || !member.guild.members.me.permissionsIn(guild.byeChannelId).has(PermissionFlagsBits.ViewChannel)))) {
         return;
     }
 

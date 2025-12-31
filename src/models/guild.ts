@@ -3,6 +3,7 @@ import { sequelize } from '../utils/database.js';
 
 interface GuildAttributes {
     id: string;
+    name: string;
     welcomeChannelId: string | null;
     byeChannelId: string | null;
     logChannelId: string | null;
@@ -21,6 +22,10 @@ const Guild = sequelize.define<GuildInstance>('guild', {
     id: {
         type: DataTypes.STRING,
         primaryKey: true,
+    },
+    name: {
+        type: DataTypes.STRING,
+        allowNull: true,
     },
     welcomeChannelId: {
         type: DataTypes.STRING,

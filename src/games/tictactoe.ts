@@ -1,6 +1,7 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, User as DiscordUser, ButtonInteraction, InteractionCollector, CacheType, ChannelSelectMenuInteraction, MentionableSelectMenuInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from 'discord.js';
 import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
 import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
+import { User } from '../models/user.js';
 import i18next from 'i18next';
 
 const EMPTY = '\u200b';
@@ -29,6 +30,17 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
 
     const tttTitle = i18next.t('ticTacToe.tttTitle');
     const hostedByFooter = i18next.t('global.hostedByFooter');
+
+    const [userData] = await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        }
+    });
+    const [opponentData] = await User.findOrCreate({
+        where: {
+            id: opponent.id,
+        }
+    });
 
     let turn = Math.random() < 0.5 ? PLAYER_X : PLAYER_O;
     let currentPlayer = Math.random() < 0.5 ? interaction.user : opponent;
@@ -142,12 +154,37 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                     content: gameEndWinMessage,
                     components: createBoard(true),
                 });
+
+                if (currentPlayer.id === interaction.user.id) {
+                    userData.update({
+                        tttWins: userData.tttWins + 1,
+                    });
+                    opponentData.update({
+                        tttLosses: opponentData.tttLosses + 1,
+                    });
+                }
+                else {
+                    userData.update({
+                        tttLosses: userData.tttLosses + 1,
+                    });
+                    opponentData.update({
+                        tttWins: opponentData.tttWins + 1,
+                    });
+                }
             }
             else if (!board.includes(EMPTY)) {
                 gameEnded = true;
+
                 await gameMessage.edit({
                     content: gameEndDrawMessage,
                     components: createBoard(true),
+                });
+
+                userData.update({
+                    tttDraws: userData.tttDraws + 1,
+                });
+                opponentData.update({
+                    tttDraws: opponentData.tttDraws + 1,
                 });
             }
 
@@ -299,6 +336,12 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
     i18next.setDefaultNamespace('games');
 
     await setInteractionLanguage(interaction);
+
+    const [userData] = await User.findOrCreate({
+        where: {
+            id: interaction.user.id,
+        }
+    });
 
     let currentPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const leftPlayer = currentPlayer;
@@ -491,9 +534,14 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
             if (!board.includes(EMPTY)) {
                 gameEnded = true;
+
                 await gameMessage.edit({
                     content: gameEndDrawMessage,
                     components: createBoard(true),
+                });
+
+                userData.update({
+                    tttDraws: userData.tttDraws + 1,
                 });
             }
 
@@ -547,13 +595,19 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
 
         if (checkWin(botSymbol)) {
             gameEnded = true;
+
             await gameMessage.edit({
                 content: gameEndBotWinMessage,
                 components: createBoard(true),
             });
+
+            userData.update({
+                tttLosses: userData.tttLosses + 1,
+            });
         }
         else if (!board.includes(EMPTY)) {
             gameEnded = true;
+
             await gameMessage.edit({
                 content: gameEndDrawMessage,
                 components: createBoard(true),

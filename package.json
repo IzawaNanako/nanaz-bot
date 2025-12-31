@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/index.ts",
-        "build": "tsc && node -e \"require('fs-extra').copySync('src/assets', 'dist/assets')\" && node -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
+        "build": "tsc && node -e \"require('fs-extra').copySync('src/locales', 'dist/locales')\"",
         "deploy-global": "node dist/deploy-commands-global.js",
         "deploy-guild": "node dist/deploy-commands-guild.js",
         "rs-global": "node dist/rs-global-cmds.js",
@@ -20,20 +20,23 @@
         "**/*": "prettier --write --ignore-unknown"
     },
     "dependencies": {
-        "@discordjs/voice": "^0.18.0",
+        "@eslint/js": "^9.39.2",
         "@google/generative-ai": "^0.24.0",
         "@types/node-schedule": "^2.1.7",
         "deepl-node": "^1.17.3",
         "discord.js": "^14.18.0",
         "dotenv": "^16.5.0",
-        "fs-extra": "^11.3.0",
+        "fs-extra": "^11.3.3",
         "fuse.js": "^7.1.0",
+        "globals": "^16.5.0",
         "i18next": "^24.2.3",
         "i18next-fs-backend": "^2.6.0",
+        "lint-staged": "^16.2.7",
         "node-schedule": "^2.1.1",
-        "pg": "^8.14.1",
+        "pg": "^8.16.3",
         "sequelize": "^6.37.7",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "typescript-eslint": "^8.51.0"
     },
     "devDependencies": {
         "eslint": "^9.24.0",
