@@ -612,6 +612,10 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
                 content: gameEndDrawMessage,
                 components: createBoard(true),
             });
+
+            userData.update({
+                tttDraws: userData.tttDraws + 1,
+            });
         }
 
         if (gameEnded) {
