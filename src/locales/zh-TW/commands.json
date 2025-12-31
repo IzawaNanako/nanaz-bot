@@ -117,7 +117,7 @@
         "kickRandomTextFive": "我很抱歉。我很抱歉。我很抱歉。"
     },
     "ban": {
-        "neverLiteral": "Never",
+        "neverLiteral": "從未",
         "banPermissionError": "我沒有在此伺服器停權成員的權限！",
         "banningThemselvesError": "蛤？",
         "failedToBanError": "我似乎無法停權那個使用者。\n請注意他們最高位的身份組不能比我的還高。",
@@ -147,7 +147,7 @@
         "banInformationLiteral": "停權資訊",
         "userIsBannedMessage": "該使用者目下正被伺服器停權中。",
         "userIsNotBannedMessage": "該使用者當下未被伺服器停權。",
-        "banInfoEmbedFooter": "Check Server Settings -> Bans or /baninfo for more information.",
+        "banInfoEmbedFooter": "查看伺服器設定 -> 被停權者或/baninfo以獲取更多資訊。",
         "banInfoEmbedBannedAtTitle": "停權於",
         "banInfoEmbedExpireDateTitle": "失效於",
         "banInfoEmbedTotalBansTitle": "總停權數"
@@ -214,18 +214,18 @@
         "sendSuccessMessage": "訊息成功送出。"
     },
     "reminder": {
-        "reminderContentLiteral": "Reminder Content",
-        "reminderLimitError": "You can only setup up to 8 reminders!",
-        "invalidTimeError": "Invalid time.",
-        "reminderTooLongError": "The reminder message is too long, it must be less than 100 characters.",
-        "reminderOnCooldownError": "Please wait a bit before setting another reminder!",
-        "reminderNoChannelError": "Please set the \"dm\" option to true if you are sending this command in dm!",
-        "reminderInDMSuccessMessage": "Reminder set! Make sure you allow me to send you DMs!",
-        "reminderInGuildSuccessMessage": "Reminder set!",
-        "reminderEmbedTitle": "Reminders",
-        "reminderEmbedDescription": "Your active reminders are shown here.",
-        "noActiveRemindersError": "You don't have any active reminders.",
-        "reminderNotExistError": "Reminder with the given ID does not exist.",
-        "stopRemindSuccessMessage": "All your reminders have been stopped."
+        "reminderContentLiteral": "提醒內容",
+        "reminderLimitError": "您最多只能設置8個提醒！",
+        "invalidTimeError": "無效的時間。",
+        "reminderTooLongError": "提醒訊息過長，其必須小於100字元。",
+        "reminderOnCooldownError": "請於設定下一個提醒前等待一段時間！",
+        "reminderNoChannelError": "如果您正於私訊中傳送此指令，請將\"dm\"選項設定為true！",
+        "reminderInDMSuccessMessage": "提醒設定完畢！務必確保您允許我向您傳送私訊！",
+        "reminderInGuildSuccessMessage": "提醒已設定！",
+        "reminderEmbedTitle": "所有提醒",
+        "reminderEmbedDescription": "您的有效提醒於此顯示。",
+        "noActiveRemindersError": "您沒有任何有效的提醒。",
+        "reminderNotExistError": "未發現與您輸入的ID相符的提醒。",
+        "stopRemindSuccessMessage": "您的所有提醒已被取消。"
     }
 }
