@@ -16,6 +16,7 @@
         "reasonLiteral": "Reason",
         "issuerLiteral": "Issuer",
         "neverLiteral": "Never",
+        "durationLiteral": "Duration",
         "sendMessagePermissionError": "I don't have permission to send messages in that channel!",
         "viewChannelPermissionError": "I don't have permission to view that channel!",
         "manageRolesPermissionError": "I don't have permission to manage roles in this server!"
@@ -96,7 +97,7 @@
         "welcomeMessageAlreadyDisabledError": "The welcome message feature is already disabled!",
         "byeMessageAlreadyDisabledError": "The bye message feature is already disabled!",
         "loggingChannelUnchangedError": "The logging channel is already set to this channel!",
-        "welcomeChannelUnchangedError": "The welcome channel is already set to this channel!",
+        "welcomeMessageChannelUnchangedError": "The welcome channel is already set to this channel!",
         "byeMessageChannelUnchangedError": "The bye message channel is already set to this channel!",
         "logChannelChangedMessage": "Log Channel Changed",
         "welcomeChannelChangedMessage": "Welcome Channel Changed",

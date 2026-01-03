@@ -143,6 +143,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             guildId: interaction.guild.id,
         }
     });
+
+    await interaction.deferReply();
     
     await setPublicInteractionLanguage(interaction);
 
@@ -309,7 +311,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         deleteMessageSeconds: delSecs,
     });
 
-    await interaction.reply({
+    await interaction.editReply({
         embeds: [banEmbed],
         components: [supportButton],
     });

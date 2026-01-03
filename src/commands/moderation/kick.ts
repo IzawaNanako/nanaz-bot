@@ -110,6 +110,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
 
+    await interaction.deferReply();
+
     await setPublicInteractionLanguage(interaction);
 
     const kickEmbedTitle = i18next.t('kick.kickEmbedTitle');
@@ -192,7 +194,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         isKicked: true,
     });
 
-    await interaction.reply({
+    await interaction.editReply({
         embeds: [kickEmbed],
         components: [supportButton],
     });

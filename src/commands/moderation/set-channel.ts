@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, PermissionFlagsBits, ChannelType, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
 import { Guild } from '../../models/guild.js';
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -150,8 +150,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
-    const featureAlreadyDisabledError = type === 'log' ? i18next.t('setChannel.logFeatureAlreadyDisabledError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageFeatureAlreadyDisabledError') : i18next.t('setChannel.byeMessageFeatureAlreadyDisabledError');
-    const featureChannelUnchangeError = type === 'log' ? i18next.t('setChannel.logFeatureChannelUnchangeError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageFeatureChannelUnchangeError') : i18next.t('setChannel.byeMessageFeatureChannelUnchangeError');
+    const featureAlreadyDisabledError = type === 'log' ? i18next.t('setChannel.loggingAlreadyDisabledError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageAlreadyDisabledError') : i18next.t('setChannel.byeMessageAlreadyDisabledError');
+    const featureChannelUnchangedError = type === 'log' ? i18next.t('setChannel.loggingChannelUnchangedError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageChannelUnchangedError') : i18next.t('setChannel.byeMessageChannelUnchangeError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
@@ -172,7 +172,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const channelKey = `${type}ChannelId` as 'welcomeChannelId' | 'byeChannelId' | 'logChannelId';
     const previousChannel = guild[channelKey];
 
-    i18next.changeLanguage(guild.language);
+    await setPublicInteractionLanguage(interaction);
 
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
@@ -204,13 +204,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             content: featureAlreadyDisabledError,
             components: [supportButton],
         });
+        return;
     }
 
     if (channel && channel.id === previousChannel) {
         await interaction.editReply({
-            content: featureChannelUnchangeError,
+            content: featureChannelUnchangedError,
             components: [supportButton],
         });
+        return;
     }
 
     const actionEmbed = new EmbedBuilder()

@@ -1,6 +1,6 @@
 {
     "name": "uwubot",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "not so cool idk maybe cute?",
     "main": "dist/index.js",
     "type": "module",

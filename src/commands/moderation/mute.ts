@@ -126,6 +126,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         return;
     }
 
+    await interaction.deferReply();
+
     await setPublicInteractionLanguage(interaction);
 
     const muteEmbedTitle = i18next.t('mute.muteEmbedTitle');
@@ -214,7 +216,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await member.timeout(duration * 60 * 1000, reason || noReasonMessage);
 
-    await interaction.reply({
+    await interaction.editReply({
         embeds: [muteEmbed],
         components: [supportButton],
     });

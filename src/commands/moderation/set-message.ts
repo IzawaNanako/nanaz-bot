@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder, ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { Guild } from '../../models/guild.js';
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -83,7 +83,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const messageKey = `${type}Message` as 'welcomeMessage' | 'byeMessage';
     const previousMessage = guild[messageKey];
 
-    i18next.changeLanguage(guild.language);
+    await setPublicInteractionLanguage(interaction);
 
     const requestedByAuthor = i18next.t('global.requestedByAuthor', {
         userDisplayName: interaction.user.displayName,
