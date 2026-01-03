@@ -2,7 +2,6 @@
     "guildMemberRemove": {
         "byeEmbedAuthor": "さようなら、{{username}}！",
         "byeEmbedTitle": "{{userDisplayName}}がサーバーから退出しました。",
-        "byeEmbedDescription": "君がいなくなるのは寂しいよ...。",
         "byeEmbedFooter": "またどこかで会えるといいね！"
     },
     "guildMemberAdd": {
@@ -13,6 +12,6 @@
     },
     "interactionCreate": {
         "commandUnknownError": "このコマンドの実行中にエラーが発生しました！",
-        "commandNoPermissionError": "このチャンネルでこのコマンドを使用する権限がない！"
+        "commandDisabled": "This command has been disabled by the server administrators."
     }
 }

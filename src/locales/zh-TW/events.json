@@ -2,7 +2,6 @@
     "guildMemberRemove": {
         "byeEmbedAuthor": "再見，{{username}}！",
         "byeEmbedTitle": "{{userDisplayName}}離開了伺服器。",
-        "byeEmbedDescription": "我們對您的離開感到非常難過...",
         "byeEmbedFooter": "希望能在別的地方見到你！"
     },
     "guildMemberAdd": {
@@ -13,6 +12,6 @@
     },
     "interactionCreate": {
         "commandUnknownError": "執行此指令時發生錯誤！",
-        "commandNoPermissionError": "您沒有在此頻道使用此指令的權限！"
+        "commandDisabled": "This command has been disabled by the server administrators."
     }
 }
