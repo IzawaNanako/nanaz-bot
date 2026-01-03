@@ -31,6 +31,8 @@ export async function execute(client: Client) {
                 await Guild.create({
                     id: guild.id,
                     name: guild.name,
+                    welcomeMessage: 'Thank you for joining <@guildname>!',
+                    byeMessage: 'Goodbye <@username>, we will miss you!',
                     language: 'en-us',
                 });
             }
