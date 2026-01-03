@@ -189,7 +189,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .addFields([
             {
                 name: userLiteral,
-                value: `<@${user}>`,
+                value: `<@${user.id}>`,
                 inline: true,
             },
             {
