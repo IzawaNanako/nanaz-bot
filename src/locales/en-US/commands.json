@@ -227,5 +227,21 @@
         "noActiveRemindersError": "You don't have any active reminders.",
         "reminderNotExistError": "Reminder with the given ID does not exist.",
         "stopRemindSuccessMessage": "All your reminders have been stopped."
+    },
+    "mute": {
+        "mutePermissionError": "I don't have permission to timeout members in this server!",
+        "mutingThemselvesError": "What the heck are you doing?",
+        "failedToMuteError": "I can't seem to mute that user.\nNote that their highest role cannot be higher than mine.",
+        "muteEmbedTitle": "🔇 Member Muted",
+        "muteEmbedFooter": "The timeout will expire automatically.",
+        "mutedNotice": "<@{{issuer}}> has muted you in **{{serverName}}** for {{duration}} minutes!",
+        "mutedNoticeReason": " Reason: {{reason}}.",
+        "noReasonMessage": "No reason provided.",
+        "muteMinutesLiteral": "minutes",
+        "muteRandomTextOne": "Silence is golden.",
+        "muteRandomTextTwo": "They'll learn to be quiet.",
+        "muteRandomTextThree": "Quiet time!",
+        "muteRandomTextFour": "Shhh... It's for your own good.",
+        "muteRandomTextFive": "No more talking for you."
     }
 }
