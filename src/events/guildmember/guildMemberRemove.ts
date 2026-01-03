@@ -27,7 +27,6 @@ export async function execute(member: Member) {
     const byeEmbedTitle = i18next.t('guildMemberRemove.byeEmbedTitle', {
         userDisplayName: member.user.username,
     });
-    const byeEmbedDescription = i18next.t('guildMemberRemove.byeEmbedDescription');
     const byeEmbedFooter = i18next.t('guildMemberRemove.byeEmbedFooter');
 
     const byeChannel = await member.guild.channels.fetch(guild.byeChannelId) as TextChannel;
@@ -51,6 +50,14 @@ export async function execute(member: Member) {
         return;
     }
 
+    const byeMessage = guild.byeMessage
+        .replace('<[user]>', `<@${member.user.id}>`)
+        .replace('<[username]>', member.user.username)
+        .replace('<[userDisplayName]>', member.user.displayName)
+        .replace('<[userId]>', member.user.id)
+        .replace('<[serverName]>', member.guild.name)
+        .replace('<[memberCount]>', (member.guild.memberCount - 1).toString());
+
     const byeEmbed = new EmbedBuilder()
         .setColor('#FF0000')
         .setAuthor({
@@ -59,7 +66,7 @@ export async function execute(member: Member) {
         })
         .setTitle(byeEmbedTitle)
         .setThumbnail(member.guild.iconURL())
-        .setDescription(byeEmbedDescription)
+        .setDescription(byeMessage)
         .setFooter({
             text: byeEmbedFooter,
             iconURL: member.client.user.avatarURL() ?? undefined,

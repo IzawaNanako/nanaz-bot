@@ -17,17 +17,13 @@ export async function setInteractionLanguage(interaction: ChatInputCommandIntera
         await i18next.changeLanguage(guild.language);
     }
     else {
-        const executeUser = await User.findOne({
+        const [executeUser] = await User.findOrCreate({
             where: {
                 id: interaction.user.id,
             }
         });
-        if (executeUser) {
-            await i18next.changeLanguage(executeUser.language);
-        }
-        else {
-            await i18next.changeLanguage(interaction.locale);
-        }
+
+        await i18next.changeLanguage(executeUser.language);
     }
 }
 
@@ -36,17 +32,13 @@ export async function setInteractionLanguage(interaction: ChatInputCommandIntera
  * @param interaction The triggered interaction.
  */
 export async function setPrivateInteractionLanguage(interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | AutocompleteInteraction) {
-    const executeUser = await User.findOne({
+    const [executeUser] = await User.findOrCreate({
         where: {
             id: interaction.user.id,
         }
     });
-    if (executeUser) {
-        await i18next.changeLanguage(executeUser.language);
-    }
-    else {
-        await i18next.changeLanguage(interaction.locale);
-    }
+
+    await i18next.changeLanguage(executeUser.language);
 }
 
 /**
@@ -54,10 +46,11 @@ export async function setPrivateInteractionLanguage(interaction: ChatInputComman
  * @param interaction The triggered interaction.
  */
 export async function setPublicInteractionLanguage(interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction | AutocompleteInteraction) {
-    const guild = await Guild.findOne({
+    const [guild] = await Guild.findOrCreate({
         where: {
             id: interaction.guild?.id,
         }
     });
-    i18next.changeLanguage(guild?.language);
+
+    await i18next.changeLanguage(guild.language);
 }

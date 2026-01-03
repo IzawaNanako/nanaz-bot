@@ -62,7 +62,13 @@ export async function execute(member: Member) {
     }
     
     if (guild.welcomeChannelId && welcomeChannel && member.guild.members.me && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.SendMessages) && member.guild.members.me.permissionsIn(guild.welcomeChannelId).has(PermissionFlagsBits.ViewChannel)) {
-        const welcomeMessage = guild.welcomeMessage;
+        const welcomeMessage = guild.welcomeMessage
+            .replace('<[user]>', `<@${member.user.id}>`)
+            .replace('<[username]>', member.user.username)
+            .replace('<[userDisplayName]>', member.user.displayName)
+            .replace('<[userId]>', member.user.id)
+            .replace('<[serverName]>', member.guild.name)
+            .replace('<[memberCount]>', member.guild.memberCount.toString());
 
         const welcomeEmbed = new EmbedBuilder()
             .setColor('#2E4053')

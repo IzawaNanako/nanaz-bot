@@ -34,18 +34,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const helpMenuOptionSettingsDescription = i18next.t('help.helpMenuOptionSettingsDescription');
     const helpMenuOptionFormattingDescription = i18next.t('help.helpMenuOptionFormattingDescription');
     const helpMenuOptionIdsDescription = i18next.t('help.helpMenuOptionIdsDescription');
-    const helpMenuOptionWelcomeMsgDescription = i18next.t('help.helpMenuOptionWelcomeMsgDescription');
+    const helpMenuOptionMsgVariablesDescription = i18next.t('help.helpMenuOptionMsgVariablesDescription');
     const helpMenuOptionUnixTimeDescription = i18next.t('help.helpMenuOptionUnixTimeDescription');
     const settingsHelpsTitle = i18next.t('help.settingsHelpsTitle');
     const formattingHelpsTitle = i18next.t('help.formattingHelpsTitle');
     const idsHelpsTitle = i18next.t('help.idsHelpsTitle');
-    const welcomeMsgHelpsTitle = i18next.t('help.welcomeMsgHelpsTitle');
+    const msgVariablesHelpsTitle = i18next.t('help.msgVariablesHelpsTitle');
     const unixTimeHelpsTitle = i18next.t('help.unixTimeHelpsTitle');
     const helpEmbedFooter = i18next.t('help.helpEmbedFooter');
     const settingsHelpsContent = i18next.t('help.settingsHelpsContent');
     const formattingHelpsContent = i18next.t('help.formattingHelpsContent');
     const idsHelpsContent = i18next.t('help.idsHelpsContent');
-    const welcomeMsgHelpsContent = i18next.t('help.welcomeMsgHelpsContent');
+    const msgVariablesHelpsContent = i18next.t('help.msgVariablesHelpsContent');
     const unixTimeHelpsContent = i18next.t('help.unixTimeHelpsContent');
     
     let option = interaction.options.get('option')?.value as string;
@@ -92,8 +92,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: true,
                 },
                 {
-                    name: 'welcome-msg',
-                    value: helpMenuOptionWelcomeMsgDescription,
+                    name: 'msg-variables',
+                    value: helpMenuOptionMsgVariablesDescription,
                     inline: true,
                 },
                 {
@@ -126,11 +126,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .setDescription(idsHelpsContent)
             .setImage('https://i.imgur.com/Dn402t2.gif');
     }
-    else if (option === 'welcome-msg') {
+    else if (option === 'msg-variables') {
         helpEmbed
             .setColor('#2E4053')
-            .setTitle(welcomeMsgHelpsTitle)
-            .setDescription(welcomeMsgHelpsContent);
+            .setTitle(msgVariablesHelpsTitle)
+            .setDescription(msgVariablesHelpsContent);
     }
     else if (option === 'unix-time') {
         helpEmbed
@@ -159,7 +159,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         'settings',
         'formatting',
         'ids',
-        'welcome-msg',
+        'msg-variables',
         'unix-time',
     ];
 
@@ -178,10 +178,11 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     }
 
     await interaction.respond(
-        filtered.map(choice => ({
-            name: choice,
-            value: choice,
-        }))
+        filtered
+            .map(choice => ({
+                name: choice,
+                value: choice,
+            }))
             .slice(0, 25)
     );
 }

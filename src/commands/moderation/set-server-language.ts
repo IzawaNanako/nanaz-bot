@@ -46,7 +46,7 @@ export const data = new SlashCommandBuilder()
         .setRequired(true)
         .setAutocomplete(true)
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
     await setPrivateInteractionLanguage(interaction);
@@ -162,10 +162,11 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     }
 
     await interaction.respond(
-        filtered.map(choice => ({
-            name: choice,
-            value: choice,
-        }))
+        filtered
+            .map(choice => ({
+                name: choice,
+                value: choice,
+            }))
             .slice(0, 25)
     );
 }

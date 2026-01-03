@@ -7,12 +7,12 @@ import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
     .setName('set-channel')
-    .setDescription('Set the logs channel or the channel to send bye messages in.')
+    .setDescription('Configure the logs channel and welcome/bye message channels.')
     .setDescriptionLocalizations({
-        'en-US': 'Set the logs channel or the channel to send bye messages in.',
-        'ja': 'ログチャンネルまたはバイバイメッセージを送信するチャンネルを設定します。',
-        'zh-CN': '设置日志频道或发送再见信息的频道。',
-        'zh-TW': '設定記錄頻道或傳送再見訊息的頻道。',
+        'en-US': 'Configure the logs channel and welcome/bye message channels.',
+        'ja': 'ログチャンネルとウェルカム/バイバイメッセージチャンネルを設定します。',
+        'zh-CN': '设置记录频道和欢迎/再见消息频道。',
+        'zh-TW': '設定記錄頻道和歡迎/再見訊息頻道。',
     })
     .addSubcommandGroup(group => group
         .setName('log')
@@ -53,6 +53,48 @@ export const data = new SlashCommandBuilder()
                 'ja': 'このサーバーのログ送信を無効にする。',
                 'zh-CN': '停止在该服务器发送日志。',
                 'zh-TW': '停止在此伺服器傳送記錄。',
+            })
+        )
+    )
+    .addSubcommandGroup(group => group
+        .setName('welcome')
+        .setDescription('Set the channel to send welcome messages in.')
+        .setDescriptionLocalizations({
+            'en-US': 'Set the channel to send welcome messages in.',
+            'ja': 'ウェルカムメッセージを送信するチャンネルを設定します。',
+            'zh-CN': '设置发送欢迎信息的频道。',
+            'zh-TW': '設定傳送歡迎訊息的頻道。',
+        })
+        .addSubcommand(subcommand => subcommand
+            .setName('set')
+            .setDescription('Set the channel to send welcome messages in.')
+            .setDescriptionLocalizations({
+                'en-US': 'Set the channel to send welcome messages in.',
+                'ja': 'ウェルカムメッセージを送信するチャンネルを設定します。',
+                'zh-CN': '设置发送欢迎信息的频道。',
+                'zh-TW': '設定傳送歡迎訊息的頻道。',
+            })
+            .addChannelOption(option => option
+                .setName('channel')
+                .setDescription('The channel to send welcome messages in.')
+                .setDescriptionLocalizations({
+                    'en-US': 'The channel to send welcome messages in.',
+                    'ja': 'ウェルカムメッセージを送るチャンネル。',
+                    'zh-CN': '发送欢迎信息的通道。',
+                    'zh-TW': '傳送歡迎訊息的頻道。',
+                })
+                .setRequired(true)
+                .addChannelTypes(ChannelType.GuildText)
+            )
+        )
+        .addSubcommand(subcommand => subcommand
+            .setName('disable')
+            .setDescription('Disable sending welcome messages in this server.')
+            .setDescriptionLocalizations({
+                'en-US': 'Disable sending welcome messages in this server.',
+                'ja': 'このサーバでウェルカムメッセージの送信を無効にする。',
+                'zh-CN': '停止在此服务器中发送欢迎信息。',
+                'zh-TW': '停止在此伺服器傳送歡迎訊息。',
             })
         )
     )
@@ -98,18 +140,18 @@ export const data = new SlashCommandBuilder()
             })
         )
     )
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     .setContexts(InteractionContextType.Guild);
 export async function execute(interaction: ChatInputCommandInteraction) {
     await setPrivateInteractionLanguage(interaction);
 
-    const type = interaction.options.getSubcommandGroup() as 'log' | 'bye';
+    const type = interaction.options.getSubcommandGroup() as 'log' | 'welcome' | 'bye';
 
     const unknownError = i18next.t('global.unknownError');
     const sendMessagePermissionError = i18next.t('global.sendMessagePermissionError');
     const viewChannelPermissionError = i18next.t('global.viewChannelPermissionError');
-    const featureAlreadyDisabledError = type === 'log' ? i18next.t('setChannel.loggingAlreadyDisabledError') : i18next.t('setChannel.byeMessageAlreadyDisabledError');
-    const featureChannelUnchangeError = type === 'log' ? i18next.t('setChannel.loggingChannelUnchangedError') : i18next.t('setChannel.byeMessageChannelUnchangedError');
+    const featureAlreadyDisabledError = type === 'log' ? i18next.t('setChannel.logFeatureAlreadyDisabledError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageFeatureAlreadyDisabledError') : i18next.t('setChannel.byeMessageFeatureAlreadyDisabledError');
+    const featureChannelUnchangeError = type === 'log' ? i18next.t('setChannel.logFeatureChannelUnchangeError') : type === 'welcome' ? i18next.t('setChannel.welcomeMessageFeatureChannelUnchangeError') : i18next.t('setChannel.byeMessageFeatureChannelUnchangeError');
 
     if (!interaction.guild || !interaction.guild.members.me) {
         await interaction.reply({
@@ -127,7 +169,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             id: interaction.guild.id,
         }
     });
-    const channelKey = `${type}ChannelId` as 'byeChannelId' | 'logChannelId';
+    const channelKey = `${type}ChannelId` as 'welcomeChannelId' | 'byeChannelId' | 'logChannelId';
     const previousChannel = guild[channelKey];
 
     i18next.changeLanguage(guild.language);
@@ -160,14 +202,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!channel && !previousChannel) {
         await interaction.editReply({
             content: featureAlreadyDisabledError,
-            components: [supportButton]
+            components: [supportButton],
         });
     }
 
     if (channel && channel.id === previousChannel) {
         await interaction.editReply({
             content: featureChannelUnchangeError,
-            components: [supportButton]
+            components: [supportButton],
         });
     }
 
@@ -202,12 +244,12 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         .setTimestamp();
 
     await guild.update({
-        [channelKey]: channel ? channel.id : null
+        [channelKey]: channel ? channel.id : null,
     });
 
     await interaction.editReply({
         embeds: [actionEmbed],
-        components: [supportButton]
+        components: [supportButton],
     });
 
     await sendLog(interaction.guild, {
