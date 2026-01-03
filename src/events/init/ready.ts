@@ -33,12 +33,11 @@ export async function execute(client: Client) {
                     name: guild.name,
                     welcomeMessage: 'Thank you for joining <@guildname>!',
                     byeMessage: 'Goodbye <@username>, we will miss you!',
-                    language: 'en-us',
+                    language: 'en-US',
                 });
             }
-
-            if (guildData?.name !== guild.name) {
-                guildData?.update({
+            else if (guildData.name !== guild.name) {
+                guildData.update({
                     name: guild.name,
                 });
             }

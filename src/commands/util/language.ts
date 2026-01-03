@@ -137,10 +137,11 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
     }
 
     await interaction.respond(
-        filtered.map(choice => ({
-            name: choice,
-            value: choice,
-        }))
+        filtered
+            .map(choice => ({
+                name: choice,
+                value: choice,
+            }))
             .slice(0, 25)
     );
 }

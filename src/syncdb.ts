@@ -26,7 +26,7 @@ try {
 
     for (const model of models) {
         await model.sync({
-            alter: true,
+            force: true,
         });
         console.log(`✅ Synced: ${model.name}`);
     }

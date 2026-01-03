@@ -1,6 +1,6 @@
 import { EmbedBuilder, SlashCommandBuilder, ChatInputCommandInteraction, InteractionContextType, PermissionFlagsBits, MessageFlags } from 'discord.js';
 import { Guild } from '../../models/guild.js';
-import { setPrivateInteractionLanguage } from 'utils/setInteractionLanguage';
+import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { sendLog } from '../../utils/sendLog.js';
 import { supportButton } from '../../utils/buttons.js';
 import i18next from 'i18next';
@@ -14,7 +14,7 @@ export const data = new SlashCommandBuilder()
         'zh-CN': '设置欢迎和告别消息',
         'zh-TW': '設定歡迎和告別訊息',
     })
-    .addSubcommandGroup(group => group
+    .addSubcommand(group => group
         .setName('welcome')
         .setDescription('Set the message to send to new members of this server.')
         .setDescriptionLocalizations({
@@ -23,29 +23,19 @@ export const data = new SlashCommandBuilder()
             'zh-CN': '设置向服务器新成员发送的信息。',
             'zh-TW': '設定要傳送給此伺服器新成員的訊息。',
         })
-        .addSubcommand(subcommand => subcommand
-            .setName('set')
-            .setDescription('Set the message to send to new members of this server.')
+        .addStringOption(option => option
+            .setName('message')
+            .setDescription('The message to send, read "/help Message Variables" for more info.')
             .setDescriptionLocalizations({
-                'en-US': 'Set the message to send to new members of this server.',
-                'ja': 'このサーバーの新しいメンバーに送信するメッセージを設定します。',
-                'zh-CN': '设置向服务器新成员发送的信息。',
-                'zh-TW': '設定要傳送給此伺服器新成員的訊息。',
+                'en-US': 'The message to send, read "/help Message Variables" for more info.',
+                'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
+                'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
+                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
             })
-            .addStringOption(option => option
-                .setName('message')
-                .setDescription('The message to send, read "/help Message Variables" for more info.')
-                .setDescriptionLocalizations({
-                    'en-US': 'The message to send, read "/help Message Variables" for more info.',
-                    'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
-                    'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
-                    'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
-                })
-                .setRequired(true)
-            )
+            .setRequired(true)
         )
     )
-    .addSubcommandGroup(group => group
+    .addSubcommand(group => group
         .setName('bye')
         .setDescription('Set the message to send to farewell members who leave this server.')
         .setDescriptionLocalizations({
@@ -54,26 +44,16 @@ export const data = new SlashCommandBuilder()
             'zh-CN': '设置向离开此服务器的成员发送的告别信息。',
             'zh-TW': '設定要傳送給離開此伺服器的成員的告別訊息。',
         })
-        .addSubcommand(subcommand => subcommand
-            .setName('set')
-            .setDescription('Set the message to send to farewell members who leave this server.')
+        .addStringOption(option => option
+            .setName('message')
+            .setDescription('The message to send, read "/help Message Variables" for more info.')
             .setDescriptionLocalizations({
-                'en-US': 'Set the message to send to farewell members who leave this server.',
-                'ja': 'このサーバーを去るメンバーに送信するさようならメッセージを設定します。',
-                'zh-CN': '设置向离开此服务器的成员发送的告别信息。',
-                'zh-TW': '設定要傳送給離開此伺服器的成員的告別訊息。',
+                'en-US': 'The message to send, read "/help Message Variables" for more info.',
+                'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
+                'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
+                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
             })
-            .addStringOption(option => option
-                .setName('message')
-                .setDescription('The message to send, read "/help Message Variables" for more info.')
-                .setDescriptionLocalizations({
-                    'en-US': 'The message to send, read "/help Message Variables" for more info.',
-                    'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
-                    'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
-                    'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
-                })
-                .setRequired(true)
-            )
+            .setRequired(true)
         )
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
