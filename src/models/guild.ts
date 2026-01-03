@@ -42,7 +42,7 @@ const Guild = sequelize.define<GuildInstance>('guild', {
     },
     welcomeMessage: {
         type: DataTypes.STRING,
-        defaultValue: 'Thank you for joining <[guildname]>!',
+        defaultValue: 'Thank you for joining <[serverName]>!',
         allowNull: false,
     },
     byeMessage: {

@@ -9,7 +9,7 @@ export async function execute(guild: DiscordGuild) {
     await Guild.create({
         id: guild.id,
         name: guild.name,
-        welcomeMessage: 'Thank you for joining <[guildname]>!',
+        welcomeMessage: 'Thank you for joining <[serverName]>!',
         byeMessage: 'Goodbye <[username]>, we will miss you!',
         language: 'en-US',
     });
