@@ -190,6 +190,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             disabled: false,
         });
 
+        if (dm) {
+            await interaction.deferReply({
+                flags: MessageFlags.Ephemeral,
+            });
+        }
+        else {
+            await interaction.deferReply();
+        }
+
         if (once) {
             if (dm) {
                 schedule.scheduleJob(date, async () => {
@@ -205,9 +214,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     });
                 });
 
-                await interaction.reply({
+                await interaction.editReply({
                     content: reminderInDMSuccessMessage,
-                    flags: MessageFlags.Ephemeral,
                 });
             }
             else {
@@ -228,7 +236,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     });
                 });
 
-                await interaction.reply({
+                await interaction.editReply({
                     content: reminderInGuildSuccessMessage,
                 });
             }
@@ -257,16 +265,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
                 });
 
-                await interaction.reply({
+                await interaction.editReply({
                     content: reminderInDMSuccessMessage,
-                    flags: MessageFlags.Ephemeral,
                 });
             }
             else {
                 if (!interaction.channel || !interaction.channel.isSendable()) {
-                    await interaction.reply({
+                    await interaction.editReply({
                         content: unknownError,
-                        flags: MessageFlags.Ephemeral,
                     });
                     await remindData.destroy();
                     return;
@@ -289,13 +295,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
                 });
 
-                await interaction.reply({
+                await interaction.editReply({
                     content: reminderInGuildSuccessMessage,
                 });
             }
         }
     }
     else if (subcommand === 'list') {
+        await interaction.deferReply({
+            flags: MessageFlags.Ephemeral,
+        });
+
         const noActiveRemindersError = i18next.t('reminder.noActiveRemindersError');
         const fetchedByFooter = i18next.t('global.fetchedByFooter');
         const reminderContentLiteral = i18next.t('reminder.reminderContentLiteral');
@@ -309,9 +319,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         });
 
         if (reminders.length === 0) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: noActiveRemindersError,
-                flags: MessageFlags.Ephemeral,
             });
             return;
         }
@@ -342,37 +351,37 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 );
         }
 
-        await interaction.reply({
+        await interaction.editReply({
             embeds: [remindersEmbed],
-            flags: MessageFlags.Ephemeral,
         });
     }
     else if (subcommand === 'stop') {
+        await interaction.deferReply({
+            flags: MessageFlags.Ephemeral,
+        });
+
         const noActiveRemindersError = i18next.t('reminder.noActiveRemindersError');
         const reminderNotExistError = i18next.t('reminder.reminderNotExistError');
         const stopRemindSuccessMessage = i18next.t('reminder.stopRemindSuccessMessage');
 
         const id = interaction.options.getString('id', true);
         if (id === 'all') {
-            let count = 0;
             const reminders = await Reminder.findAll({
                 where: {
                     userId: interaction.user.id,
                 }
             });
             if (reminders.length === 0) {
-                await interaction.reply({
+                await interaction.editReply({
                     content: noActiveRemindersError,
-                    flags: MessageFlags.Ephemeral,
                 });
             }
 
             for (const reminder of reminders) {
                 reminder.disabled = true;
             }
-            await interaction.reply({
+            await interaction.editReply({
                 content: stopRemindSuccessMessage,
-                flags: MessageFlags.Ephemeral,
             });
         }
         else {
@@ -383,26 +392,17 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 }
             });
             if (!reminder) {
-                await interaction.reply({
+                await interaction.editReply({
                     content: reminderNotExistError,
-                    flags: MessageFlags.Ephemeral,
                 });
                 return;
             }
 
             reminder.disabled = true;
 
-            if (reminder.dm) {
-                await interaction.reply({
-                    content: stopRemindSuccessMessage,
-                    flags: MessageFlags.Ephemeral,
-                });
-            }
-            else {
-                await interaction.reply({
-                    content: stopRemindSuccessMessage,
-                });
-            }
+            await interaction.editReply({
+                content: stopRemindSuccessMessage,
+            });
         }
     }
     else {
