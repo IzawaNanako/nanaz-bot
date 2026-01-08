@@ -432,7 +432,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
          * The minimax algorithm, used to get the best move.
          * @param newBoard What the board looks like currently.
          * @param isMaximizing Whether the bot is maximizing or minimizing score.
-         * @returns 
+         * @returns Returns the best possible score for the given move.
          */
         const minimax = (newBoard: string[], isMaximizing: boolean) => {
             if (checkWin(botSymbol)) {

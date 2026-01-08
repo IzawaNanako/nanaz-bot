@@ -28,7 +28,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
                 const perm = await CommandPermission.findOne({
                     where: {
                         guildId: interaction.guildId,
-                        commandName: interaction.commandName
+                        commandName: interaction.commandName,
                     }
                 });
 
