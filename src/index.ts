@@ -185,14 +185,17 @@ await client.login(token);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 process.on('unhandledRejection', (error: any) => {
-    if (error.code === 10062) {
-        console.error(`<${new Date()}> Unknown interation found, possibly latency too high?`);
-    }
-    else if (error.code !== 10008) {
+    if (error.code !== 10008) {
         console.error(`<${new Date()}> Unhandled Promise Rejection: `, error);
     }
 });
 
-process.on('uncaughtException', error => {
-    console.error(`<${new Date()}> Uncaught Exception: `, error);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+process.on('uncaughtException', (error: any) => {
+    if (error.code === 10062) {
+        console.error(`<${new Date()}> Unknown interation found, possibly latency too high?`);
+    }
+    else {
+        console.error(`<${new Date()}> Uncaught Exception: `, error);
+    }
 });
