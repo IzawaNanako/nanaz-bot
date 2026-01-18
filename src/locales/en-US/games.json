@@ -7,7 +7,7 @@
     },
     "rockPaperScissors": {
         "rpsTitle": "Rock Paper Scissors",
-        "chooseChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nChoose your choice!",
+        "makeChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nMake your choice!",
         "rockButtonLabel": "🪨 Rock",
         "paperButtonLabel": "📄 Paper",
         "scissorsButtonLabel": "✂️ Scissors",

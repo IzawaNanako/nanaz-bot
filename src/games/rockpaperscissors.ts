@@ -51,7 +51,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const leftPlayer = Math.random() < 0.5 ? interaction.user : opponent;
     const rightPlayer = leftPlayer === interaction.user ? opponent : interaction.user;
 
-    const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
+    const makeChoiceMessage = i18next.t('rockPaperScissors.makeChoiceMessage', {
         leftPlayer: leftPlayer.id,
         rightPlayer: rightPlayer.id,
     });
@@ -63,7 +63,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
     const gameEmbed = new EmbedBuilder()
         .setColor('#00ff00')
         .setTitle(rpsTitle)
-        .setDescription(chooseChoiceMessage)
+        .setDescription(makeChoiceMessage)
         .setImage('https://i.imgur.com/8r6dKEH.png')
         .setFooter({
             text: hostedByFooter,
@@ -407,7 +407,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     const leftPlayer = Math.random() < 0.5 ? interaction.user : interaction.client.user;
     const rightPlayer = leftPlayer === interaction.user ? interaction.client.user : interaction.user;
 
-    const chooseChoiceMessage = i18next.t('rockPaperScissors.chooseChoiceMessage', {
+    const makeChoiceMessage = i18next.t('rockPaperScissors.makeChoiceMessage', {
         leftPlayer: leftPlayer.id,
         rightPlayer: rightPlayer.id,
     });
@@ -419,7 +419,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
     const gameEmbed = new EmbedBuilder()
         .setColor('#00ff00')
         .setTitle(rpsTitle)
-        .setDescription(chooseChoiceMessage)
+        .setDescription(makeChoiceMessage)
         .setImage('https://i.imgur.com/8r6dKEH.png')
         .setFooter({
             text: hostedByFooter,
