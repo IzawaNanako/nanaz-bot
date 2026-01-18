@@ -7,7 +7,7 @@
     },
     "rockPaperScissors": {
         "rpsTitle": "剪刀石頭布",
-        "chooseChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\n請選擇！",
+        "makeChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nMake your choice!",
         "rockButtonLabel": "🪨 石頭",
         "paperButtonLabel": "📄 布",
         "scissorsButtonLabel": "✂️ 剪刀",

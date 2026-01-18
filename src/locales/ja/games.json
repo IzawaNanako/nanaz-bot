@@ -7,7 +7,7 @@
     },
     "rockPaperScissors": {
         "rpsTitle": "じゃんけん",
-        "chooseChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nお好きなものをお選びください！",
+        "makeChoiceMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nMake your choice!",
         "rockButtonLabel": "🪨 グー",
         "paperButtonLabel": "📄 パー",
         "scissorsButtonLabel": "✂️ チョキ",
