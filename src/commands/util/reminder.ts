@@ -190,15 +190,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             disabled: false,
         });
 
-        if (dm) {
-            await interaction.deferReply({
-                flags: MessageFlags.Ephemeral,
-            });
-        }
-        else {
-            await interaction.deferReply();
-        }
-
         if (once) {
             if (dm) {
                 schedule.scheduleJob(date, async () => {
@@ -214,8 +205,9 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     });
                 });
 
-                await interaction.editReply({
+                await interaction.reply({
                     content: reminderInDMSuccessMessage,
+                    flags: MessageFlags.Ephemeral,
                 });
             }
             else {
@@ -236,7 +228,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     });
                 });
 
-                await interaction.editReply({
+                await interaction.reply({
                     content: reminderInGuildSuccessMessage,
                 });
             }
@@ -265,14 +257,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
                 });
 
-                await interaction.editReply({
+                await interaction.reply({
                     content: reminderInDMSuccessMessage,
+                    flags: MessageFlags.Ephemeral,
                 });
             }
             else {
                 if (!interaction.channel || !interaction.channel.isSendable()) {
-                    await interaction.editReply({
+                    await interaction.reply({
                         content: unknownError,
+                        flags: MessageFlags.Ephemeral,
                     });
                     await remindData.destroy();
                     return;
@@ -295,7 +289,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
                 });
 
-                await interaction.editReply({
+                await interaction.reply({
                     content: reminderInGuildSuccessMessage,
                 });
             }
@@ -380,6 +374,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             for (const reminder of reminders) {
                 reminder.disabled = true;
             }
+            
             await interaction.editReply({
                 content: stopRemindSuccessMessage,
             });
@@ -395,6 +390,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 await interaction.editReply({
                     content: reminderNotExistError,
                 });
+
                 return;
             }
 

@@ -19,7 +19,7 @@
         "paperVersusRockResult": "Paper + Rock = Paper ball!",
         "gameEndWinMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n👑 <@{{winner}}> **Won!**",
         "gameEndDrawMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n**It's a draw!**",
-        "gameEndInactivityMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\nGame ended due to inactivity."
+        "gameEndInactivityMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\nGame ended due to inactivity."
     },
     "ticTacToe": {
         "tttTitle": "Tic Tac Toe",

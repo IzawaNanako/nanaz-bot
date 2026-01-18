@@ -5,4 +5,29 @@ services:
     container_name: uwubot
     env_file:
       - .env
-    restart: unless-stopped
+    depends_on:
+      - nanazdb
+
+  nanazdb:
+    image: postgres:18-alpine
+    container_name: nanazdb
+    environment:
+      POSTGRES_DB: ${DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: uwubot_adminer
+    ports:
+      - "9090:8080"
+    depends_on:
+      - nanazdb
+
+volumes:
+  db_data:
+  

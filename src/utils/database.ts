@@ -3,7 +3,6 @@ import { Sequelize } from 'sequelize';
 const database = process.env.DATABASE;
 const user = process.env.DB_USER;
 const password = process.env.DB_PASSWORD;
-const host = process.env.DB_HOST;
 
 if (!database || !user || !password) {
     console.error('Database credentials not found.');
@@ -15,13 +14,7 @@ if (!database || !user || !password) {
  */
 export const sequelize = new Sequelize(database, user, password, {
     dialect: 'postgres',
-    host: host, 
+    host: 'nanazdb', 
     port: 5432,
     logging: false,
-    dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false,
-        }
-    }
 });

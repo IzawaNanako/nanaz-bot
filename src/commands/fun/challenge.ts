@@ -91,8 +91,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        await interaction.deferReply();
-
         const challengeLetterLiteral = i18next.t('challenge.challengeLetterLiteral');
         const challengeLetterMessage = i18next.t('challenge.challengeLetterMessage', {
             challenger: interaction.user.id,
@@ -119,7 +117,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     iconURL: interaction.client.user.avatarURL() ?? undefined
                 })
                 .setTimestamp();
-            const challengeLetter = await interaction.editReply({
+            const challengeLetter = await interaction.reply({
                 content: `<@${opponent.id}>`,
                 embeds: [letterEmbed],
                 components: [acceptAndDeclineButton],
@@ -167,7 +165,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             });
         }
         else if (opponent === interaction.user) {
-            await interaction.editReply({
+            await interaction.reply({
                 content: challengeThemselvesMessage,
             });
             setTimeout(async () => {
@@ -180,7 +178,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             }, 2000);
         }
         else {
-            await interaction.editReply({
+            await interaction.reply({
                 content: challengeCurrentBotMessage,
             });
             setTimeout(async () => {
