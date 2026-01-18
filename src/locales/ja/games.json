@@ -19,7 +19,7 @@
         "paperVersusRockResult": "紙＋石＝紙のボール！",
         "gameEndWinMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n👑 <@{{winner}}>**勝った！**",
         "gameEndDrawMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n**引き分けだ！**",
-        "gameEndInactivityMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n不活発であるために試合は終わった。"
+        "gameEndInactivityMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}>\n\n不活発であるために試合は終わった。"
     },
     "ticTacToe": {
         "tttTitle": "三目並べ",
