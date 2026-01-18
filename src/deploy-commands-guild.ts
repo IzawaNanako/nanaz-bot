@@ -3,29 +3,6 @@ import { REST, Routes, ApplicationCommand } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
-import i18next from 'i18next';
-import Backend from 'i18next-fs-backend';
-
-try {
-    await i18next.use(Backend).init({
-        backend: {
-            loadPath: join('dist/locales/{{lng}}/{{ns}}.json'),
-        },
-        lng: 'en-US',
-        fallbackLng: 'en-US',
-        preload: ['en-US'],
-        load: 'currentOnly',
-        ns: ['commands', 'events', 'games', 'general', 'languages'],
-        defaultNS: 'commands',
-        interpolation: {
-            escapeValue: false,
-        },
-    });
-}
-catch (error) {
-    console.error(`i18next initialization error: ${error}`);
-    process.exit(1);
-}
 
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID;

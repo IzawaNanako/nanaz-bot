@@ -193,7 +193,7 @@ process.on('unhandledRejection', (error: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 process.on('uncaughtException', (error: any) => {
     if (error.code === 10062) {
-        console.error(`<${new Date()}> Unknown interation found, possibly latency too high?`);
+        console.error(`<${new Date()}> Unknown interaction found, possibly latency too high?`);
     }
     else {
         console.error(`<${new Date()}> Uncaught Exception: `, error);
