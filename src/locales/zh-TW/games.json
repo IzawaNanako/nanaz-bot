@@ -19,7 +19,7 @@
         "paperVersusRockResult": "紙 + 石頭 = 紙球！",
         "gameEndWinMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n👑 <@{{winner}}>**勝利！**",
         "gameEndDrawMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}> {{rightPlayerEmoji}}\n\n**平手！**",
-        "gameEndInactivityMessage": "{{leftPlayerEmoji}} <@{{leftPlayer}}> ⚔️ <@{{rightPlayer}} {{rightPlayerEmoji}}>\n\n遊戲因閒置時間過長而結束。"
+        "gameEndInactivityMessage": "<@{{leftPlayer}}> ⚔️ <@{{rightPlayer}}\n\n遊戲因閒置時間過長而結束。"
     },
     "ticTacToe": {
         "tttTitle": "井字遊戲",
