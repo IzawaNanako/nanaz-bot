@@ -10,13 +10,13 @@ const declineLabel = i18next.t('buttons.declineLabel');
 /**
  * A red button labeled "Rematch".
  */
-export const rematchButton = new ActionRowBuilder<ButtonBuilder>()
+export const rematchButton = new ActionRowBuilder<ButtonBuilder> ()
     .addComponents(
         new ButtonBuilder()
             .setCustomId('rematch')
             .setLabel(rematchLabel)
             .setStyle(ButtonStyle.Danger)
-);
+    );
 
 const supportServer = process.env.SUPPORT_SERVER;
 

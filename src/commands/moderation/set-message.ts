@@ -25,12 +25,12 @@ export const data = new SlashCommandBuilder()
         })
         .addStringOption(option => option
             .setName('message')
-            .setDescription('The message to send, read "/help Message Variables" for more info.')
+            .setDescription('The message to send, read "/help msg-variables" for more info.')
             .setDescriptionLocalizations({
-                'en-US': 'The message to send, read "/help Message Variables" for more info.',
-                'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
-                'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
-                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
+                'en-US': 'The message to send, read "/help msg-variables" for more info.',
+                'ja': '送信するメッセージ。詳しくは"/help msg-variables"を参照のこと。',
+                'zh-CN': '要发送的信息，详情请阅读"/help msg-variables"。',
+                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help msg-variables"。',
             })
             .setRequired(true)
         )
@@ -46,12 +46,12 @@ export const data = new SlashCommandBuilder()
         })
         .addStringOption(option => option
             .setName('message')
-            .setDescription('The message to send, read "/help Message Variables" for more info.')
+            .setDescription('The message to send, read "/help msg-variables" for more info.')
             .setDescriptionLocalizations({
-                'en-US': 'The message to send, read "/help Message Variables" for more info.',
-                'ja': '送信するメッセージ。詳しくは"/help Message Variables"を参照のこと。',
-                'zh-CN': '要发送的信息，详情请阅读"/help Message Variables"。',
-                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help Message Variables"。',
+                'en-US': 'The message to send, read "/help msg-variables" for more info.',
+                'ja': '送信するメッセージ。詳しくは"/help msg-variables"を参照のこと。',
+                'zh-CN': '要发送的信息，详情请阅读"/help msg-variables"。',
+                'zh-TW': '要傳送的訊息，更多資訊請參閱"/help msg-variables"。',
             })
             .setRequired(true)
         )
