@@ -35,18 +35,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const helpMenuOptionFormattingDescription = i18next.t('help.helpMenuOptionFormattingDescription');
     const helpMenuOptionIdsDescription = i18next.t('help.helpMenuOptionIdsDescription');
     const helpMenuOptionMsgVariablesDescription = i18next.t('help.helpMenuOptionMsgVariablesDescription');
-    const helpMenuOptionUnixTimeDescription = i18next.t('help.helpMenuOptionUnixTimeDescription');
+    const helpMenuOptionReminderFormatDescription = i18next.t('help.helpMenuOptionReminderFormatDescription');
     const settingsHelpsTitle = i18next.t('help.settingsHelpsTitle');
     const formattingHelpsTitle = i18next.t('help.formattingHelpsTitle');
     const idsHelpsTitle = i18next.t('help.idsHelpsTitle');
     const msgVariablesHelpsTitle = i18next.t('help.msgVariablesHelpsTitle');
-    const unixTimeHelpsTitle = i18next.t('help.unixTimeHelpsTitle');
+    const reminderFormatHelpsTitle = i18next.t('help.reminderFormatHelpsTitle');
     const helpEmbedFooter = i18next.t('help.helpEmbedFooter');
     const settingsHelpsContent = i18next.t('help.settingsHelpsContent');
     const formattingHelpsContent = i18next.t('help.formattingHelpsContent');
     const idsHelpsContent = i18next.t('help.idsHelpsContent');
     const msgVariablesHelpsContent = i18next.t('help.msgVariablesHelpsContent');
-    const unixTimeHelpsContent = i18next.t('help.unixTimeHelpsContent');
+    const reminderFormatHelpsContent = i18next.t('help.reminderFormatHelpsContent');
     
     let option = interaction.options.get('option')?.value as string;
 
@@ -97,8 +97,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     inline: true,
                 },
                 {
-                    name: 'unix-time',
-                    value: helpMenuOptionUnixTimeDescription,
+                    name: 'reminder-format',
+                    value: helpMenuOptionReminderFormatDescription,
                     inline: true,
                 },
                 {
@@ -132,11 +132,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             .setTitle(msgVariablesHelpsTitle)
             .setDescription(msgVariablesHelpsContent);
     }
-    else if (option === 'unix-time') {
+    else if (option === 'reminder-format') {
         helpEmbed
             .setColor('#2E4053')
-            .setTitle(unixTimeHelpsTitle)
-            .setDescription(unixTimeHelpsContent);
+            .setTitle(reminderFormatHelpsTitle)
+            .setDescription(reminderFormatHelpsContent);
     }
     else {
         await interaction.reply({
@@ -160,7 +160,7 @@ export async function autocomplete(interaction: AutocompleteInteraction) {
         'formatting',
         'ids',
         'msg-variables',
-        'unix-time',
+        'reminder-format',
     ];
 
     let filtered;

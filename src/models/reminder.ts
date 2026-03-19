@@ -3,14 +3,13 @@ import { sequelize } from '../utils/database.js';
 import { User } from './user.js';
 
 interface ReminderAttributes {
-    id: number;
+    id: string;
     content: string;
     userId: string;
     when: Date;
     once: boolean;
     dm: boolean;
     channelId: string | null;
-    disabled: boolean;
 }
 
 interface ReminderInstance
@@ -22,7 +21,7 @@ interface ReminderInstance
 
 const Reminder = sequelize.define<ReminderInstance>('reminder', {
     id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         primaryKey: true,
     },
     content: {
@@ -49,11 +48,6 @@ const Reminder = sequelize.define<ReminderInstance>('reminder', {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    disabled: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    }
 });
 
 User.hasMany(Reminder, {

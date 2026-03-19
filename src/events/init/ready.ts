@@ -166,12 +166,7 @@ export async function execute(client: Client) {
             const date = new Date(reminder.when);
             if (reminder.once) {
                 if (reminder.dm) {
-                    schedule.scheduleJob(date, async () => {
-                        if (reminder.disabled) {
-                            await reminder.destroy();
-                            return;
-                        }
-        
+                    schedule.scheduleJob(reminder.id, date, async () => {
                         await reminder.destroy();
                     
                         await reminderUser.send({
@@ -184,12 +179,7 @@ export async function execute(client: Client) {
                         continue;
                     }
                     const reminderChannel = await client.channels.fetch(reminder.channelId);
-                    schedule.scheduleJob(date, async () => {
-                        if (reminder.disabled) {
-                            await reminder.destroy();
-                            return;
-                        }
-        
+                    schedule.scheduleJob(reminder.id, date, async () => {
                         await reminder.destroy();
         
                         if (!reminderChannel || !reminderChannel.isSendable()) {
@@ -209,13 +199,7 @@ export async function execute(client: Client) {
                 const cronTime = `${seconds} ${minutes} ${hours} * * *`;
         
                 if (reminder.dm) {
-                    const job = schedule.scheduleJob(cronTime, async () => {
-                        if (reminder.disabled) {
-                            await reminder.destroy();
-                            job.cancel();
-                            return;
-                        }
-        
+                    const job = schedule.scheduleJob(reminder.id, cronTime, async () => {
                         await reminderUser.send({
                             content: `${reminderUser}\n${reminder.content}`,
                         });
@@ -236,7 +220,7 @@ export async function execute(client: Client) {
                         return;
                     }
         
-                    const job = schedule.scheduleJob(cronTime, async () => {
+                    const job = schedule.scheduleJob(reminder.id, cronTime, async () => {
                         if (!reminderChannel || !reminderChannel.isSendable()) {
                             await reminder.destroy();
                             job.cancel();

@@ -4,7 +4,7 @@ import { sequelize } from '../utils/database.js';
 interface UserAttributes {
     id: string;
     language: string;
-    // New Stats Columns
+    timezone: string;
     rpsWins: number;
     rpsLosses: number;
     rpsDraws: number;
@@ -30,6 +30,11 @@ const User = sequelize.define<UserInstance>('user', {
     language: {
         type: DataTypes.STRING,
         defaultValue: 'en-US',
+        allowNull: false,
+    },
+    timezone: {
+        type: DataTypes.STRING,
+        defaultValue: 'UTC+00:00',
         allowNull: false,
     },
     rpsWins: {

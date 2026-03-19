@@ -2,6 +2,7 @@ import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags, EmbedBu
 import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
 import { Reminder } from '../../models/reminder.js';
 import { User } from '../../models/user.js';
+import { uuidv7 } from 'uuidv7';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 
@@ -34,25 +35,25 @@ export const data = new SlashCommandBuilder()
             })
             .setRequired(true)
         )
-        .addIntegerOption(option => option
+        .addStringOption(option => option
             .setName('when')
-            .setDescription('The time the bot should remind you or remind you until. In unix timestamp: "/help unix-time".')
+            .setDescription('The time the bot should remind you or remind you until. /help reminder-format to see the formats.')
             .setDescriptionLocalizations({
-                'en-US': 'The time the bot should remind you or remind you until. In unix timestamp: "/help unix-time".',
-                'ja': 'ボットがあなたにリマインドするか、あなたにリマインドするまでの時間を決めます。 Unixタイムスタンプ："/help unix-time"。',
-                'zh-CN': '机器人应该提醒您或提醒您直到什么时候。Unix时间戳："/help unix-time"。',
-                'zh-TW': '機器人應該提醒您或提醒您直到什麼時候。Unix時間戳："/help unix-time"。',
+                'en-US': 'The time the bot should remind you or remind you until. /help reminder-format to see the formats.',
+                'ja': 'ボットがリマインドする時間、またはリマインドし続ける時間。フォーマットは/help reminder-formatで確認できます。',
+                'zh-CN': '机器人应该提醒您的时间或提醒您直到。/help reminder-format查看格式。',
+                'zh-TW': '機器人應該提醒您的時間或提醒您直到。/help reminder-format查看格式。',
             })
             .setRequired(true)
         )
         .addBooleanOption(option => option
             .setName('once')
-            .setDescription('Whether the reminder should be sent only once or repeatedly until you stop it.')
+            .setDescription('Whether the reminder should be sent only once or repeatedly at the given time until you stop it.')
             .setDescriptionLocalizations({
-                'en-US': 'Whether the reminder should be sent only once or repeatedly until you stop it.',
-                'ja': 'リマインドを一度だけ送信するか、停止するまで繰り返し送信するか。',
-                'zh-CN': '提醒是只发送一次还是重复发送直到您停止它。',
-                'zh-TW': '提醒是只傳送一次還是重複傳送直到您停止它。',
+                'en-US': 'Whether the reminder should be sent only once or repeatedly at the given time until you stop it.',
+                'ja': 'リマインドを一度だけ送信するか、指定した時間に繰り返し送信するか。繰り返しの場合は停止するまで送信されます。',
+                'zh-CN': '提醒是只发送一次还是在给定的时间重复发送直到您停止它。',
+                'zh-TW': '提醒是只發送一次還是在給定的時間重複發送直到您停止它。',
             })
             .setRequired(true)
         )
@@ -111,7 +112,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const reminderLimitError = i18next.t('reminder.reminderLimitError');
         const invalidTimeError = i18next.t('reminder.invalidTimeError');
         const reminderTooLongError = i18next.t('reminder.reminderTooLongError');
-        const reminderOnCooldownError = i18next.t('reminder.reminderOnCooldownError');
         const reminderNoChannelError = i18next.t('reminder.reminderNoChannelError');
         const reminderInDMSuccessMessage = i18next.t('reminder.reminderInDMSuccessMessage');
         const reminderInGuildSuccessMessage = i18next.t('reminder.reminderInGuildSuccessMessage');
@@ -130,10 +130,96 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
 
         const content = interaction.options.getString('content', true);
-        const when = interaction.options.getInteger('when', true);
+        let when = interaction.options.getString('when', true);
         const once = interaction.options.getBoolean('once', true);
         const dm = interaction.options.getBoolean('dm', true);
-        const date = new Date(when.toString().length === 10 ? when * 1000 : when);
+
+        const [user] = await User.findOrCreate({
+            where: {
+                id: interaction.user.id,
+            }
+        });
+
+        let month: number | undefined;
+        let day: number | undefined;
+        let year: number | undefined;
+        let hour: number | undefined;
+        let minute: number | undefined
+        let second: number = 0;
+        let utcOffsetHours: number = 0;
+        let utcOffsetMinutes: number = 0;
+
+        const timezoneMatch = when.match(/\(UTC([+-]\d{2}):(\d{2})\)$/);
+        if (timezoneMatch) {
+            utcOffsetHours = parseInt(timezoneMatch[1]);
+            utcOffsetMinutes = parseInt(timezoneMatch[2]);
+            if (utcOffsetHours < 0) {
+                utcOffsetMinutes = -utcOffsetMinutes;
+            }
+            when = when.replace(/\(UTC[+-]\d{2}:\d{2}\)$/, '').trim();
+        }
+        else {
+            const tzMatch = user.timezone.match(/UTC([+-])(\d{1,2}):(\d{2})/);
+            if (tzMatch) {
+                utcOffsetHours = parseInt(tzMatch[2]) * (tzMatch[1] === '+' ? 1 : -1);
+                utcOffsetMinutes = parseInt(tzMatch[3]) * (tzMatch[1] === '+' ? 1 : -1);
+            }
+        }
+        const timezoneOffsetMinutes = utcOffsetHours * 60 + utcOffsetMinutes;
+        const nowInSelectedTimezone = new Date(Date.now() + timezoneOffsetMinutes * 60 * 1000);
+        const parts = when.trim().split(/\s+/);
+        
+        if (parts.length === 2) {
+            const datePart = parts[0];
+            const timePart = parts[1];
+
+            const datePieces = datePart.split('/');
+            month = parseInt(datePieces[0]);
+            day = parseInt(datePieces[1]);
+            year = datePieces[2] ? parseInt(datePieces[2]) : undefined;
+
+            const timePieces = timePart.split(':');
+            hour = parseInt(timePieces[0]);
+            minute = parseInt(timePieces[1]);
+            second = timePieces[2] ? parseInt(timePieces[2]) : 0;
+        }
+        else {
+            const timePieces = parts[0].split(':');
+            hour = parseInt(timePieces[0]);
+            minute = parseInt(timePieces[1]);
+            second = timePieces[2] ? parseInt(timePieces[2]) : 0;
+
+            year = nowInSelectedTimezone.getUTCFullYear();
+            month = nowInSelectedTimezone.getUTCMonth() + 1;
+            day = nowInSelectedTimezone.getUTCDate();
+
+            const nowSecondsInSelectedTimezone = nowInSelectedTimezone.getUTCHours() * 3600 + nowInSelectedTimezone.getUTCMinutes() * 60 + nowInSelectedTimezone.getUTCSeconds();
+            const inputSecondsInSelectedTimezone = hour * 3600 + minute * 60 + second;
+
+            if (inputSecondsInSelectedTimezone <= nowSecondsInSelectedTimezone) {
+                const tomorrowInSelectedTimezone = new Date(Date.UTC(year, month - 1, day + 1));
+                year = tomorrowInSelectedTimezone.getUTCFullYear();
+                month = tomorrowInSelectedTimezone.getUTCMonth() + 1;
+                day = tomorrowInSelectedTimezone.getUTCDate();
+            }
+        }
+
+        if (hour === undefined || minute === undefined || month === undefined || day === undefined) {
+            await interaction.reply({
+                content: invalidTimeError,
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
+
+        if (year === undefined) {
+            year = nowInSelectedTimezone.getUTCFullYear();
+        }
+
+        const date = new Date(Date.UTC(year, month - 1, day, hour, minute, second));
+
+        date.setUTCHours(date.getUTCHours() - utcOffsetHours);
+        date.setUTCMinutes(date.getUTCMinutes() - utcOffsetMinutes);        
 
         if (isNaN(date.getTime()) || Date.now() >= date.getTime()) {
             await interaction.reply({
@@ -151,26 +237,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        await User.findOrCreate({
-            where: {
-                id: interaction.user.id,
-            },
-        });
-
-        const id = Math.floor(Date.now() / 1000);
-        const remindCooldownCheck = await Reminder.findOne({
-            where: {
-                id: id,
-            }
-        });
-        if (remindCooldownCheck) {
-            await interaction.reply({
-                content: reminderOnCooldownError,
-                flags: MessageFlags.Ephemeral,
-            });
-            return;
-        }
-
         if (!interaction.channel && !dm) {
             await interaction.reply({
                 content: reminderNoChannelError,
@@ -180,24 +246,18 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         }
 
         const remindData = await Reminder.create({
-            id: id,
+            id: uuidv7(),
             content: content,
             userId: interaction.user.id,
             when: date,
             once: once,
             dm: dm,
             channelId: dm ? null : interaction.channel?.id,
-            disabled: false,
         });
 
         if (once) {
             if (dm) {
-                schedule.scheduleJob(date, async () => {
-                    if (remindData.disabled) {
-                        await remindData.destroy();
-                        return;
-                    }
-
+                schedule.scheduleJob(remindData.id, date, async () => {
                     await remindData.destroy();
 
                     await interaction.user.send({
@@ -211,12 +271,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 });
             }
             else {
-                schedule.scheduleJob(date, async () => {
-                    if (remindData.disabled) {
-                        await remindData.destroy();
-                        return;
-                    }
-
+                schedule.scheduleJob(remindData.id, date, async () => {
                     await remindData.destroy();
 
                     if (!interaction.channel || !interaction.channel.isSendable()) {
@@ -240,13 +295,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const cronTime = `${seconds} ${minutes} ${hours} * * *`;
 
             if (dm) {
-                const job = schedule.scheduleJob(cronTime, async () => {
-                    if (remindData.disabled) {
-                        await remindData.destroy();
-                        job.cancel();
-                        return;
-                    }
-
+                const job = schedule.scheduleJob(remindData.id, cronTime, async () => {
                     await interaction.user.send({
                         content: `<@${interaction.user.id}>\n${content}`,
                     });
@@ -272,8 +321,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     return;
                 }
 
-                const job = schedule.scheduleJob(cronTime, async () => {
-                    if (!interaction.channel || !interaction.channel.isSendable() || remindData.disabled) {
+                const job = schedule.scheduleJob(remindData.id, cronTime, async () => {
+                    if (!interaction.channel || !interaction.channel.isSendable()) {
                         await remindData.destroy();
                         job.cancel();
                         return;
@@ -303,8 +352,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const noActiveRemindersError = i18next.t('reminder.noActiveRemindersError');
         const fetchedByFooter = i18next.t('global.fetchedByFooter');
         const reminderContentLiteral = i18next.t('reminder.reminderContentLiteral');
+        const reminderTypeLiteral = i18next.t('reminder.reminderTypeLiteral');
         const reminderEmbedTitle = i18next.t('reminder.reminderEmbedTitle');
         const reminderEmbedDescription = i18next.t('reminder.reminderEmbedDescription');
+        const reminderTypeOnce = i18next.t('reminder.reminderTypeOnce');
+        const reminderTypeRepeating = i18next.t('reminder.reminderTypeRepeating');
 
         const reminders = await Reminder.findAll({
             where: {
@@ -327,6 +379,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 {
                     name: 'ID',
                     value: reminderContentLiteral,
+                    inline: true,
+                },
+                {
+                    name: 'Time',
+                    value: reminderTypeLiteral,
+                    inline: true,
+                },
+                {
+                    name: '\u200B',
+                    value: '\u200B',
                 }
             )
             .setFooter({
@@ -341,6 +403,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     {
                         name: `\`\`\`${reminder.id}\`\`\``,
                         value: `${reminder.content}`,
+                        inline:true,
+                    },
+                    {
+                        name:`<t:${Math.floor(reminder.when.getTime() / 1000)}:F>`,
+                        value: reminder.once ? reminderTypeOnce : reminderTypeRepeating,
+                        inline: true,
+                    },
+                    {
+                        name: '\u200B',
+                        value: '\u200B',
                     }
                 );
         }
@@ -369,10 +441,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 await interaction.editReply({
                     content: noActiveRemindersError,
                 });
+                return;
             }
 
             for (const reminder of reminders) {
-                reminder.disabled = true;
+                const scheduledJob = schedule.scheduledJobs[reminder.id];
+                if (scheduledJob) {
+                    scheduledJob.cancel();
+                }
+                await reminder.destroy();
             }
             
             await interaction.editReply({
@@ -382,7 +459,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         else {
             const reminder = await Reminder.findOne({
                 where: {
-                    id: parseInt(id),
+                    id,
                     userId: interaction.user.id,
                 }
             });
@@ -394,7 +471,11 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 return;
             }
 
-            reminder.disabled = true;
+            const scheduledJob = schedule.scheduledJobs[reminder.id];
+            if (scheduledJob) {
+                scheduledJob.cancel();
+            }
+            await reminder.destroy();
 
             await interaction.editReply({
                 content: stopRemindSuccessMessage,
