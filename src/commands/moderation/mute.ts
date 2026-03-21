@@ -192,7 +192,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 inline: true,
             }
         ])
-        .setImage('https://i.imgur.com/4M7IWwP.gif')
+        .setImage('https://i.imgur.com/hDnVnrm.png')
         .setTimestamp()
         .setFooter({
             text: muteEmbedFooter,
