@@ -1,5 +1,5 @@
 import 'dotenv/config.js';
-import { GlobalStats } from '../models/globalStats.js';
+import { GlobalStats } from '@models/globalStats.js';
 import { TargetLanguageCode, Translator } from 'deepl-node';
 
 /**

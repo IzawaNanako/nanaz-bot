@@ -1,5 +1,6 @@
-import { Guild as DiscordGuild, MessageCreateOptions, MessagePayload, PermissionFlagsBits, TextChannel } from 'discord.js';
-import { Guild } from '../models/guild.js';
+import type { MessagePayload, MessageCreateOptions, TextChannel, Guild as DiscordGuild } from 'discord.js';
+import { PermissionFlagsBits} from 'discord.js';
+import { Guild } from '@models/guild.js';
 
 /**
  * Send a log to the log channel of the selected guild.

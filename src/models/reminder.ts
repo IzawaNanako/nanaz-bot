@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import { sequelize } from '../utils/database.js';
-import { User } from './user.js';
+import { sequelize } from '@utils/database.js';
+import { User } from '@models/user.js';
 
 interface ReminderAttributes {
     id: string;

@@ -1,6 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
-import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { User } from '../../models/user.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { User } from '@models/user.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
-import { GlobalStats } from '../models/globalStats.js';
+import { GlobalStats } from '@models/globalStats.js';
 
 const geminiAPIKey = process.env.GEMINI_API_KEY;
 if (!geminiAPIKey) {

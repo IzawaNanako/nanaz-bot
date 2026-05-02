@@ -1,6 +1,7 @@
-import { Events, AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction, MessageFlags } from 'discord.js';
-import { CommandPermission } from '../../models/commandPermission.js';
-import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
+import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, AutocompleteInteraction } from 'discord.js';
+import { Events, MessageFlags } from 'discord.js';
+import { CommandPermission } from '@models/commandPermission.js';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import i18next from 'i18next';
 
 export const name = Events.InteractionCreate;

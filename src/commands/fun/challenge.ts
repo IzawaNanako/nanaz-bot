@@ -1,8 +1,10 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, TextChannel, ButtonInteraction, MessageFlags, InteractionContextType } from 'discord.js';
-import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { acceptAndDeclineButton } from '../../utils/buttons.js';
-import { tictactoe, tictactoeBot } from '../../games/tictactoe.js';
-import { rockpaperscissors, rockpaperscissorsBot } from '../../games/rockpaperscissors.js';
+import type { ChatInputCommandInteraction, ButtonInteraction } from 'discord.js';
+import { InteractionContextType, MessageFlags, EmbedBuilder, ChannelType } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { acceptAndDeclineButton } from '@utils/buttons.js';
+import { tictactoe, tictactoeBot } from '@/games/tictactoe.js';
+import { rockpaperscissors, rockpaperscissorsBot } from '@/games/rockpaperscissors.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
@@ -60,7 +62,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const challengeOtherBotError = i18next.t('challenge.challengeOtherBotError');
 
     try {
-        if (interaction.channel instanceof TextChannel === false) {
+        if (!interaction.channel || interaction.channel.type !== ChannelType.GuildText) {
             await interaction.reply({
                 content: notTextChannelError,
                 flags: MessageFlags.Ephemeral,

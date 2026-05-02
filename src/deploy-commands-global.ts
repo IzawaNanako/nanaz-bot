@@ -1,5 +1,6 @@
 import 'dotenv/config.js';
-import { REST, Routes, ApplicationCommand } from 'discord.js';
+import type { ApplicationCommand } from 'discord.js';
+import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';

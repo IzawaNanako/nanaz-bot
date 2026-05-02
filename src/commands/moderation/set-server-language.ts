@@ -1,8 +1,10 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, EmbedBuilder, InteractionContextType, MessageFlags, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
-import { Guild } from '../../models/guild.js';
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { sendLog } from '../../utils/sendLog.js';
-import { supportButton } from '../../utils/buttons.js';
+import type { ChatInputCommandInteraction, AutocompleteInteraction } from 'discord.js';
+import { PermissionFlagsBits, MessageFlags, EmbedBuilder, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Guild } from '@models/guild.js';
+import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { sendLog } from '@utils/sendLog.js';
+import { supportButton } from '@utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 

@@ -1,8 +1,10 @@
 {
     "compilerOptions": {
+        "noEmit": true,
+        "isolatedModules": true,
         "target": "ESNext",
-        "module": "ESNext",
-        "moduleResolution": "Node",
+        "module": "NodeNext",
+        "moduleResolution": "nodenext",
         "strict": true,
         "noImplicitAny": true,
         "declaration": false,
@@ -12,10 +14,10 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "allowSyntheticDefaultImports": true,
-        "baseUrl": "./src",
-        "outDir": "dist",
         "paths": {
-          "*": ["*.js", "*.ts"]
+          "@/*": ["./src/*"],
+          "@utils/*": ["./src/utils/*"],
+          "@models/*": ["./src/models/*"]
         }
     },
     "include": ["src"],

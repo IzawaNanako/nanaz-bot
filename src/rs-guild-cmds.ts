@@ -1,5 +1,6 @@
 import 'dotenv/config.js';
-import { REST, Routes, ApplicationCommand } from 'discord.js';
+import type { ApplicationCommand } from 'discord.js';
+import { REST, Routes } from 'discord.js';
 
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.GUILD_ID;

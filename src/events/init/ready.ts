@@ -1,9 +1,10 @@
-import { Events, Client, EmbedBuilder } from 'discord.js';
-import { BannedMember } from '../../models/bannedMember.js';
-import { Guild } from '../../models/guild.js';
-import { Reminder } from '../../models/reminder.js';
-import { User } from '../../models/user.js';
-import { sendLog } from '../../utils/sendLog.js';
+import type { Client } from 'discord.js';
+import { Events, EmbedBuilder } from 'discord.js';
+import { BannedMember } from '@models/bannedMember.js';
+import { Guild } from '@models/guild.js';
+import { Reminder } from '@models/reminder.js';
+import { User } from '@models/user.js';
+import { sendLog } from '@utils/sendLog.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 

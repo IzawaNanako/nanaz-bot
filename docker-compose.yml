@@ -20,13 +20,13 @@ services:
     ports:
       - "5432:5432"
 
-  adminer:
-    image: adminer
-    container_name: uwubot_adminer
-    ports:
-      - "9090:8080"
-    depends_on:
-      - nanazdb
+    # adminer:
+    #   image: adminer
+    #   container_name: uwubot_adminer
+    #   ports:
+    #     - "9090:8080"
+    #   depends_on:
+    #     - nanazdb
 
 volumes:
   db_data:

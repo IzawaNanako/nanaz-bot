@@ -3,8 +3,8 @@ import { readdirSync } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
 import { ActivityType, Client, Collection, GatewayIntentBits, Partials, PresenceData, PresenceStatusData } from 'discord.js';
-import { BotSettings } from './models/botSettings.js';
-import { GlobalStats } from './models/globalStats.js';
+import { BotSettings } from '@models/botSettings.js';
+import { GlobalStats } from '@models/globalStats.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
 
