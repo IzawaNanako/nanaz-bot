@@ -1,6 +1,6 @@
-import { AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
-import { Guild } from '../models/guild.js';
-import { User } from '../models/user.js';
+import type { ChatInputCommandInteraction, ContextMenuCommandInteraction, AutocompleteInteraction } from 'discord.js';
+import { Guild } from '@models/guild.js';
+import { User } from '@models/user.js';
 import i18next from 'i18next';
 
 /**

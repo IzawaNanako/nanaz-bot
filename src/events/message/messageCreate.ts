@@ -1,5 +1,6 @@
-import { ChannelType, Message, Client, Events, PermissionFlagsBits } from 'discord.js';
-import { generateWithAI } from '../../utils/generateWithAI.js';
+import type { Client, Message } from 'discord.js';
+import { Events, ChannelType, PermissionFlagsBits } from 'discord.js';
+import { generateWithAI } from '@utils/generateWithAI.js';
 
 export const name = Events.MessageCreate;
 export async function execute(message: Message, client: Client) {

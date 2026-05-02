@@ -1,6 +1,8 @@
-import { ApplicationCommandType, ContextMenuCommandBuilder, ContextMenuCommandType, EmbedBuilder, MessageFlags, UserContextMenuCommandInteraction } from 'discord.js';
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { supportButton } from '../../utils/buttons.js';
+import type { UserContextMenuCommandInteraction, ContextMenuCommandType } from 'discord.js';
+import { ApplicationCommandType, EmbedBuilder, MessageFlags } from 'discord.js';
+import { ContextMenuCommandBuilder } from '@discordjs/builders';
+import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { supportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 export const data = new ContextMenuCommandBuilder()

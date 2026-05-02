@@ -1,6 +1,8 @@
-import { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ContextMenuCommandType, UserContextMenuCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { supportButton } from '../../utils/buttons.js';
+import type { UserContextMenuCommandInteraction, ContextMenuCommandType } from 'discord.js';
+import { ApplicationCommandType, EmbedBuilder, MessageFlags, InteractionContextType } from 'discord.js';
+import { ContextMenuCommandBuilder } from '@discordjs/builders';
+import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { supportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 i18next.setDefaultNamespace('general');

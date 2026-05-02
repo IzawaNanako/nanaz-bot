@@ -1,5 +1,6 @@
-import { Events, Guild as DiscordGuild } from 'discord.js';
-import { Guild } from '../../models/guild.js';
+import type { Guild as DiscordGuild } from 'discord.js';
+import { Events } from 'discord.js';
+import { Guild } from '@models/guild.js';
 
 export const name = Events.GuildUpdate;
 

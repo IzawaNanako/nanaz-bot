@@ -1,6 +1,8 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, TextChannel, AutocompleteInteraction, MessageFlags } from 'discord.js'
-import { setPrivateInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { translateWithDeepL } from '../../utils/translateWithDeepL.js';
+import type { ChatInputCommandInteraction, AutocompleteInteraction } from 'discord.js';
+import { ChannelType, MessageFlags } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { translateWithDeepL } from '@utils/translateWithDeepL.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
@@ -123,7 +125,7 @@ export const execute = async (interaction: ChatInputCommandInteraction) => {
         return;
     }
 
-    if (!(channel instanceof TextChannel)) {
+    if (channel.type !== ChannelType.GuildText) {
         await interaction.editReply({
             content: unknownError,
         });

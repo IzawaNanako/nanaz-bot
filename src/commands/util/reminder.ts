@@ -1,7 +1,9 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags, EmbedBuilder } from 'discord.js';
-import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { Reminder } from '../../models/reminder.js';
-import { User } from '../../models/user.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { MessageFlags, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { Reminder } from '@models/reminder.js';
+import { User } from '@models/user.js';
 import { uuidv7 } from 'uuidv7';
 import schedule from 'node-schedule';
 import i18next from 'i18next';

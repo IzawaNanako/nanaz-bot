@@ -1,8 +1,10 @@
-import { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, ChatInputCommandInteraction, InteractionContextType, MessageFlags } from 'discord.js';
-import { GuildMember } from '../../models/guildMember.js';
-import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { sendLog } from '../../utils/sendLog.js';
-import { supportButton } from '../../utils/buttons.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { PermissionFlagsBits, MessageFlags, EmbedBuilder, InteractionContextType } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { GuildMember } from '@models/guildMember.js';
+import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { sendLog } from '@utils/sendLog.js';
+import { supportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()

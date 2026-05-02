@@ -1,6 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
-import { setInteractionLanguage } from '../../utils/setInteractionLanguage.js';
-import { supportButton } from '../../utils/buttons.js';
+import type { ChatInputCommandInteraction } from 'discord.js';
+import { MessageFlags, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { supportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 /**

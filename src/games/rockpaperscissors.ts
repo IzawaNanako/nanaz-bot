@@ -1,7 +1,8 @@
-import { EmbedBuilder, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, User as DiscordUser, ActionRowBuilder, MessageComponentInteraction, ButtonInteraction } from 'discord.js';
-import { User } from '../models/user.js';
-import { setInteractionLanguage } from '../utils/setInteractionLanguage.js';
-import { acceptAndDeclineButton, rematchButton } from '../utils/buttons.js';
+import type { ChatInputCommandInteraction, ButtonInteraction, MessageComponentInteraction, User as DiscordUser } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { User } from '@models/user.js';
+import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
+import { acceptAndDeclineButton, rematchButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 const choiceMap: Record<string, string> = {

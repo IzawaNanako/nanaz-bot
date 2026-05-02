@@ -1,5 +1,7 @@
-import { SlashCommandBuilder, PermissionFlagsBits, PresenceStatusData, ActivityType, ChatInputCommandInteraction, TextChannel, InteractionContextType, MessageFlags } from 'discord.js';
-import { BotSettings } from '../../models/botSettings.js';
+import type { ChatInputCommandInteraction, PresenceStatusData, TextChannel } from 'discord.js';
+import { ActivityType, InteractionContextType, MessageFlags, PermissionFlagsBits } from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { BotSettings } from '@models/botSettings.js';
 
 export const data = new SlashCommandBuilder()
     .setName('dev')
@@ -81,10 +83,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
         try {
+            await interaction.client.user.setUsername(value);
             await interaction.reply({
                 content: `Changing my username to ${value}...`,
             });
-            await interaction.client.user.setUsername(value);
         }
         catch (error) {
             await interaction.reply({
