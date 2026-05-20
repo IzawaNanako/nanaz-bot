@@ -7,6 +7,7 @@ services:
       - .env
     depends_on:
       - nanazdb
+    command: sh -c "npm run syncdb && node dist/index.js"
 
   nanazdb:
     image: postgres:18-alpine
@@ -16,7 +17,7 @@ services:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql
     ports:
       - "5432:5432"
 
