@@ -1,3 +1,12 @@
-node_modules
-dist
+node_modules/
+dist/
 .env
+.git/
+.github/
+.env.example
+.prettierrc
+.crowdin.yml
+eslint.config.js
+README.md
+rsdocker.bat
+start.bat
