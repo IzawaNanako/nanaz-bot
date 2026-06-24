@@ -1,5 +1,5 @@
 {
-    "name": "uwubot",
+    "name": "nanaz-bot",
     "version": "2.4.0",
     "description": "not so cool idk maybe cute?",
     "main": "dist/index.js",
@@ -14,7 +14,11 @@
         "syncdb": "node dist/syncdb.js"
     },
     "keywords": [],
-    "author": "Izawa Nanako",
+    "author": "Wither (https://github.com/IzawaNanako)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/IzawaNanako/nanaz-bot.git"
+    },
     "license": "ISC",
     "lint-staged": {
         "**/*": "prettier --write --ignore-unknown"
