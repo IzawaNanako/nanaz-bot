@@ -27,7 +27,7 @@ services:
 
   adminer:
     image: adminer
-    container_name: uwubot_adminer
+    container_name: nanaz-bot_adminer
     ports:
       - "9090:8080"
     depends_on:
