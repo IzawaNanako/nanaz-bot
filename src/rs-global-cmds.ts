@@ -22,7 +22,6 @@ async function deleteGlobalCommands(clientId: string, token: string) {
     }
     catch (error) {
         console.error(error);
-        process.exit(1);
     }
 }
 

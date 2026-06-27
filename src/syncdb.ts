@@ -35,9 +35,7 @@ try {
     }
 
     console.log('All models synced.');
-    process.exit(0);
 } 
 catch (error) {
     console.error('Failed to sync DB:', error);
-    process.exit(1);
 }

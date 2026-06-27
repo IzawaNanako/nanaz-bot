@@ -30,7 +30,6 @@ async function deleteGuildCommands(clientId: string, guildId: string, token: str
     }
     catch (error) {
         console.error(error);
-        process.exit(1);
     }
 }
 
