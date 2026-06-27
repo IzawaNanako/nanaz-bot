@@ -1,53 +1,54 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import i18next from 'i18next';
 
-i18next.setDefaultNamespace('general');
-const rematchLabel = i18next.t('buttons.rematchLabel');
-const supportServerLabel = i18next.t('buttons.supportServerLabel');
-const acceptLabel = i18next.t('buttons.acceptLabel');
-const declineLabel = i18next.t('buttons.declineLabel');
-
-/**
- * A red button labeled "Rematch".
- */
-export const rematchButton = new ActionRowBuilder<ButtonBuilder> ()
-    .addComponents(
-        new ButtonBuilder()
-            .setCustomId('rematch')
-            .setLabel(rematchLabel)
-            .setStyle(ButtonStyle.Danger)
-    );
-
-const supportServer = process.env.SUPPORT_SERVER;
+const supportServer = process.env.SUPPORT_SERVER || '';
 
 if (!supportServer) {
     console.error('Support server not found.');
-    process.exit(1);
 }
 
 /**
- * A button that links to the support server.
+ * Creates a red button labeled "Rematch".
  */
-export const supportButton = new ActionRowBuilder<ButtonBuilder> ()
+export const createRematchButton = () => new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
         new ButtonBuilder()
-            .setLabel(supportServerLabel)
+            .setCustomId('rematch')
+            .setLabel(i18next.t('buttons.rematchLabel', {
+                ns: 'general'
+            }))
+            .setStyle(ButtonStyle.Danger)
+    );
+
+/**
+ * Creates a button that links to the support server.
+ */
+export const createSupportButton = () => new ActionRowBuilder<ButtonBuilder>()
+    .addComponents(
+        new ButtonBuilder()
+            .setLabel(i18next.t('buttons.supportServerLabel', {
+                ns: 'general'
+            }))
             .setStyle(ButtonStyle.Link)
             .setEmoji('📞')
             .setURL(supportServer)
     );
 
 /**
- * A green button labeled "Accept" and a red button labeled "Decline" respectively.
+ * Creates a green button labeled "Accept" and a red button labeled "Decline" respectively.
  */
-export const acceptAndDeclineButton = new ActionRowBuilder<ButtonBuilder> ()
+export const createAcceptAndDeclineButton = () => new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
         new ButtonBuilder()
             .setCustomId('accept')
-            .setLabel(acceptLabel)
+            .setLabel(i18next.t('buttons.acceptLabel', {
+                ns: 'general',
+            }))
             .setStyle(ButtonStyle.Success),
         new ButtonBuilder()
             .setCustomId('decline')
-            .setLabel(declineLabel)
+            .setLabel(i18next.t('buttons.declineLabel', {
+                ns: 'general',
+            }))
             .setStyle(ButtonStyle.Danger)
     );
