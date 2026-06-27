@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction, AutocompleteInteraction } from 'disco
 import { MessageFlags, EmbedBuilder } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { User } from '@models/user.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
@@ -111,7 +111,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.reply({
         embeds: [actionEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
         flags: MessageFlags.Ephemeral,
     });
 }

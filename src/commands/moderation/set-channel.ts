@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { Guild } from '@models/guild.js';
 import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import { sendLog } from '@utils/sendLog.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
@@ -204,7 +204,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (!channel && !previousChannel) {
         await interaction.editReply({
             content: featureAlreadyDisabledError,
-            components: [supportButton],
+            components: [createSupportButton()],
         });
         return;
     }
@@ -212,7 +212,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     if (channel && channel.id === previousChannel) {
         await interaction.editReply({
             content: featureChannelUnchangedError,
-            components: [supportButton],
+            components: [createSupportButton()],
         });
         return;
     }
@@ -253,7 +253,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.editReply({
         embeds: [actionEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
     });
 
     await sendLog(interaction.guild, {

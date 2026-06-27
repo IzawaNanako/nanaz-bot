@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { Guild } from '@models/guild.js';
 import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import { sendLog } from '@utils/sendLog.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import Fuse from 'fuse.js';
 import i18next from 'i18next';
 
@@ -133,7 +133,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.reply({
         embeds: [actionEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
     });
 
     await sendLog(interaction.guild, {

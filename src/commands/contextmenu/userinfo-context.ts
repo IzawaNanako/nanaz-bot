@@ -2,7 +2,7 @@ import type { UserContextMenuCommandInteraction, ContextMenuCommandType } from '
 import { ApplicationCommandType, EmbedBuilder, MessageFlags, InteractionContextType } from 'discord.js';
 import { ContextMenuCommandBuilder } from '@discordjs/builders';
 import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 i18next.setDefaultNamespace('general');
@@ -186,7 +186,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     await interaction.reply({
         embeds: [userInfoEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
         flags: MessageFlags.Ephemeral,
     });
 }

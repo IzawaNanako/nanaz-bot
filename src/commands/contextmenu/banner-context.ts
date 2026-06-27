@@ -2,7 +2,7 @@ import type { UserContextMenuCommandInteraction, ContextMenuCommandType } from '
 import { ApplicationCommandType, EmbedBuilder, MessageFlags } from 'discord.js';
 import { ContextMenuCommandBuilder } from '@discordjs/builders';
 import { setPrivateInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 export const data = new ContextMenuCommandBuilder()
@@ -52,7 +52,7 @@ export async function execute(interaction: UserContextMenuCommandInteraction) {
 
     await interaction.reply({
         embeds: [bannerEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
         flags: MessageFlags.Ephemeral,
     });
 }

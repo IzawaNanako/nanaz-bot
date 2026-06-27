@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction } from 'discord.js';
 import { EmbedBuilder } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 export const data = new SlashCommandBuilder()
@@ -57,6 +57,6 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                     }
                 ]),
         ],
-        components: [supportButton],
+        components: [createSupportButton()],
     });
 }

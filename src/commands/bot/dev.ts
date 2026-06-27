@@ -1,5 +1,5 @@
 import type { ChatInputCommandInteraction, PresenceStatusData, TextChannel } from 'discord.js';
-import { ActivityType, InteractionContextType, MessageFlags, PermissionFlagsBits } from 'discord.js';
+import { ActivityType, InteractionContextType, MessageFlags, PermissionFlagsBits, EmbedBuilder } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { BotSettings } from '@models/botSettings.js';
 
@@ -22,6 +22,14 @@ export const data = new SlashCommandBuilder()
             {
                 name: 'status',
                 value: 'status',
+            },
+            {
+                name: 'list-guilds',
+                value: 'list-guilds',
+            },
+            {
+                name: 'leave',
+                value: 'leave',
             },
             {
                 name: 'test',
@@ -305,6 +313,54 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 });
                 console.log(error);
             }
+        }
+    }
+    else if (option === 'list-guilds') {
+        const guildList = interaction.client.guilds.cache
+            .map(g => `**${g.name}** \`\`\`(${g.id})\`\`\``)
+            .join('\n');
+
+        const embed = new EmbedBuilder()
+            .setColor('#0099ff')
+            .setTitle('Guild List')
+            .setDescription(guildList.length > 4096 ? guildList.slice(0, 4093) + '...' : guildList || 'No guilds were found.');
+
+        await interaction.reply({
+            embeds: [embed],
+            flags: MessageFlags.Ephemeral,
+        });
+    }
+    else if (option === 'leave') {
+        if (!value) {
+            await interaction.reply({
+                content: 'Please provide a guild ID in the "value" field.',
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
+
+        const guildToLeave = interaction.client.guilds.cache.get(value);
+        if (!guildToLeave) {
+            await interaction.reply({
+                content: `Guild with the ID \`${value}\` not found. Make sure the bot is in the guild.`,
+                flags: MessageFlags.Ephemeral,
+            });
+            return;
+        }
+
+        try {
+            await guildToLeave.leave();
+            await interaction.reply({
+                content: `Successfully left **${guildToLeave.name}** forcefully!`,
+                flags: MessageFlags.Ephemeral,
+            });
+        }
+        catch (error) {
+            console.log(error);
+            await interaction.reply({
+                content: 'Failed to leave the selected guild. Check logs for more information.',
+                flags: MessageFlags.Ephemeral,
+            });
         }
     }
     else if (option === 'test') {

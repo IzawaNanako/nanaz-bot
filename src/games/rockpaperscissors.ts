@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction, ButtonInteraction, MessageComponentIn
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { User } from '@models/user.js';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { acceptAndDeclineButton, rematchButton } from '@utils/buttons.js';
+import { createAcceptAndDeclineButton, createRematchButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 const choiceMap: Record<string, string> = {
@@ -265,7 +265,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
 
             await gameMessage.edit({
                 embeds: [gameEmbed],
-                components: [rematchButton],
+                components: [createRematchButton()],
             });
 
             const rematchCollector = gameMessage.createMessageComponentCollector({
@@ -319,7 +319,7 @@ export async function rockpaperscissors(interaction: ChatInputCommandInteraction
                         rematchEmbed
                             .setDescription(rematchRequestMessage)
                     ],
-                    components: [acceptAndDeclineButton],
+                    components: [createAcceptAndDeclineButton()],
                 });
 
                 const acceptCollector = gameMessage.createMessageComponentCollector({
@@ -571,7 +571,7 @@ export async function rockpaperscissorsBot(interaction: ChatInputCommandInteract
 
         await gameMessage.edit({
             embeds: [gameEmbed],
-            components: [rematchButton],
+            components: [createRematchButton()],
         });
 
         const rematchCollector = gameMessage.createMessageComponentCollector({

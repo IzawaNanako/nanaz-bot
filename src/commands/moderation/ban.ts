@@ -4,7 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { BannedMember } from '@models/bannedMember.js';
 import { setPrivateInteractionLanguage, setPublicInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import { sendLog } from '@utils/sendLog.js';
-import { supportButton } from '@utils/buttons.js';
+import { createSupportButton } from '@utils/buttons.js';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
 
@@ -315,7 +315,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     await interaction.editReply({
         embeds: [banEmbed],
-        components: [supportButton],
+        components: [createSupportButton()],
     });
 
     await sendLog(interaction.guild, {

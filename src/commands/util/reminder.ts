@@ -4,6 +4,7 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import { Reminder } from '@models/reminder.js';
 import { User } from '@models/user.js';
+import { createSupportButton } from '@utils/buttons.js';
 import { uuidv7 } from 'uuidv7';
 import schedule from 'node-schedule';
 import i18next from 'i18next';
@@ -421,6 +422,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
         await interaction.editReply({
             embeds: [remindersEmbed],
+            components: [createSupportButton()],
         });
     }
     else if (subcommand === 'stop') {
@@ -456,6 +458,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             
             await interaction.editReply({
                 content: stopRemindSuccessMessage,
+                components: [createSupportButton()],
             });
         }
         else {
@@ -481,6 +484,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
             await interaction.editReply({
                 content: stopRemindSuccessMessage,
+                components: [createSupportButton()],
             });
         }
     }

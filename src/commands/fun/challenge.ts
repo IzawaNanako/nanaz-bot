@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction, ButtonInteraction } from 'discord.js'
 import { InteractionContextType, MessageFlags, EmbedBuilder, ChannelType } from 'discord.js';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { acceptAndDeclineButton } from '@utils/buttons.js';
+import { createAcceptAndDeclineButton } from '@utils/buttons.js';
 import { tictactoe, tictactoeBot } from '@/games/tictactoe.js';
 import { rockpaperscissors, rockpaperscissorsBot } from '@/games/rockpaperscissors.js';
 import i18next from 'i18next';
@@ -122,7 +122,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             const challengeLetter = await interaction.reply({
                 content: `<@${opponent.id}>`,
                 embeds: [letterEmbed],
-                components: [acceptAndDeclineButton],
+                components: [createAcceptAndDeclineButton()],
             });
             const acceptCollector = challengeLetter.createMessageComponentCollector({
                 filter: i => i.user.id === opponent.id,

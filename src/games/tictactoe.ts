@@ -2,7 +2,7 @@ import type { ChatInputCommandInteraction, ButtonInteraction, MessageComponentIn
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 import { User } from '@models/user.js';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
-import { acceptAndDeclineButton, rematchButton } from '@utils/buttons.js';
+import { createAcceptAndDeclineButton, createRematchButton } from '@utils/buttons.js';
 import i18next from 'i18next';
 
 const EMPTY = '\u200b';
@@ -95,7 +95,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
             components.push(row);
         }
         if (includeRematchButton) {
-            components.push(rematchButton);
+            components.push(createRematchButton());
         }
         return components;
     };
@@ -242,7 +242,7 @@ export async function tictactoe(interaction: ChatInputCommandInteraction, oppone
                             rematchEmbed
                                 .setDescription(rematchRequestMessage)
                         ],
-                        components: [acceptAndDeclineButton],
+                        components: [createAcceptAndDeclineButton()],
                     });
     
                     const acceptCollector = gameMessage.createMessageComponentCollector({
@@ -403,7 +403,7 @@ export async function tictactoeBot(interaction: ChatInputCommandInteraction) {
             components.push(row);
         }
         if (includeRematchButton) {
-            components.push(rematchButton);
+            components.push(createRematchButton());
         }
         return components;
     };
