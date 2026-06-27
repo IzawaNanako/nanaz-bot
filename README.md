@@ -27,9 +27,17 @@ Nanaz is a multi-purpose Discord bot built with TypeScript. It provides a compre
 * **For Docker Setup:** [Docker](https://www.docker.com/) and Docker Compose
 * **For Manual Setup:** Node.js (v16.x or higher), a package manager (npm/yarn/pnpm), and a configured SQL database (PostgreSQL recommended).
 
-## Environment Configuration
+## Installation & Configuration
 
-Before starting the bot, rename the `.env.example` file to `.env` and configure your credentials.
+First, clone this repository:
+
+```bash
+git clone [https://github.com/IzawaNanako/nanaz-bot.git](https://github.com/IzawaNanako/nanaz-bot.git)
+cd nanaz-bot
+
+```
+
+Then, rename the `.env.example` file to `.env` and configure your credentials.
 
 ```bash
 cp .env.example .env
@@ -40,7 +48,7 @@ cp .env.example .env
 | --- | --- | --- | --- |
 | `TOKEN` | Your Discord Bot Token. | Yes | - |
 | `CLIENT_ID` | Your Discord Application Client ID. | Yes | - |
-| `MODEL_NAME` | The Gemini model to use (e.g., `gemini-1.5-pro`). | Yes | - |
+| `MODEL_NAME` | The Gemini model to use (e.g., `gemini-3.5-flash`). | Yes | - |
 | `GEMINI_API_KEY` | Your Google Gemini API Key. | Yes | - |
 | `DEEPL_API_KEY` | Your DeepL API Key. | Yes | - |
 | `DATABASE` | The name of the database. | Yes | `database` |
