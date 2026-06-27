@@ -27,12 +27,6 @@ const safetySettings = [
     }
 ];
 
-const [stats] = await GlobalStats.findOrCreate({
-    where: {
-        id: 1,
-    }
-});
-
 /**
  * Generate a reply to a message with AI.
  * @param message The input message.
@@ -40,6 +34,12 @@ const [stats] = await GlobalStats.findOrCreate({
  * @returns Returns the replied message as string.
  */
 export async function generateWithAI(message: string, isMaster: boolean = false) {
+    const [stats] = await GlobalStats.findOrCreate({
+        where: {
+            id: 1,
+        }
+    });
+
     if (!modelName) {
         throw new Error('AI model name not found.');
     }
@@ -81,7 +81,7 @@ export async function generateWithAI(message: string, isMaster: boolean = false)
 
     const reply = result.response.text();
     
-    stats.update({
+    await stats.update({
         totalReplies: stats.totalReplies + 1,
     });
 

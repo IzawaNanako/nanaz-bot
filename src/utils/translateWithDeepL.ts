@@ -31,12 +31,6 @@ if (!DeepLAPIKey) {
 
 const translator = new Translator(DeepLAPIKey);
 
-const [stats] = await GlobalStats.findOrCreate({
-    where: {
-        id: 1,
-    }
-});
-
 /**
  * Translate a string using DeepL.
  * @param message The message to translate.
@@ -44,6 +38,12 @@ const [stats] = await GlobalStats.findOrCreate({
  * @returns Returns the translated string.
  */
 export async function translateWithDeepL(message: string, language: string) {
+    const [stats] = await GlobalStats.findOrCreate({
+        where: {
+            id: 1,
+        }
+    });
+
     const supportedLanguages = await translator.getTargetLanguages();
 
     let targetLanguage = mapLanguageCode(language) as TargetLanguageCode;
