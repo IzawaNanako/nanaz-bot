@@ -1,8 +1,8 @@
 services:
-  uwubot:
+  nanaz-bot:
     build: .
-    image: uwubot
-    container_name: uwubot
+    image: nanaz-bot
+    container_name: nanaz-bot
     env_file:
       - .env
     depends_on:
