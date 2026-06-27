@@ -86,7 +86,7 @@ Docker provides a streamlined, one-click startup. The provided configuration als
 If you prefer to host the bot on a dedicated environment without Docker, follow these steps:
 
 1. Provision and start your database server (e.g., PostgreSQL).
-2. Update the `DB_HOST`, `DB_PORT`, and `DB_DIALECT` in your `.env` to match your manual database setup.
+2. Update the database variables in your .env (DATABASE, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_DIALECT) to match your manual database setup.
 3. Install dependencies:
 
     ```bash
