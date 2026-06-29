@@ -1,3 +1,5 @@
+name: nanaz-bot
+
 services:
   nanaz-bot:
     build: .
