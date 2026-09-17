@@ -10,6 +10,8 @@ services:
     depends_on:
       - nanazdb
     command: sh -c "npm run syncdb && node dist/index.js"
+    ports:
+      - "5565:5565"
     networks:
       - nanaz-network
 
