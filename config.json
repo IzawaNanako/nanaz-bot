@@ -1,0 +1,46 @@
+{
+  "ai": {
+    "modelName": "gemini-3.5-flash",
+    "temperature": 0.9
+  },
+  "mcBridge": {
+    "showStartStop": true,
+    "showAdvancements": true,
+    "showDeaths": true,
+    "showJoinLeave": true,
+    "pingOnIgnMention": true,
+    "renderMarkdown": true
+  },
+  "features": {
+    "aiChat": true,
+    "mcBridge": true,
+    "help": true,
+    "avatar": true,
+    "banner": true,
+    "userinfo": true,
+    "serverIcon": true,
+    "send": true,
+    "reminder": true,
+    "ping": true,
+    "setTimezone": true,
+    "serverInfo": true,
+    "translate": true,
+    "language": true,
+    "challenge": true,
+    "flipACoin": true,
+    "owo": true,
+    "ban": true,
+    "banInfo": true,
+    "kick": true,
+    "mute": true,
+    "setChannel": true,
+    "setMessage": true,
+    "setServerLanguage": true,
+    "unban": true,
+    "welcomeRoles": true,
+    "userAvatar": true,
+    "userBanner": true,
+    "translateMessage": true,
+    "userInfoContext": true
+  }
+}

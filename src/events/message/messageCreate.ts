@@ -1,3 +1,4 @@
+import { getConfig } from '@utils/config.js';
 import { generateWithAI } from '@utils/generateWithAI.js';
 import type { Client, Message } from 'discord.js';
 import { ChannelType, Events, PermissionFlagsBits } from 'discord.js';
@@ -19,6 +20,13 @@ export async function execute(message: Message, client: Client): Promise<void> {
 	}
 
 	if (message.mentions.has(client.user, { ignoreEveryone: true, ignoreRoles: true }) || message.channel.type === ChannelType.DM) {
+		const config = getConfig();
+
+		if (config.features.aiChat !== true) {
+			await message.reply('AI feature is currently disabled.');
+			return;
+		}
+
 		try {
 			const reply = await generateWithAI(message.content, message.author.id === process.env.OWNER_ID);
 
@@ -34,6 +42,7 @@ export async function execute(message: Message, client: Client): Promise<void> {
 			await message.reply(reply);
 		} catch (error) {
 			console.error(error);
+			await message.reply('An error occurred due to incorrect configuration, please contact the bot owner.');
 			return;
 		}
 	}

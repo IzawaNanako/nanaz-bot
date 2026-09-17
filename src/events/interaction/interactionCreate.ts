@@ -1,4 +1,5 @@
 import { CommandPermission } from '@models/commandPermission.js';
+import { getConfig } from '@utils/config.js';
 import { setInteractionLanguage } from '@utils/setInteractionLanguage.js';
 import type { AutocompleteInteraction, ChatInputCommandInteraction, ContextMenuCommandInteraction } from 'discord.js';
 import { Events, MessageFlags } from 'discord.js';
@@ -16,10 +17,57 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
 	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isContextMenuCommand()) {
 		return;
 	}
+
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {
 		console.error(`No command matching ${interaction.commandName} was found, but it was triggered somehow.`);
+		return;
+	}
+
+	const config = getConfig();
+	const featureMap: Record<string, keyof typeof config.features> = {
+		help: 'help',
+		avatar: 'avatar',
+		banner: 'banner',
+		userinfo: 'userinfo',
+		servericon: 'serverIcon',
+		send: 'send',
+		reminder: 'reminder',
+		ping: 'ping',
+		'set-timezone': 'setTimezone',
+		serverinfo: 'serverInfo',
+		translate: 'translate',
+		language: 'language',
+		challenge: 'challenge',
+		'flip-a-coin': 'flipACoin',
+		owo: 'owo',
+		ban: 'ban',
+		baninfo: 'banInfo',
+		kick: 'kick',
+		mute: 'mute',
+		'set-channel': 'setChannel',
+		'set-message': 'setMessage',
+		'set-server-language': 'setServerLanguage',
+		unban: 'unban',
+		'welcome-roles': 'welcomeRoles',
+		'User Avatar': 'userAvatar',
+		'User Banner': 'userBanner',
+		'Translate Message': 'translateMessage',
+		'User Info': 'userInfoContext',
+	};
+
+	const featureKey = featureMap[interaction.commandName];
+
+	if (featureKey && config.features[featureKey] === false) {
+		if (interaction.isChatInputCommand() || interaction.isContextMenuCommand()) {
+			await interaction.reply({
+				content: commandDisabled,
+				flags: MessageFlags.Ephemeral,
+			});
+		} else if (interaction.isAutocomplete()) {
+			await interaction.respond([]);
+		}
 		return;
 	}
 
@@ -59,6 +107,7 @@ export async function execute(interaction: ChatInputCommandInteraction | Context
 		}
 		return;
 	}
+
 	if (interaction.isAutocomplete()) {
 		if (command.autocomplete) {
 			try {
