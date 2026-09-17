@@ -4,7 +4,6 @@ declare namespace NodeJS {
 		CLIENT_ID: string;
 		GUILD_ID: string;
 		OWNER_ID: string;
-		MODEL_NAME: string;
 		GEMINI_API_KEY: string;
 		DEEPL_API_KEY: string;
 		DATABASE: string;
@@ -13,6 +12,10 @@ declare namespace NodeJS {
 		DB_DIALECT: string;
 		DB_HOST: string;
 		DB_PORT: string;
+		MC_BRIDGE_WS_PORT: string;
+		MC_BRIDGE_WS_SECRET: string;
+		MC_BRIDGE_GUILD_ID: string;
+		MC_BRIDGE_CHANNEL_ID: string;
 		SUPPORT_SERVER: string;
 	}
 }
