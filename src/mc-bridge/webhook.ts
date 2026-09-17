@@ -66,7 +66,7 @@ export async function sendSystemToDiscord(
 		}
 
 		await channel.send({
-			content: `**${message}**`,
+			content: message,
 			allowedMentions: {
 				parse: [],
 			},
