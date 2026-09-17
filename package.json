@@ -1,6 +1,6 @@
 {
   "name": "nanaz-bot",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "A multi-purpose Discord bot built with TypeScript.",
   "keywords": [],
   "homepage": "https://www.saduwub.com/nanaz/",
@@ -37,12 +37,18 @@
     "pg": "^8.16.3",
     "sequelize": "^6.37.8",
     "typescript": "^6.0.3",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.1",
+    "ws": "^8.21.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.3",
     "@swc/cli": "^0.8.1",
     "@swc/core": "^1.15.32",
+    "@types/ws": "^8.18.1",
     "tsx": "^4.21.0"
+  },
+  "allowScripts": {
+    "@swc/core@1.16.2": true,
+    "esbuild@0.28.2": true
   }
 }
