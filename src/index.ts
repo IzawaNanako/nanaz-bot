@@ -8,11 +8,14 @@ import type { PresenceData } from 'discord.js';
 import { ActivityType, Client, Collection, DiscordAPIError, GatewayIntentBits, Partials } from 'discord.js';
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
+import { initMcBridge } from './mc-bridge/index.js';
+import { getConfig } from './utils/config.js';
 
 const token = process.env.TOKEN;
+const config = getConfig();
 
 if (!token) {
-	console.log('Token not found.');
+	console.error('Bot token not found.');
 	process.exit(1);
 }
 
@@ -187,6 +190,10 @@ for (const folder of eventFolders) {
 }
 
 await client.login(token);
+
+if (config.features.mcBridge === true) {
+	initMcBridge(client);
+}
 
 process.on('unhandledRejection', (error) => {
 	if (error instanceof DiscordAPIError && error.code !== 10008) {
