@@ -1,13 +1,9 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai';
 import { GlobalStats } from '@models/globalStats.js';
+import { getConfig } from '@utils/config.js';
 
-const geminiAPIKey = process.env.GEMINI_API_KEY;
-if (!geminiAPIKey) {
-	throw new Error('Gemini API key not found.');
-}
+let genAI: GoogleGenerativeAI | null = null;
 
-const modelName = process.env.MODEL_NAME;
-const genAI = new GoogleGenerativeAI(geminiAPIKey);
 const safetySettings = [
 	{
 		category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
@@ -31,11 +27,22 @@ const safetySettings = [
  * @param isMaster Whether the message is from the Wither or not.
  */
 export async function generateWithAI(message: string, isMaster: boolean = false): Promise<string> {
+	if (!genAI) {
+		const geminiAPIKey = process.env.GEMINI_API_KEY;
+		if (!geminiAPIKey) {
+			throw new Error('Gemini API key is missing from .env.');
+		}
+		genAI = new GoogleGenerativeAI(geminiAPIKey);
+	}
+
 	const [stats] = await GlobalStats.findOrCreate({
 		where: {
 			id: 1,
 		},
 	});
+
+	const config = getConfig();
+	const modelName = config.ai.modelName;
 
 	if (!modelName) {
 		throw new Error('AI model name not found.');

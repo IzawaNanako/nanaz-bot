@@ -24,13 +24,7 @@ function mapLanguageCode(language: string) {
 	}
 }
 
-const DeepLAPIKey = process.env.DEEPL_API_KEY;
-if (!DeepLAPIKey) {
-	console.error('DeepL API key not found.');
-	process.exit(1);
-}
-
-const translator = new Translator(DeepLAPIKey);
+let translator: Translator | null = null;
 
 function isSupportedTarget(code: string, supported: readonly { code: string }[]): code is TargetLanguageCode {
 	return supported.some((lang) => lang.code === code) || code === 'zh-HANT';
@@ -40,6 +34,13 @@ function isSupportedTarget(code: string, supported: readonly { code: string }[])
  * @param language The language to translate to, e.g. 'en-US'.
  */
 export async function translateWithDeepL(message: string, language: string): Promise<{ text: string; isFallback: boolean; resolvedLanguage: TargetLanguageCode }> {
+	const DeepLAPIKey = process.env.DEEPL_API_KEY;
+	if (!DeepLAPIKey) {
+		throw new Error('DeepL API key not found.');
+	}
+
+	translator = new Translator(DeepLAPIKey);
+
 	const [stats] = await GlobalStats.findOrCreate({
 		where: { id: 1 },
 	});
