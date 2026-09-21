@@ -5,8 +5,12 @@ export interface BotConfig {
 	ai: {
 		modelName: string;
 		temperature: number;
+		ownerName: string;
+		rules: string;
+		preset: string;
 	};
 	mcBridge: {
+		allowPlayerMentions: boolean;
 		showStartStop: boolean;
 		showAdvancements: boolean;
 		showDeaths: boolean;

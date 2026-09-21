@@ -1,9 +1,13 @@
 {
   "ai": {
     "modelName": "gemini-3.5-flash",
-    "temperature": 0.9
+    "temperature": 0.9,
+    "ownerName": "Owner Name",
+    "rules": "Respond in language of the input.",
+    "preset": "You are a bot in a Discord server. Be helpful."
   },
   "mcBridge": {
+    "allowPlayerMentions": false,
     "showStartStop": true,
     "showAdvancements": true,
     "showDeaths": true,
