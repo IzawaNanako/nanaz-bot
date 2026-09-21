@@ -28,7 +28,7 @@ export interface McSystemPayload extends BaseMessage {
 	type: 'system_mc_to_discord';
 	data: {
 		message: string;
-		eventType: 'join' | 'leave' | 'death' | 'advancement' | 'start' | 'stop';
+		eventType: 'join' | 'leave' | 'death' | 'advancement' | 'start' | 'stop' | 'console';
 	};
 }
 
