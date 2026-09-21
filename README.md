@@ -44,25 +44,25 @@ Nanaz is a multi-purpose Discord bot built with TypeScript. It provides a compre
 
 2. Rename the `.env.example` file to `.env` and populate it with your credentials:
 
-| Variable               | Description                                                 | Required | Default    |
-| ---------------------- | ----------------------------------------------------------- | -------- | ---------- |
-| `TOKEN`                | Your Discord Bot Token.                                     | Yes      | -          |
-| `CLIENT_ID`            | Your Discord Application Client ID.                         | Yes      | -          |
-| `GEMINI_API_KEY`       | Your Google Gemini API Key.                                 | No       | -          |
-| `DEEPL_API_KEY`        | Your DeepL API Key.                                         | No       | -          |
-| `DATABASE`             | The name of the database.                                   | Yes      | `database` |
-| `DB_USER`              | The database username.                                      | Yes      | `user`     |
-| `DB_PASSWORD`          | The database password.                                      | Yes      | `password` |
-| `DB_DIALECT`           | The database dialect used by Sequelize.                     | Yes      | `postgres` |
-| `DB_HOST`              | The database host address.                                  | Yes      | `nanazdb`  |
-| `DB_PORT`              | The database port.                                          | Yes      | `5432`     |
-| `MC_BRIDGE_WS_SECRET`  | The secret for the MC-Discord bridge WebSocket.             | No       | -          |
-| `MC_BRIDGE_WS_PORT`    | The port used for the MC-Discord bridge WebSocket.          | No       | `5565`     |
-| `MC_BRIDGE_GUILD_ID`   | The ID of the guild that the bridge channel is in.          | No       | -          |
-| `MC_BRIDGE_CHANNEL_ID` | The ID of the bridge channel.                               | No       | -          |
-| `GUILD_ID`             | The ID of your primary or development Discord server.       | No       | -          |
-| `OWNER_ID`             | The Discord User ID of the bot owner (used for AI persona). | No       | -          |
-| `SUPPORT_SERVER`       | An invite link to the bot's support server.                 | No       | -          |
+| Variable               | Description                                           | Required | Default    |
+| ---------------------- | ----------------------------------------------------- | -------- | ---------- |
+| `TOKEN`                | Your Discord Bot Token.                               | Yes      | -          |
+| `CLIENT_ID`            | Your Discord Application Client ID.                   | Yes      | -          |
+| `GEMINI_API_KEY`       | Your Google Gemini API Key.                           | No       | -          |
+| `DEEPL_API_KEY`        | Your DeepL API Key.                                   | No       | -          |
+| `DATABASE`             | The name of the database.                             | Yes      | `database` |
+| `DB_USER`              | The database username.                                | Yes      | `user`     |
+| `DB_PASSWORD`          | The database password.                                | Yes      | `password` |
+| `DB_DIALECT`           | The database dialect used by Sequelize.               | Yes      | `postgres` |
+| `DB_HOST`              | The database host address.                            | Yes      | `nanazdb`  |
+| `DB_PORT`              | The database port.                                    | Yes      | `5432`     |
+| `MC_BRIDGE_WS_SECRET`  | The secret for the MC-Discord bridge WebSocket.       | No       | -          |
+| `MC_BRIDGE_WS_PORT`    | The port used for the MC-Discord bridge WebSocket.    | No       | `5565`     |
+| `MC_BRIDGE_GUILD_ID`   | The ID of the guild that the bridge channel is in.    | No       | -          |
+| `MC_BRIDGE_CHANNEL_ID` | The ID of the bridge channel.                         | No       | -          |
+| `GUILD_ID`             | The ID of your primary or development Discord server. | No       | -          |
+| `OWNER_ID`             | The Discord User ID of the bot owner.                 | Yes      | -          |
+| `SUPPORT_SERVER`       | An invite link to the bot's support server.           | No       | -          |
 
 _Optional variables can be left blank or as default values, but the keys should not be deleted from the `.env` file._
 _Ports must match with ones in the docker-compose.yml file if docker is used._
