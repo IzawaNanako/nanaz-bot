@@ -1,3 +1,4 @@
+import { getConfig } from '@utils/config.js';
 import type { Client, Webhook } from 'discord.js';
 
 let bridgeWebhook: Webhook | null = null;
@@ -13,6 +14,7 @@ export async function sendToDiscordWebhook(
 	try {
 		const guild = client.guilds.cache.get(guildId) || await client.guilds.fetch(guildId);
 		const channel = guild.channels.cache.get(channelId) || await guild.channels.fetch(channelId);
+		const bridgeConfig = getConfig().mcBridge;
 
 		if (!channel?.isTextBased() || !('fetchWebhooks' in channel)) {
 			console.error(`[MC Bridge] Error: Channel ${channelId} not found or does not support webhooks.`);
@@ -32,18 +34,23 @@ export async function sendToDiscordWebhook(
 			}
 		}
 
+		const trimmedUsername = username.trim().slice(0, 32) || 'Error Loading Player Name';
 		const avatarURL = `https://mc-heads.net/avatar/${uuid}/256.png`;
 
 		await bridgeWebhook.send({
 			content: message,
-			username: username,
+			username: trimmedUsername,
 			avatarURL: avatarURL,
-			allowedMentions: {
-				parse: [
-					'users',
-					'roles',
-				],
-			},
+			allowedMentions: bridgeConfig.allowPlayerMentions
+				? {
+					parse: [
+						'users',
+						'roles',
+					],
+				}
+				: {
+					parse: [],
+				},
 		});
 	} catch (error) {
 		console.error(`[MC Bridge] Failed to send webhook message:`, error);
