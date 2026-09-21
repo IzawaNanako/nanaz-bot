@@ -16,9 +16,10 @@ function timingSafeCheck(incoming?: string, target?: string): boolean {
 	return crypto.timingSafeEqual(incomingHash, targetHash);
 }
 
-export function startWsServer(port: number, secret: string, guildId: string, channelId: string, client: Client): WebSocketServer {
+export function startWsServer(port: number, host: string, secret: string, guildId: string, channelId: string, client: Client): WebSocketServer {
 	const wss = new WebSocketServer({
-		port: port,
+		port,
+		host,
 		maxPayload: 1024 * 16,
 	});
 

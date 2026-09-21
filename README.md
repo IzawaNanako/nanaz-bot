@@ -57,6 +57,7 @@ Nanaz is a multi-purpose Discord bot built with TypeScript. It provides a compre
 | `DB_HOST`              | The database host address.                            | Yes      | `nanazdb`  |
 | `DB_PORT`              | The database port.                                    | Yes      | `5432`     |
 | `MC_BRIDGE_WS_SECRET`  | The secret for the MC-Discord bridge WebSocket.       | No       | -          |
+| `MC_BRIDGE_WS_HOST`    | The host used for the MC-Discord bridge WebSocket.    | No       | `0.0.0.0   |
 | `MC_BRIDGE_WS_PORT`    | The port used for the MC-Discord bridge WebSocket.    | No       | `5565`     |
 | `MC_BRIDGE_GUILD_ID`   | The ID of the guild that the bridge channel is in.    | No       | -          |
 | `MC_BRIDGE_CHANNEL_ID` | The ID of the bridge channel.                         | No       | -          |
@@ -65,7 +66,8 @@ Nanaz is a multi-purpose Discord bot built with TypeScript. It provides a compre
 | `SUPPORT_SERVER`       | An invite link to the bot's support server.           | No       | -          |
 
 _Optional variables can be left blank or as default values, but the keys should not be deleted from the `.env` file._
-_Ports must match with ones in the docker-compose.yml file if docker is used._
+_Ports must match with ones in the `docker-compose.yml` file if docker is used._
+_Change `MC_BRIDGE_WS_HOST` to `127.0.0.1` if both the minecraft server and discord are hosted on one machine._
 
 ### Deployment
 

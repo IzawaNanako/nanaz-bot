@@ -4,6 +4,7 @@ import { startWsServer } from './websocket.js';
 
 export function initMcBridge(client: Client) {
 	const port = Number(process.env.MC_BRIDGE_WS_PORT) || 5565;
+	const host = process.env.MC_BRIDGE_WS_HOST || '0.0.0.0';
 	const secret = process.env.MC_BRIDGE_WS_SECRET;
 	const guildId = process.env.MC_BRIDGE_GUILD_ID;
 	const channelId = process.env.MC_BRIDGE_CHANNEL_ID;
@@ -15,7 +16,7 @@ export function initMcBridge(client: Client) {
 
 	console.log(`[MC Bridge] Starting up! Listening on port ${port}...`);
 
-	const wss = startWsServer(port, secret, guildId, channelId, client);
+	const wss = startWsServer(port, host, secret, guildId, channelId, client);
 
 	registerDiscordListeners(client, guildId, channelId, wss);
 }

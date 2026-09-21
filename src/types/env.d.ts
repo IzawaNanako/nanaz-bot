@@ -13,6 +13,7 @@ declare namespace NodeJS {
 		DB_HOST: string;
 		DB_PORT: string;
 		MC_BRIDGE_WS_PORT: string;
+		MC_BRIDGE_WS_HOST: string;
 		MC_BRIDGE_WS_SECRET: string;
 		MC_BRIDGE_GUILD_ID: string;
 		MC_BRIDGE_CHANNEL_ID: string;
