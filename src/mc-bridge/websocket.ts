@@ -1,11 +1,26 @@
+import crypto from 'node:crypto';
 import { getConfig } from '@utils/config.js';
 import type { Client } from 'discord.js';
 import { type WebSocket, WebSocketServer } from 'ws';
 import type { IncomingMcPayload } from './types.js';
 import { sendSystemToDiscord, sendToDiscordWebhook } from './webhook.js';
 
+function timingSafeCheck(incoming?: string, target?: string): boolean {
+	if (!incoming || !target) {
+		return false;
+	}
+
+	const incomingHash = crypto.createHash('sha256').update(incoming).digest();
+	const targetHash = crypto.createHash('sha256').update(target).digest();
+
+	return crypto.timingSafeEqual(incomingHash, targetHash);
+}
+
 export function startWsServer(port: number, secret: string, guildId: string, channelId: string, client: Client): WebSocketServer {
-	const wss = new WebSocketServer({ port });
+	const wss = new WebSocketServer({
+		port: port,
+		maxPayload: 1024 * 16,
+	});
 
 	wss.on('connection', (ws: WebSocket, req) => {
 		const ip = req.socket.remoteAddress;
@@ -23,7 +38,7 @@ export function startWsServer(port: number, secret: string, guildId: string, cha
 				const payload = JSON.parse(rawData.toString()) as IncomingMcPayload;
 
 				if (!isAuthenticated) {
-					if (payload.type === 'auth' && payload.data?.secret === secret) {
+					if (payload.type === 'auth' && timingSafeCheck(payload.data?.secret, secret)) {
 						isAuthenticated = true;
 						clearTimeout(authTimeout);
 						console.log('[MC Bridge] Minecraft server connected!');
@@ -75,6 +90,7 @@ export function startWsServer(port: number, secret: string, guildId: string, cha
 		});
 
 		ws.on('close', (code, reason) => {
+			clearTimeout(authTimeout);
 			if (isAuthenticated) {
 				console.log(`[MC Bridge] Minecraft server disconnected. Code: ${code} Reason: ${reason.toString() || 'None'}`);
 			}
