@@ -92,8 +92,17 @@ export function startWsServer(port: number, host: string, secret: string, guildI
 
 		ws.on('close', (code, reason) => {
 			clearTimeout(authTimeout);
+
 			if (isAuthenticated) {
-				console.log(`[MC Bridge] Minecraft server disconnected. Code: ${code} Reason: ${reason.toString() || 'None'}`);
+				const reasonText = reason.toString() || 'None';
+
+				if (code === 1000) {
+					console.log(`[MC Bridge] Minecraft server cleanly shut down. (${reasonText})`);
+				} else if (code === 1006) {
+					console.warn(`[MC Bridge] Minecraft server process terminated abruptly (Connection dropped / Code 1006).`);
+				} else {
+					console.log(`[MC Bridge] Minecraft server disconnected. Code: ${code} Reason: ${reasonText}`);
+				}
 			}
 		});
 
