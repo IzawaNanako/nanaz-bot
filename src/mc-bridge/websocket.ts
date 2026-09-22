@@ -36,7 +36,7 @@ export function startWsServer(port: number, host: string, secret: string, guildI
 
 		ws.on('message', async (rawData: Buffer) => {
 			try {
-				const payload = JSON.parse(rawData.toString()) as IncomingMcPayload;
+				const payload: IncomingMcPayload = JSON.parse(rawData.toString());
 
 				if (!isAuthenticated) {
 					if (payload.type === 'auth' && timingSafeCheck(payload.data?.secret, secret)) {
