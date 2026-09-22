@@ -1,8 +1,8 @@
 import { getConfig } from '@utils/config.js';
 import type { Client, Message } from 'discord.js';
 import { WebSocket, type WebSocketServer } from 'ws';
-import { parseDiscordMarkdown, truncateSpans } from './markdown.js';
-import type { DiscordChatPayload } from './types.js';
+import { parseDiscordMarkdown, truncate, truncateSpans, wrapHoverText } from './markdown.js';
+import type { DiscordChatPayload, ReplyData } from './types.js';
 
 export function registerDiscordListeners(client: Client, guildId: string, channelId: string, wss: WebSocketServer) {
 	client.on('messageCreate', async (message: Message) => {
@@ -22,12 +22,29 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 
 		const MAX_VISIBLE_CHARS = 256;
 
-		const fullSpans = parseDiscordMarkdown(message.content);
+		const fullSpans = parseDiscordMarkdown(message);
 		const spans = truncateSpans(fullSpans, MAX_VISIBLE_CHARS);
 		const attachments = message.attachments.map(att => att.url);
 		const isEveryonePing = bridgeConfig.pingOnIgnMention ? message.mentions.everyone : false;
 		const mentions = bridgeConfig.pingOnIgnMention ? message.mentions.users.map(u => u.globalName || u.username) : [];
 		const roleColor = message.member?.displayColor || 0;
+
+		let replyData: ReplyData | undefined;
+
+		if (message.reference?.messageId) {
+			try {
+				const referencedMsg = await message.channel.messages.fetch(message.reference.messageId);
+				if (referencedMsg) {
+					const author = referencedMsg.member?.displayName ?? referencedMsg.author.username;
+					const cleanMsg = referencedMsg.cleanContent || (referencedMsg.attachments.size > 0 ? '[Attachment]' : '');
+					replyData = {
+						author,
+						preview: truncate(cleanMsg.replace(/\n+/g, ' '), 32),
+						hoverText: wrapHoverText(cleanMsg, 45, 256),
+					};
+				}
+			} catch {}
+		}
 
 		const payload: DiscordChatPayload = {
 			type: 'chat_discord_to_mc',
@@ -40,6 +57,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 				isEveryonePing: isEveryonePing,
 				renderMarkdown: bridgeConfig.renderMarkdown,
 				roleColor: roleColor,
+				replyData,
 			},
 		};
 
