@@ -16,8 +16,8 @@
     "renderMarkdown": true
   },
   "features": {
-    "aiChat": true,
-    "mcBridge": true,
+    "aiChat": false,
+    "mcBridge": false,
     "help": true,
     "avatar": true,
     "banner": true,
