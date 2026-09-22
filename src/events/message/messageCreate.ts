@@ -42,7 +42,7 @@ export async function execute(message: Message, client: Client): Promise<void> {
 			await message.reply(reply);
 		} catch (error) {
 			console.error(error);
-			await message.reply('An error occurred due to incorrect configuration, please contact the bot owner.');
+			await message.reply('An error occurred, please contact the bot owner.');
 			return;
 		}
 	}
