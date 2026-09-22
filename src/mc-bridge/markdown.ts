@@ -9,6 +9,7 @@ export interface FormattedSpan {
 	spoiler?: boolean;
 	code?: boolean;
 	url?: string;
+	hoverText?: string;
 }
 
 interface StyleState {
@@ -32,7 +33,7 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 		return [];
 	}
 
-	const ast = parse(content, 'normal') as readonly MarkdownNode[];
+	const ast: readonly MarkdownNode[] = parse(content, 'normal');
 	const spans: FormattedSpan[] = [];
 
 	function extractPlainText(nodeContent?: string | readonly MarkdownNode[]): string {
@@ -48,44 +49,71 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 	function traverse(nodes: readonly MarkdownNode[], currentStyle: StyleState): void {
 		for (const node of nodes) {
 			switch (node.type) {
+				case 'br':
+				case 'newline': {
+					spans.push({
+						text: '\n',
+						...currentStyle,
+					});
+					break;
+				}
+
 				case 'text': {
 					if (typeof node.content === 'string' && node.content.length > 0) {
-						spans.push({ text: node.content, ...currentStyle });
+						spans.push({
+							text: node.content,
+							...currentStyle,
+						});
 					}
 					break;
 				}
 
 				case 'em': {
 					if (Array.isArray(node.content)) {
-						traverse(node.content, { ...currentStyle, italic: true });
+						traverse(node.content, {
+							...currentStyle,
+							italic: true,
+						});
 					}
 					break;
 				}
 
 				case 'strong': {
 					if (Array.isArray(node.content)) {
-						traverse(node.content, { ...currentStyle, bold: true });
+						traverse(node.content, {
+							...currentStyle,
+							bold: true,
+						});
 					}
 					break;
 				}
 
 				case 'underline': {
 					if (Array.isArray(node.content)) {
-						traverse(node.content, { ...currentStyle, underline: true });
+						traverse(node.content, {
+							...currentStyle,
+							underline: true,
+						});
 					}
 					break;
 				}
 
 				case 'strike': {
 					if (Array.isArray(node.content)) {
-						traverse(node.content, { ...currentStyle, strikethrough: true });
+						traverse(node.content, {
+							...currentStyle,
+							strikethrough: true,
+						});
 					}
 					break;
 				}
 
 				case 'spoiler': {
 					if (Array.isArray(node.content)) {
-						traverse(node.content, { ...currentStyle, spoiler: true });
+						traverse(node.content, {
+							...currentStyle,
+							spoiler: true,
+						});
 					}
 					break;
 				}
@@ -99,10 +127,18 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 				case 'link':
 				case 'url':
 				case 'autolink': {
-					const url = typeof node.target === 'string' ? node.target : (typeof node.content === 'string' ? node.content : extractPlainText(node.content));
+					const url = typeof node.target === 'string'
+						? node.target
+						: (typeof node.content === 'string' ? node.content : extractPlainText(node.content));
 
 					const text = extractPlainText(node.content) || url;
-					spans.push({ text, ...currentStyle, url });
+
+					spans.push({
+						text,
+						...currentStyle,
+						url,
+						hoverText: url,
+					});
 					break;
 				}
 
