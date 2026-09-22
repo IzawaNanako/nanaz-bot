@@ -1,3 +1,5 @@
+import type { FormattedSpan } from './markdown.js';
+
 export type EventType =
 	| 'auth'
 	| 'chat_mc_to_discord'
@@ -37,6 +39,7 @@ export interface DiscordChatPayload extends BaseMessage {
 	data: {
 		username: string;
 		message: string;
+		spans: FormattedSpan[];
 		mentions: string[];
 		attachments: string[];
 		isEveryonePing: boolean;

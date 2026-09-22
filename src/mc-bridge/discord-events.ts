@@ -1,6 +1,7 @@
 import { getConfig } from '@utils/config.js';
 import type { Client, Message } from 'discord.js';
 import { WebSocket, type WebSocketServer } from 'ws';
+import { parseDiscordMarkdown, truncateSpans } from './markdown.js';
 import type { DiscordChatPayload } from './types.js';
 
 export function registerDiscordListeners(client: Client, guildId: string, channelId: string, wss: WebSocketServer) {
@@ -19,6 +20,10 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 			return;
 		}
 
+		const MAX_VISIBLE_CHARS = 256;
+
+		const fullSpans = parseDiscordMarkdown(message.content);
+		const spans = truncateSpans(fullSpans, MAX_VISIBLE_CHARS);
 		const attachments = message.attachments.map(att => att.url);
 		const isEveryonePing = bridgeConfig.pingOnIgnMention ? message.mentions.everyone : false;
 		const mentions = bridgeConfig.pingOnIgnMention ? message.mentions.users.map(u => u.globalName || u.username) : [];
@@ -29,6 +34,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 			data: {
 				username: message.member?.nickname || message.author.globalName || message.author.username,
 				message: message.cleanContent || message.content,
+				spans,
 				mentions: mentions,
 				attachments: attachments,
 				isEveryonePing: isEveryonePing,
