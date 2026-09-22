@@ -18,8 +18,8 @@ function timingSafeCheck(incoming?: string, target?: string): boolean {
 
 export function startWsServer(port: number, host: string, secret: string, guildId: string, channelId: string, client: Client): WebSocketServer {
 	const wss = new WebSocketServer({
-		port: port,
-		host: host,
+		port,
+		host,
 		maxPayload: 1024 * 16,
 	});
 
