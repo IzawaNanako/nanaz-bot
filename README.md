@@ -67,7 +67,6 @@ Nanaz is a multi-purpose Discord bot built with TypeScript. It provides a compre
 
 _Optional variables can be left blank or as default values, but the keys should not be deleted from the `.env` file._
 _Ports must match with ones in the `docker-compose.yml` file if docker is used._
-_Change `MC_BRIDGE_WS_HOST` to `127.0.0.1` if both the minecraft server and discord are hosted on one machine._
 
 ### Deployment
 
