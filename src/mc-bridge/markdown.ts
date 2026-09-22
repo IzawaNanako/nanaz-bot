@@ -57,7 +57,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					});
 					break;
 				}
-
 				case 'text': {
 					if (typeof node.content === 'string' && node.content.length > 0) {
 						spans.push({
@@ -67,7 +66,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
 				case 'em': {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, {
@@ -77,7 +75,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
 				case 'strong': {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, {
@@ -87,7 +84,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
 				case 'underline': {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, {
@@ -97,8 +93,7 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
-				case 'strike': {
+				case 'strikethrough': {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, {
 							...currentStyle,
@@ -107,7 +102,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
 				case 'spoiler': {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, {
@@ -117,14 +111,11 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					}
 					break;
 				}
-
 				case 'inlineCode': {
 					const text = typeof node.content === 'string' ? node.content : extractPlainText(node.content);
 					spans.push({ text, ...currentStyle, code: true });
 					break;
 				}
-
-				case 'link':
 				case 'url':
 				case 'autolink': {
 					const url = typeof node.target === 'string'
@@ -141,7 +132,6 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 					});
 					break;
 				}
-
 				default: {
 					if (Array.isArray(node.content)) {
 						traverse(node.content, currentStyle);
