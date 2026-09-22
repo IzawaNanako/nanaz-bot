@@ -1,34 +1,9 @@
+import type { Message } from 'discord.js';
 import { parse } from 'discord-markdown-parser';
+import type { FormattedSpan, MarkdownNode, StyleState } from './types.js';
 
-export interface FormattedSpan {
-	text: string;
-	bold?: boolean;
-	italic?: boolean;
-	underline?: boolean;
-	strikethrough?: boolean;
-	spoiler?: boolean;
-	code?: boolean;
-	url?: string;
-	hoverText?: string;
-}
-
-interface StyleState {
-	readonly bold?: boolean;
-	readonly italic?: boolean;
-	readonly underline?: boolean;
-	readonly strikethrough?: boolean;
-	readonly spoiler?: boolean;
-	readonly code?: boolean;
-}
-
-export interface MarkdownNode {
-	readonly type: string;
-	readonly content?: string | readonly MarkdownNode[];
-	readonly target?: string;
-	readonly [key: string]: unknown;
-}
-
-export function parseDiscordMarkdown(content: string): FormattedSpan[] {
+export function parseDiscordMarkdown(message: Message): FormattedSpan[] {
+	const content = message.content;
 	if (!content) {
 		return [];
 	}
@@ -49,8 +24,66 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 	function traverse(nodes: readonly MarkdownNode[], currentStyle: StyleState): void {
 		for (const node of nodes) {
 			switch (node.type) {
-				case 'br':
-				case 'newline': {
+				case 'everyone':
+				case 'here': {
+					spans.push({
+						text: `@${node.type}`,
+						bold: true,
+						...currentStyle,
+					});
+					break;
+				}
+				case 'user':
+				case 'mention': {
+					const userId = typeof node.id === 'string' ? node.id : '';
+					let name = '@user';
+
+					if (message && userId) {
+						const member = message.mentions.members?.get(userId) ?? message.guild?.members.cache.get(userId);
+						const user = message.mentions.users?.get(userId) ?? message.client.users.cache.get(userId);
+						name = member?.displayName ?? user?.username ?? `@${userId}`;
+					}
+
+					spans.push({
+						text: name.startsWith('@') ? name : `@${name}`,
+						bold: true,
+						...currentStyle,
+					});
+					break;
+				}
+				case 'role': {
+					const roleId = typeof node.id === 'string' ? node.id : '';
+					let roleName = '@role';
+
+					if (message && roleId) {
+						const role = message.mentions.roles?.get(roleId) ?? message.guild?.roles.cache.get(roleId);
+						roleName = role?.name ?? `@${roleId}`;
+					}
+
+					spans.push({
+						text: roleName.startsWith('@') ? roleName : `@${roleName}`,
+						bold: true,
+						...currentStyle,
+					});
+					break;
+				}
+				case 'channel': {
+					const channelId = typeof node.id === 'string' ? node.id : '';
+					let chanName = '#channel';
+
+					if (message && channelId) {
+						const chan = message.guild?.channels.cache.get(channelId);
+						chanName = chan?.name ?? `#${channelId}`;
+					}
+
+					spans.push({
+						text: chanName.startsWith('#') ? chanName : `#${chanName}`,
+						bold: true,
+						...currentStyle,
+					});
+					break;
+				}
+				case 'br': {
 					spans.push({
 						text: '\n',
 						...currentStyle,
@@ -118,9 +151,7 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 				}
 				case 'url':
 				case 'autolink': {
-					const url = typeof node.target === 'string'
-						? node.target
-						: (typeof node.content === 'string' ? node.content : extractPlainText(node.content));
+					const url = typeof node.target === 'string' ? node.target : (typeof node.content === 'string' ? node.content : extractPlainText(node.content));
 
 					const text = extractPlainText(node.content) || url;
 
@@ -128,7 +159,7 @@ export function parseDiscordMarkdown(content: string): FormattedSpan[] {
 						text,
 						...currentStyle,
 						url,
-						hoverText: url,
+						hoverText: wrapHoverText(url, 45, 256),
 					});
 					break;
 				}
@@ -179,4 +210,62 @@ export function truncateSpans(spans: FormattedSpan[], maxVisibleChars: number = 
 	}
 
 	return truncated;
+}
+
+export function truncate(text: string, maxLength: number = 256): string {
+	if (!text || text.length <= maxLength) {
+		return text ?? '';
+	}
+	const cutLength = Math.max(0, maxLength - 3);
+	return `${text.slice(0, cutLength)}...`;
+}
+
+export function wrapHoverText(text: string, maxLineLength: number = 45, maxTotalLength: number = 256): string {
+	if (!text) {
+		return '';
+	}
+
+	let content = text;
+	if (content.length > maxTotalLength) {
+		content = `${content.slice(0, maxTotalLength - 3)}...`;
+	}
+
+	const lines: string[] = [];
+	const rawParagraphs = content.split('\n');
+
+	for (const paragraph of rawParagraphs) {
+		if (paragraph.length <= maxLineLength) {
+			lines.push(paragraph);
+			continue;
+		}
+
+		let currentLine = '';
+		const words = paragraph.split(' ');
+
+		for (const word of words) {
+			if (word.length > maxLineLength) {
+				if (currentLine) {
+					lines.push(currentLine);
+				}
+				for (let i = 0; i < word.length; i += maxLineLength) {
+					lines.push(word.slice(i, i + maxLineLength));
+				}
+				currentLine = '';
+				continue;
+			}
+
+			if (currentLine.length + word.length + 1 > maxLineLength) {
+				lines.push(currentLine);
+				currentLine = word;
+				continue;
+			}
+			currentLine = currentLine ? `${currentLine} ${word}` : word;
+		}
+
+		if (currentLine) {
+			lines.push(currentLine);
+		}
+	}
+
+	return lines.join('\n');
 }
