@@ -22,6 +22,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 		const attachments = message.attachments.map(att => att.url);
 		const isEveryonePing = bridgeConfig.pingOnIgnMention ? message.mentions.everyone : false;
 		const mentions = bridgeConfig.pingOnIgnMention ? message.mentions.users.map(u => u.globalName || u.username) : [];
+		const roleColor = message.member?.displayColor || 0;
 
 		const payload: DiscordChatPayload = {
 			type: 'chat_discord_to_mc',
@@ -32,6 +33,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 				attachments: attachments,
 				isEveryonePing: isEveryonePing,
 				renderMarkdown: bridgeConfig.renderMarkdown,
+				roleColor: roleColor,
 			},
 		};
 

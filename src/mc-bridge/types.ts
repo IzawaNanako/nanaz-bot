@@ -41,6 +41,7 @@ export interface DiscordChatPayload extends BaseMessage {
 		attachments: string[];
 		isEveryonePing: boolean;
 		renderMarkdown: boolean;
+		roleColor?: number;
 	};
 }
 
