@@ -159,7 +159,7 @@ export function parseDiscordMarkdown(message: Message): FormattedSpan[] {
 						text,
 						...currentStyle,
 						url,
-						hoverText: wrapHoverText(url, 45, 256),
+						hoverText: wrapHoverText(url, 45, 240),
 					});
 					break;
 				}
@@ -179,7 +179,7 @@ export function parseDiscordMarkdown(message: Message): FormattedSpan[] {
 	return spans;
 }
 
-export function truncateSpans(spans: FormattedSpan[], maxVisibleChars: number = 256): FormattedSpan[] {
+export function truncateSpans(spans: FormattedSpan[], maxVisibleChars: number = 240): FormattedSpan[] {
 	const truncated: FormattedSpan[] = [];
 	let currentLength = 0;
 
@@ -212,7 +212,7 @@ export function truncateSpans(spans: FormattedSpan[], maxVisibleChars: number = 
 	return truncated;
 }
 
-export function truncate(text: string, maxLength: number = 256): string {
+export function truncate(text: string, maxLength: number = 240): string {
 	if (!text || text.length <= maxLength) {
 		return text ?? '';
 	}
@@ -220,7 +220,7 @@ export function truncate(text: string, maxLength: number = 256): string {
 	return `${text.slice(0, cutLength)}...`;
 }
 
-export function wrapHoverText(text: string, maxLineLength: number = 45, maxTotalLength: number = 256): string {
+export function wrapHoverText(text: string, maxLineLength: number = 45, maxTotalLength: number = 240): string {
 	if (!text) {
 		return '';
 	}

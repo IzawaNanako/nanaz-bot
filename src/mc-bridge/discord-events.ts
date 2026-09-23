@@ -30,7 +30,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 			return;
 		}
 
-		const MAX_VISIBLE_CHARS = 256;
+		const MAX_VISIBLE_CHARS = 240;
 
 		const fullSpans = parseDiscordMarkdown(message);
 		const spans = truncateSpans(fullSpans, MAX_VISIBLE_CHARS);
@@ -50,7 +50,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 					replyData = {
 						author,
 						preview: truncate(cleanMsg.replace(/\n+/g, ' '), 32),
-						hoverText: wrapHoverText(cleanMsg, 45, 256),
+						hoverText: wrapHoverText(cleanMsg, 45, 240),
 					};
 				}
 			} catch {}
