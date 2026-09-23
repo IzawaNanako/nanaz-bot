@@ -1,5 +1,5 @@
 import { getConfig } from '@utils/config.js';
-import type { Client, Message } from 'discord.js';
+import { type Client, type Message, MessageType } from 'discord.js';
 import { WebSocket, type WebSocketServer } from 'ws';
 import { parseDiscordMarkdown, truncate, truncateSpans, wrapHoverText } from './markdown.js';
 import type { DiscordChatPayload, ReplyData } from './types.js';
@@ -20,6 +20,14 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 			return;
 		}
 
+		if (message.type !== MessageType.Default && message.type !== MessageType.Reply) {
+			return;
+		}
+
+		if (!message.content && message.attachments.size === 0) {
+			return;
+		}
+
 		const MAX_VISIBLE_CHARS = 256;
 
 		const fullSpans = parseDiscordMarkdown(message);
@@ -31,7 +39,7 @@ export function registerDiscordListeners(client: Client, guildId: string, channe
 
 		let replyData: ReplyData | undefined;
 
-		if (message.reference?.messageId) {
+		if (message.type === MessageType.Reply && message.reference?.messageId) {
 			try {
 				const referencedMsg = await message.channel.messages.fetch(message.reference.messageId);
 				if (referencedMsg) {
