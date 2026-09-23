@@ -149,6 +149,24 @@ export function parseDiscordMarkdown(message: Message): FormattedSpan[] {
 					spans.push({ text, ...currentStyle, code: true });
 					break;
 				}
+				case 'emoji': {
+					const emojiName = typeof node.name === 'string' ? node.name : 'emoji';
+					spans.push({
+						text: `:${emojiName}:`,
+						...currentStyle,
+					});
+					break;
+				}
+				case 'twemoji': {
+					const emojiText = typeof node.name === 'string' ? node.name : (typeof node.content === 'string' ? node.content : extractPlainText(node.content));
+					if (emojiText) {
+						spans.push({
+							text: emojiText,
+							...currentStyle,
+						});
+					}
+					break;
+				}
 				case 'url':
 				case 'autolink': {
 					const url = typeof node.target === 'string' ? node.target : (typeof node.content === 'string' ? node.content : extractPlainText(node.content));

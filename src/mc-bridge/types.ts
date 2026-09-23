@@ -58,6 +58,8 @@ export interface MarkdownNode {
 	readonly content?: string | readonly MarkdownNode[];
 	readonly target?: string;
 	readonly id?: unknown;
+	readonly name?: string;
+	readonly animated?: boolean;
 	readonly [key: string]: unknown;
 }
 
