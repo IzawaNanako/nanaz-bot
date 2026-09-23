@@ -1,4 +1,5 @@
-import { type Dialect, Sequelize } from 'sequelize';
+import type { Dialect } from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 const database = process.env.DATABASE;
 const user = process.env.DB_USER;

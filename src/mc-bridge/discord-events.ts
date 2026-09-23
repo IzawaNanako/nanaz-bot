@@ -1,6 +1,8 @@
 import { getConfig } from '@utils/config.js';
-import { type Client, type Message, MessageType } from 'discord.js';
-import { WebSocket, type WebSocketServer } from 'ws';
+import type { Client, Message } from 'discord.js';
+import { MessageType } from 'discord.js';
+import type { WebSocketServer } from 'ws';
+import { WebSocket } from 'ws';
 import { parseDiscordMarkdown, truncate, truncateSpans, wrapHoverText } from './markdown.js';
 import type { DiscordChatPayload, ReplyData } from './types.js';
 

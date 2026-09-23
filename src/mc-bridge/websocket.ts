@@ -1,7 +1,8 @@
 import crypto from 'node:crypto';
 import { getConfig } from '@utils/config.js';
 import type { Client } from 'discord.js';
-import { type WebSocket, WebSocketServer } from 'ws';
+import type { WebSocket } from 'ws';
+import { WebSocketServer } from 'ws';
 import type { IncomingMcPayload } from './types.js';
 import { sendSystemToDiscord, sendToDiscordWebhook } from './webhook.js';
 
